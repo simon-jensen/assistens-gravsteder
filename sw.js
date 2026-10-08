@@ -3,7 +3,7 @@
 //
 // VIGTIGT: Bump VERSION ved hvert deploy, der ændrer index.html, gravsteder.json, kortet, fonte eller ikoner.
 // Ellers kan en gammel side hænge fast i cachen hos dem, der allerede har besøgt siden. Se CLAUDE.md.
-const VERSION = '2026-10-08';
+const VERSION = '2026-10-08b';
 const CACHE = 'gravsteder-' + VERSION;
 const CORE = ['./', './index.html', './gravsteder.json', './manifest.webmanifest'];
 
