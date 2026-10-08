@@ -231,15 +231,15 @@ h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,42px)
 #youdot[hidden]{display:none}
 #youdot i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:rgba(43,108,217,.14);border:1px solid rgba(43,108,217,.55)} /* GPS-usikkerhed */
 /* Gravsteder som prikker, farvet efter brochurens kategorier */
-.dot{position:absolute;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);z-index:3;padding:0;cursor:pointer;
- border:1.2px solid var(--dot-ring);box-shadow:0 0 0 1px var(--dot-halo);background:var(--c);-webkit-tap-highlight-color:transparent;transition:width .12s,height .12s}
-.dot::after{content:"";position:absolute;inset:-10px} /* trykfladen er større end prikken */
-.dot:hover{width:14px;height:14px;z-index:4}
-.dot.sel{width:16px;height:16px;z-index:5;border-color:var(--ink);box-shadow:0 0 0 2px var(--gold)}
-.dot.sel::before{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--gold);animation:pulse 1.6s ease-out infinite;pointer-events:none}
+.dot{position:absolute;width:7px;height:7px;border-radius:50%;transform:translate(-50%,-50%);z-index:3;padding:0;cursor:pointer;
+ border:1px solid var(--dot-ring);box-shadow:0 0 0 1px var(--dot-halo);background:var(--c);-webkit-tap-highlight-color:transparent;transition:width .12s,height .12s}
+.dot::after{content:"";position:absolute;inset:-11px} /* trykfladen er større end prikken: ca. 28 px */
+.dot:hover{width:11px;height:11px;z-index:4}
+.dot.sel{width:14px;height:14px;z-index:5;border-color:var(--ink);box-shadow:0 0 0 2px var(--gold)}
+.dot.sel::before{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--gold);animation:pulse 1.6s ease-out infinite;pointer-events:none}
 .dot.dim{opacity:.22;pointer-events:none}
 body.ret .dot.sel{pointer-events:none} /* mens en placering rettes, går trykket igennem til kortet */
-@keyframes pulse{0%{width:16px;height:16px;opacity:.9}100%{width:80px;height:80px;opacity:0}}
+@keyframes pulse{0%{width:14px;height:14px;opacity:.9}100%{width:70px;height:70px;opacity:0}}
 #cross{position:absolute;width:22px;height:22px;transform:translate(-50%,-50%);z-index:6;pointer-events:none;display:none}
 #cross::before,#cross::after{content:"";position:absolute;background:var(--gold)}
 #cross::before{left:50%;top:-5px;bottom:-5px;width:2px;transform:translateX(-50%)}
@@ -273,7 +273,7 @@ select{font-family:'Spline Sans Mono',monospace;font-size:11px;padding:8px 8px;m
 .count{font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--faint)}
 .list{max-height:620px;overflow-y:auto;padding-right:6px}
 @media(max-width:900px){.list{max-height:none;overflow:visible;padding-right:0}
- .dot{width:9px;height:9px}.dot::after{inset:-8px}}
+ .dot{width:6px;height:6px}.dot::after{inset:-9px}} /* 6 px er ca. 7 m på jorden uden forstørrelse; selve gravstedet er mindre */
 .list::-webkit-scrollbar{width:8px}.list::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
 .afdhead{position:sticky;top:0;z-index:2;background:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bark);padding:10px 4px 5px;border-bottom:1px solid var(--line)}
 .afdhead b{font-family:'Fraunces',serif;font-size:15px;letter-spacing:0;text-transform:none;color:var(--moss-d);margin-right:6px}
@@ -357,7 +357,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
   <div class="cNote" id="cNote"></div>
 </div>
 <div class="legend" id="legend" aria-label="Kategorier — tryk for at filtrere"></div>
-<div class="maphint">Kortdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragydere</a> (ODbL) · afdelinger, gravsteder og trækroner: Københavns Kommune (CC BY 4.0, bearbejdet) · fortegnelse: Københavns Kommune, “133 gravsteder på Assistens Kirkegård” (2019). Prikkerne sidder på gravstedernes midtpunkter i kommunens register.</div>
+<div class="maphint">Kortdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragydere</a> (ODbL) · afdelinger, gravsteder og trækroner: Københavns Kommune (CC BY 4.0, bearbejdet) · fortegnelse: Københavns Kommune, “133 gravsteder på Assistens Kirkegård” (2019). Prikkerne sidder på gravstedernes midtpunkter i kommunens register, men er større end gravstedet: forstør, når du er tæt på.</div>
 </section>
 <section>
 <div class="panel-title"><span id="listhead">Alle gravsteder</span><span class="count" id="count" aria-live="polite"></span></div>
