@@ -115,6 +115,7 @@ try {
   ok(!(await page.evaluate(() => document.body.classList.contains('rute'))), 'Afslut rute slukker ruten');
   await ctx.setGeolocation({ latitude: 55.6903, longitude: 12.5505 }); await page.click('#hereBtn'); await page.waitForTimeout(300); // GPS fra igen
   // Rettetilstand: tryk på kortet flytter den valgte prik og gemmes lokalt
+  await page.goto(URL0 + '#g=U1'); await page.waitForSelector('.dot'); // U1 valgt igen (ruteblokken valgte P1)
   await page.click('#retToggle');
   ok(await page.evaluate(() => document.body.classList.contains('ret')), 'rettetilstand tændt');
   await page.locator('#mapwrap').scrollIntoViewIfNeeded();
