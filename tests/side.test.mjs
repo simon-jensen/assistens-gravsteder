@@ -108,6 +108,8 @@ try {
   ok(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('assistens_grav_ret_v1') || '{}')).length) === 0, 'fortryd fjerner rettelsen');
   await page.click('#retToggle');
   if (UD) { await page.goto(URL0 + '#g=P1'); await page.waitForSelector('.dot'); }
+  const vSw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8').match(/const VERSION\s*=\s*'([^']+)'/)[1];
+  ok((await page.locator('#udgave').textContent()) === vSw, 'udgaven i sidefoden er sw.js VERSION (' + vSw + ')');
   ok(errs.length === 0, 'ingen JavaScript-fejl i konsollen' + (errs.length ? ': ' + errs.join(' | ') : ''));
   await ctx.close();
   // Telefon, mørk tilstand + skrivebord

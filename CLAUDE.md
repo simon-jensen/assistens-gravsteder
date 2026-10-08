@@ -28,6 +28,10 @@ Gør sådan, i **samme commit** som ændringen:
 const VERSION = '2026-10-08';   // dagens dato; ved flere deploys samme dag: '2026-10-08b'
 ```
 
+Ret samtidig `const UDGAVE='…'` øverst i `index.html`'s script til samme værdi;
+den vises i sidefoden, så man kan se, hvilken udgave en telefon viser.
+`scripts/check_data.py` fejler, hvis de to ikke er ens.
+
 CI (`.github/workflows/pages.yml` → `scripts/check_sw_version.py`) fejler
 ellers, og siden udgives ikke. Filer i `data/` kræver ikke et bump (siden henter dem ikke).
 

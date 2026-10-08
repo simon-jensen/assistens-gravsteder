@@ -298,6 +298,8 @@ footer a{color:var(--bark)}
 #toast{pointer-events:none;position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(90px);background:var(--moss-d);color:#fff;font-family:'Spline Sans Mono',monospace;font-size:12px;padding:9px 16px;border-radius:5px;z-index:70;transition:transform .25s;max-width:88vw;text-align:center}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #status{font-family:'Fraunces',serif;font-style:italic;color:var(--faint);padding:20px 4px}
+#nyudgave{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:80;background:var(--gold);color:#3a2f0a;border:0;border-radius:6px;padding:10px 16px;font-family:'Spline Sans Mono',monospace;font-size:12px;cursor:pointer;box-shadow:0 6px 20px -8px rgba(0,0,0,.5);max-width:92vw}
+#nyudgave[hidden]{display:none}
 /* — Rettetilstand: flyt en prik med et tryk på kortet (#ret=1 eller knappen i sidefoden; se README) — */
 .retbar{display:none;margin:0 0 10px;padding:9px 12px;border:1.5px dashed var(--moss-d);border-radius:5px;background:var(--card-hover);font-family:'Spline Sans Mono',monospace;font-size:11.5px;line-height:1.55}
 body.ret .retbar{display:block}
@@ -364,11 +366,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <div class="list" id="list"><div id="status">Henter gravstederne …</div></div>
 </section>
 </div>
-<footer><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>). <button class="clearchip" id="retToggle">Ret placeringer</button></footer>
+<footer><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>). <button class="clearchip" id="retToggle">Ret placeringer</button><br><b>Udgave:</b> <span id="udgave"></span> — ser du ikke den nyeste, så luk siden helt og åbn den igen.</footer>
 </div>
 <div id="toast" role="status"></div>
+<button type="button" id="nyudgave" hidden>↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
+const UDGAVE='2026-10-08e'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
 // ————— Kategorier (brochurens signaturer og farver) —————
 const KAT={
  digt:{navn:'Digtere, forfattere og filosoffer',kort:'digter/forfatter/filosof',c:'#f29b3a'},
@@ -531,6 +535,11 @@ addEventListener('mouseup',()=>{if(pan){pan=null;setTimeout(()=>{dragged=false;}
 mapwrapEl.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();const g=geo(),[sx,sy]=sxy(e,g);zoomAt(k*Math.exp(-e.deltaY*0.01),sx,sy,false);},{passive:false});
 mapwrapEl.addEventListener('dblclick',e=>{if(e.target.closest('.dot'))return;const g=geo(),[sx,sy]=sxy(e,g);trin(sx,sy);});
 addEventListener('resize',()=>{clampT(geo());applyT(false);});
+// iOS Safari: gesture-events blokerer browserens egen zoom over kortet og er reserve, hvis touch-knibet ikke kom igennem
+let gk0=1,gTouch=false;
+mapwrapEl.addEventListener('gesturestart',e=>{e.preventDefault();gk0=k;gTouch=!!pinch;},{passive:false});
+mapwrapEl.addEventListener('gesturechange',e=>{e.preventDefault();if(gTouch||pinch||!Number.isFinite(e.scale))return;const g=geo();zoomAt(gk0*e.scale,e.clientX-g.r.left,e.clientY-g.r.top,false);dragged=true;},{passive:false});
+mapwrapEl.addEventListener('gestureend',e=>{e.preventDefault();gTouch=false;setTimeout(()=>{dragged=false;},60);},{passive:false});
 // ————— Hvor er jeg? —————
 let hereWatch=null;const hereBtn=$('hereBtn'),youRing=$('youring');
 function stopHere(){if(hereWatch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(hereWatch);hereWatch=null;you=null;
@@ -591,6 +600,10 @@ fetch('gravsteder.json').then(r=>{if(!r.ok)throw new Error(r.status);return r.js
   DOC=d;prep();buildDots();readHash();retCount();
   window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g');if(g&&g!==sel&&byId[g])select(g,'hash');});
 }).catch(e=>{$('status').textContent='Gravstederne kunne ikke hentes ('+e.message+'). Prøv igen, når du har forbindelse.';});
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+$('udgave').textContent=UDGAVE;
+if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  let havde=!!navigator.serviceWorker.controller; // første installation er ikke en opdatering
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(havde)$('nyudgave').hidden=false;havde=true;}); // ny sw.js (nyt VERSION) har taget over: næste indlæsning er den nye udgave
+  $('nyudgave').onclick=()=>location.reload();}
 </script>
 </body></html>

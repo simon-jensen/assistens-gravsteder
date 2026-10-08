@@ -51,8 +51,13 @@ def main():
             err.append(f"{gid}: 'src' skal være 'kk' (scriptets) eller 'kort' (manuel)")
         if g.get("src") == "kort" and not TS_RE.match(str(g.get("ts", ""))):
             err.append(f"{gid}: en manuel placering (src kort) skal have et tidsstempel 'ts'")
-    # Filer, service workeren precacher, skal findes
+    # Filer, service workeren precacher, skal findes; udgaven i sidefoden skal være sw.js' VERSION
     sw = open(os.path.join(ROOT, "sw.js"), encoding="utf-8").read()
+    idx = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
+    v_sw = re.search(r"const VERSION\s*=\s*['\"]([^'\"]+)['\"]", sw)
+    v_idx = re.search(r"const UDGAVE='([^']+)'", idx)
+    if not v_sw or not v_idx or v_sw.group(1) != v_idx.group(1):
+        err.append(f"UDGAVE i index.html ({v_idx.group(1) if v_idx else '?'}) skal være lig VERSION i sw.js ({v_sw.group(1) if v_sw else '?'})")
     for f in re.findall(r"'\./([^']+)'", sw):
         if not os.path.exists(os.path.join(ROOT, f)):
             err.append(f"sw.js precacher '{f}', men filen findes ikke")
