@@ -1,0 +1,15 @@
+{
+  "name": "Assistens Kirkegård · Gravsteder",
+  "short_name": "Gravsteder",
+  "description": "Find de 133 kendte gravsteder på Assistens Kirkegård, og se hvor du selv står",
+  "lang": "da",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f1e6",
+  "theme_color": "#5a7a4f",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

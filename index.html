@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="da"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assistens Kirkegård · Gravsteder</title>
+<meta name="description" content="Find de 133 kendte gravsteder på Assistens Kirkegård i København, og se hvor du selv står.">
+<meta name="theme-color" content="#5a7a4f" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1f1a" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preload" href="fonts/Outfit-normal-300-latin-5.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/Fraunces-normal-400-latin-3.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Selv-hostede skrifttyper (hentet fra Google Fonts 2026-08-25, OFL-licens).
+ * Kun latin/latin-ext-subsets; dansk (æøå) ligger i latin. */
+
+/* latin-ext */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/Fraunces-italic-400-latin-ext-0.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/Fraunces-italic-400-latin-1.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/Fraunces-normal-400-latin-ext-2.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/Fraunces-normal-400-latin-3.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/Fraunces-normal-400-latin-ext-2.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/Fraunces-normal-400-latin-3.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Spline Sans Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/SplineSansMono-normal-400-latin-ext-6.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Spline Sans Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/SplineSansMono-normal-400-latin-7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Spline Sans Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/SplineSansMono-normal-400-latin-ext-6.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Spline Sans Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/SplineSansMono-normal-400-latin-7.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+:root{--ink:#23271f;--paper:#f4f1e6;--moss:#5a7a4f;--moss-d:#3f5a37;--bark:#7a5c3e;--rare:#a04724;--line:#c8c0a8;--gold:#c8a24a;
+ --panel-bg:#f4f1e6;--input-bg:#fbf9f0;--mute:#555;--faint:#6f6a5c;--card-hover:rgba(90,122,79,.05);--plot-text:#fff;--map-frame:#c8c0a8;
+ --dot-ring:rgba(35,39,31,.6);--dot-halo:rgba(255,255,255,.85);--andet:#fff;--handel:#23201f;}
+@media (prefers-color-scheme: dark){
+ :root{--ink:#e8e4d6;--paper:#1c1f1a;--moss:#7a9b6d;--moss-d:#9bbb8c;--bark:#c89a6a;--rare:#e08a5c;--line:#3a3f36;--gold:#d4b25e;
+  --panel-bg:#23271f;--input-bg:#262a22;--mute:#a8a496;--faint:#9c9684;--card-hover:rgba(122,155,109,.12);--plot-text:#1c1f1a;--map-frame:#3a3f36;
+  --dot-ring:rgba(244,241,230,.75);--dot-halo:rgba(0,0,0,.5);--andet:#f4f1e6;--handel:#111;}
+ body{background-image:radial-gradient(circle at 15% 5%,rgba(122,155,109,.07),transparent 40%) !important;}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;
+ background-image:radial-gradient(circle at 15% 5%,rgba(90,122,79,.05),transparent 40%);}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 50px}
+header{border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:16px}
+.kicker{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--moss-d)}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,42px);line-height:1.03;margin:6px 0 4px;letter-spacing:-.01em}
+.sub{font-family:'Fraunces',serif;font-style:italic;font-size:14.5px;color:var(--mute);max-width:64ch}
+.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:22px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.panel-title{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bark);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.maptools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.mapwrap{position:relative;border:1px solid var(--map-frame);border-radius:5px;overflow:hidden;box-shadow:0 8px 26px -18px rgba(0,0,0,.5);background:#efede3;line-height:0}
+@media (prefers-color-scheme: dark){.mapwrap{background:#23271f}}
+.mapinner{position:relative;width:100%} /* prikker og "du er her" ligger her, så de følger med ved beskæring og forstørrelse */
+.mapinner picture{display:block}
+.mapwrap img{width:100%;height:auto;display:block}
+@media(max-width:900px){ /* på telefon beskæres park og gader væk (x 280–1290 af 1400): kortet bliver ca. 38 % større */
+ .mapinner{width:calc(100% * 1400 / 1010);margin-left:calc(-100% * 280 / 1010)}
+}
+.mapwrap.zoom{overflow:auto;max-height:78vh;-webkit-overflow-scrolling:touch;cursor:grab}
+.mapwrap.zoom .mapinner{width:250%;margin-left:0}
+#hereBtn.on{background:#2b6cd9;border-color:#2b6cd9;color:#fff}
+#zoomBtn.on{background:var(--bark);border-color:var(--bark);color:var(--paper)}
+#youdot{position:absolute;width:14px;height:14px;border-radius:50%;background:#2b6cd9;border:2px solid #fff;box-shadow:0 0 0 2px rgba(43,108,217,.45);transform:translate(-50%,-50%);z-index:6;pointer-events:none}
+#youdot[hidden]{display:none}
+#youdot i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:rgba(43,108,217,.14);border:1px solid rgba(43,108,217,.55)} /* GPS-usikkerhed */
+/* Gravsteder som prikker, farvet efter brochurens kategorier */
+.dot{position:absolute;width:13px;height:13px;border-radius:50%;transform:translate(-50%,-50%);z-index:3;padding:0;cursor:pointer;
+ border:1.5px solid var(--dot-ring);box-shadow:0 0 0 1.5px var(--dot-halo);background:var(--c);-webkit-tap-highlight-color:transparent;transition:width .12s,height .12s}
+.dot::after{content:"";position:absolute;inset:-9px} /* større trykflade på telefon */
+.dot:hover{width:17px;height:17px;z-index:4}
+.dot.sel{width:20px;height:20px;z-index:5;border-color:var(--ink);box-shadow:0 0 0 2.5px var(--gold)}
+.dot.sel::before{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--gold);animation:pulse 1.6s ease-out infinite;pointer-events:none}
+.dot.dim{opacity:.22;pointer-events:none}
+body.ret .dot.sel{pointer-events:none} /* mens en placering rettes, går trykket igennem til kortet */
+@keyframes pulse{0%{width:20px;height:20px;opacity:.9}100%{width:90px;height:90px;opacity:0}}
+#cross{position:absolute;width:22px;height:22px;transform:translate(-50%,-50%);z-index:6;pointer-events:none;display:none}
+#cross::before,#cross::after{content:"";position:absolute;background:var(--gold)}
+#cross::before{left:50%;top:-5px;bottom:-5px;width:2px;transform:translateX(-50%)}
+#cross::after{top:50%;left:-5px;right:-5px;height:2px;transform:translateY(-50%)}
+.maphint{font-family:'Spline Sans Mono',monospace;font-size:10px;color:var(--faint);margin-top:7px;letter-spacing:.04em;line-height:1.5}
+.maphint a{color:inherit}
+.legend{display:flex;gap:6px 10px;flex-wrap:wrap;margin-top:9px;align-items:center}
+.kat{font-family:'Spline Sans Mono',monospace;font-size:10.5px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:6px;padding:4px 9px 4px 6px;min-height:28px;border:1px solid var(--line);border-radius:14px;background:transparent;color:var(--mute);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.kat:hover{border-color:var(--bark);color:var(--ink)}
+.kat.on{border-color:var(--ink);color:var(--ink);background:var(--card-hover)}
+.kdot{width:11px;height:11px;border-radius:50%;background:var(--c);border:1.5px solid var(--dot-ring);flex:none}
+/* Det valgte gravsted: et kort under kortet */
+.card{display:none;margin-top:10px;padding:12px 14px;border:1.5px solid var(--gold);border-radius:6px;background:var(--panel-bg);position:relative;line-height:1.45}
+.card.open{display:block}
+.card .cClose{position:absolute;top:6px;right:8px;background:none;border:none;font-size:24px;line-height:1;color:var(--faint);cursor:pointer;font-family:'Outfit';padding:4px 8px}
+.card .cClose:hover{color:var(--ink)}
+.cName{font-family:'Fraunces',serif;font-size:21px;font-weight:600;line-height:1.1;padding-right:34px}
+.cName small{font-family:'Spline Sans Mono',monospace;font-size:12px;font-weight:400;color:var(--faint);margin-left:8px;white-space:nowrap}
+.cMeta{font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--mute);margin-top:5px;display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center}
+.cMeta .kdot{width:9px;height:9px}
+.cLinks{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.cNote{font-family:'Spline Sans Mono',monospace;font-size:10.5px;color:var(--faint);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px;display:none}
+body.ret .cNote{display:block}
+.controls{display:flex;gap:8px;margin-bottom:11px;align-items:center;flex-wrap:wrap}
+input[type=search]{flex:1 1 180px;font-family:'Outfit';font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:3px;background:var(--input-bg);color:var(--ink);min-width:0}
+input[type=search]:focus{outline:none;border-color:var(--moss)}
+select{font-family:'Spline Sans Mono',monospace;font-size:11px;padding:8px 8px;min-height:36px;border:1px solid var(--bark);background:var(--input-bg);color:var(--bark);border-radius:3px;cursor:pointer;max-width:48%}
+.filterbtn{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;min-height:32px;border:1px solid var(--bark);background:transparent;color:var(--bark);border-radius:3px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.filterbtn.on{background:var(--rare);border-color:var(--rare);color:#fff}
+.filterbtn[hidden]{display:none}
+.count{font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--faint)}
+.list{max-height:620px;overflow-y:auto;padding-right:6px}
+@media(max-width:900px){.list{max-height:none;overflow:visible;padding-right:0}
+ .dot{width:11px;height:11px}.dot::after{inset:-6px}}
+.list::-webkit-scrollbar{width:8px}.list::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.afdhead{position:sticky;top:0;z-index:2;background:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bark);padding:10px 4px 5px;border-bottom:1px solid var(--line)}
+.afdhead b{font-family:'Fraunces',serif;font-size:15px;letter-spacing:0;text-transform:none;color:var(--moss-d);margin-right:6px}
+.row{border-bottom:1px solid var(--line);padding:9px 4px;display:grid;grid-template-columns:14px 62px 1fr auto;gap:9px;cursor:pointer;align-items:start;-webkit-tap-highlight-color:transparent}
+.row:hover{background:var(--card-hover)}
+.row.sel{background:rgba(200,162,74,.16);outline:2px solid var(--gold);outline-offset:-2px}
+.row .kdot{margin-top:5px}
+.plot{font-family:'Spline Sans Mono',monospace;font-size:11px;font-weight:500;color:var(--plot-text);background:var(--moss-d);border-radius:3px;padding:3px 2px;text-align:center;height:fit-content;line-height:1.2;word-break:break-all}
+.row .nm{font-family:'Fraunces',serif;font-size:15.5px;line-height:1.15}
+.row .sub2{font-size:12px;color:var(--mute);margin-top:2px}
+.row .yr{font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--faint);text-align:right;white-space:nowrap;margin-top:2px}
+.row .yr b{display:block;color:#2b6cd9;font-weight:500}
+.qrtag{display:inline-block;font-family:'Spline Sans Mono',monospace;font-size:9.5px;letter-spacing:.04em;border:1px solid var(--line);color:var(--faint);padding:0 5px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.empty{padding:30px;text-align:center;color:var(--faint);font-style:italic;font-family:'Fraunces',serif}
+.empty .resetf{display:block;margin:12px auto 0;font-family:'Spline Sans Mono',monospace;font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--bark);background:transparent;color:var(--bark);border-radius:3px;cursor:pointer}
+.lookup{display:inline-block;font-family:'Spline Sans Mono',monospace;font-style:normal;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--moss-d);text-decoration:none;border:1px solid var(--moss);border-radius:3px;padding:5px 9px;cursor:pointer;background:transparent;transition:.13s}
+.lookup:hover{background:var(--moss);color:#fff}
+footer{margin-top:26px;border-top:1px solid var(--line);padding-top:12px;font-size:11.5px;color:var(--faint);line-height:1.6}
+footer b{color:var(--bark)}
+footer a{color:var(--bark)}
+.clearchip{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:transparent;border:1px solid var(--line);color:var(--mute);border-radius:3px;padding:1px 7px;margin-left:8px;cursor:pointer;vertical-align:middle}
+.clearchip:hover{border-color:var(--ink);color:var(--ink)}
+#toast{pointer-events:none;position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(90px);background:var(--moss-d);color:#fff;font-family:'Spline Sans Mono',monospace;font-size:12px;padding:9px 16px;border-radius:5px;z-index:70;transition:transform .25s;max-width:88vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#status{font-family:'Fraunces',serif;font-style:italic;color:var(--faint);padding:20px 4px}
+/* — Rettetilstand: flyt en prik med et tryk på kortet (#ret=1 eller knappen i sidefoden; se README) — */
+.retbar{display:none;margin:0 0 10px;padding:9px 12px;border:1.5px dashed var(--moss-d);border-radius:5px;background:var(--card-hover);font-family:'Spline Sans Mono',monospace;font-size:11.5px;line-height:1.55}
+body.ret .retbar{display:block}
+body.ret .mapwrap{cursor:crosshair}
+.retbar b{color:var(--moss-d)}
+.retbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.retbtn{font-family:'Spline Sans Mono',monospace;font-size:11px;border:1px solid var(--bark);background:transparent;color:var(--bark);border-radius:3px;cursor:pointer;padding:5px 10px;min-height:36px}
+.retbtn:hover{background:var(--bark);color:var(--paper)}
+.retbtn.warn{border-color:var(--rare);color:var(--rare)}
+.retbtn.warn:hover{background:var(--rare);color:#fff}
+.dot.flyttet{box-shadow:0 0 0 1.5px var(--dot-halo),0 0 0 4px rgba(200,162,74,.55)}
+@media (prefers-color-scheme: dark){ /* hvid tekst på de lyse mørk-tilstands-farver giver for lav kontrast */
+ .filterbtn.on,#toast,.lookup:hover,.retbtn:hover,.retbtn.warn:hover{color:var(--plot-text)}
+}
+@media (prefers-reduced-motion: reduce){
+ .dot.sel::before{animation:none}
+ .dot,#toast{transition:none}
+ html{scroll-behavior:auto}
+}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.row:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+</style></head>
+<body><div class="wrap">
+<header>
+<div class="kicker">Københavns Kommune · 133 gravsteder · kort af åbne data</div>
+<h1>Assistens Kirkegård — Gravsteder</h1>
+<div class="sub">De kendte gravsteder lagt på et kort, der virker i hånden: søg, tryk på en prik, og se hvor du selv står.</div>
+</header>
+<div class="layout">
+<section>
+<div class="panel-title"><span>Kort</span><span class="maptools"><button class="filterbtn" id="hereBtn" title="Vis din GPS-position på kortet" aria-pressed="false">🧭 Hvor er jeg?</button><button class="filterbtn" id="zoomBtn" title="Forstør kortet — træk for at panorere" aria-pressed="false">🔍 Forstør</button></span></div>
+<div class="retbar" id="retbar">
+  <div><b>Ret placering.</b> Vælg et gravsted i listen eller på kortet, og tryk så på kortet, dér hvor gravstedet er. Eller stil dig ved gravstedet med GPS tændt og tryk <b>📡 Her</b>. Rettelserne gemmes kun i din browser, indtil du eksporterer filen og lægger den i repoet som <code>gravsteder.json</code>.</div>
+  <div class="retbtns">
+    <button class="retbtn" id="retGPS">📡 Her</button>
+    <button class="retbtn" id="retExport">⬇ Eksportér gravsteder.json</button>
+    <button class="retbtn warn" id="retUndo">Fortryd rettelsen</button>
+    <button class="retbtn warn" id="retClear">Slet alle rettelser</button>
+    <span class="count" id="retcount" style="margin-left:auto"></span>
+  </div>
+</div>
+<div class="mapwrap" id="mapwrap">
+ <div class="mapinner" id="mapinner">
+  <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="kort-moerk.webp 1x, kort-moerk@2x.webp 2x" type="image/webp">
+   <img src="kort.webp" srcset="kort.webp 1x, kort@2x.webp 2x" width="1400" height="1216" decoding="async" fetchpriority="high" alt="Kort over Assistens Kirkegård med afdelingerne A–V" id="mapimg">
+  </picture>
+  <div id="dots"></div>
+  <div id="cross"></div><div id="youdot" hidden aria-label="Din position"><i></i></div>
+ </div>
+</div>
+<div class="card" id="card" aria-live="polite">
+  <button class="cClose" id="cClose" aria-label="Luk">×</button>
+  <div class="cName" id="cName"></div>
+  <div class="cMeta" id="cMeta"></div>
+  <div class="cLinks" id="cLinks"></div>
+  <div class="cNote" id="cNote"></div>
+</div>
+<div class="legend" id="legend" aria-label="Kategorier — tryk for at filtrere"></div>
+<div class="maphint">Kortdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragydere</a> (ODbL) · afdelinger, gravsteder og trækroner: Københavns Kommune (CC BY 4.0, bearbejdet) · fortegnelse: Københavns Kommune, “133 gravsteder på Assistens Kirkegård” (2019). Prikkerne sidder på gravstedernes midtpunkter i kommunens register.</div>
+</section>
+<section>
+<div class="panel-title"><span id="listhead">Alle gravsteder</span><span class="count" id="count" aria-live="polite"></span></div>
+<div class="controls"><input type="search" id="q" placeholder="Søg navn, gravsted eller afdeling…" aria-label="Søg navn, gravsted eller afdeling"><select id="afd" aria-label="Afdeling"><option value="">Alle afd.</option></select><button class="filterbtn" id="nearBtn" aria-pressed="false" hidden title="Sortér efter afstand fra din position">📍 Nærmeste først</button></div>
+<div class="list" id="list"><div id="status">Henter gravstederne …</div></div>
+</section>
+</div>
+<footer><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>). <button class="clearchip" id="retToggle">Ret placeringer</button></footer>
+</div>
+<div id="toast" role="status"></div>
+<script>
+'use strict';
+// ————— Kategorier (brochurens signaturer og farver) —————
+const KAT={
+ digt:{navn:'Digtere, forfattere og filosoffer',kort:'digter/forfatter/filosof',c:'#f29b3a'},
+ komp:{navn:'Komponister og musikere',kort:'komponist/musiker',c:'#5cb77a'},
+ kunst:{navn:'Arkitekter, billedhuggere og malere',kort:'arkitekt/billedhugger/maler',c:'#e0272a'},
+ scene:{navn:'Scenekunstnere',kort:'scenekunstner',c:'#f2dc1e'},
+ handel:{navn:'Handel og industri',kort:'handel/industri',c:'var(--handel)'},
+ vid:{navn:'Videnskabsfolk',kort:'videnskab',c:'#1f9ede'},
+ andet:{navn:'Interessant monument eller andet',kort:'monument/andet',c:'var(--andet)'},
+ faelles:{navn:'Fællesmonument',kort:'fællesmonument',c:'#6b6f7a'}};
+const IMGW=1400,IMGH=1216,M_PER_PX=0.46,LON0=12.55,LAT0=55.69;
+// GPS → kortbrøk: fire hjørneankre (OSM way 3099111 parret med kortets pixelnet), samme som trækortet og scripts/placer.py.
+const ANCHORS=[{lat:55.690688,lon:12.544873,fx:336/IMGW,fy:48/IMGH},{lat:55.688026,lon:12.551794,fx:303/IMGW,fy:1186/IMGH},
+ {lat:55.690514,lon:12.554329,fx:1001/IMGW,fy:1146/IMGH},{lat:55.693494,lon:12.549890,fx:1272/IMGW,fy:252/IMGH}];
+function lsq(get){const S=[[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+  ANCHORS.forEach(a=>{const r=[a.lon-LON0,a.lat-LAT0,1],v=get(a);for(let i=0;i<3;i++){for(let j=0;j<3;j++)S[i][j]+=r[i]*r[j];S[i][3]+=r[i]*v;}});
+  for(let i=0;i<3;i++){let m=i;for(let k=i+1;k<3;k++)if(Math.abs(S[k][i])>Math.abs(S[m][i]))m=k;const t=S[i];S[i]=S[m];S[m]=t;
+    for(let k=i+1;k<3;k++){const f=S[k][i]/S[i][i];for(let j=i;j<4;j++)S[k][j]-=f*S[i][j];}}
+  const x=[0,0,0];for(let i=2;i>=0;i--){x[i]=S[i][3];for(let j=i+1;j<3;j++)x[i]-=S[i][j]*x[j];x[i]/=S[i][i];}return x;}
+const TX=lsq(a=>a.fx),TY=lsq(a=>a.fy);
+function llToFrac(lat,lon){const u=lon-LON0,v=lat-LAT0;return {fx:TX[0]*u+TX[1]*v+TX[2],fy:TY[0]*u+TY[1]*v+TY[2]};}
+function udenforM(f){const dx=Math.max(0,-f.fx,f.fx-1)*IMGW,dy=Math.max(0,-f.fy,f.fy-1)*IMGH;return Math.hypot(dx,dy)*M_PER_PX;} // meter uden for kortet
+function distM(a,b){return Math.hypot((a.fx-b.fx)*IMGW,(a.fy-b.fy)*IMGH)*M_PER_PX;}
+function esc(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+const SB=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
+const $=id=>document.getElementById(id);
+const wrap=$('mapinner'),mapwrapEl=$('mapwrap'),dotsEl=$('dots'),list=$('list'),q=$('q'),afdSel=$('afd'),cnt=$('count'),
+  legend=$('legend'),card=$('card'),nearBtn=$('nearBtn'),youEl=$('youdot');
+let DOC=null,G=[],byId={},sel=null,katOn=null,curAfd='',nearest=false,you=null;
+let toastT=null;function toast(m){const el=$('toast');el.textContent=m;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
+// ————— Rettelser (lokalt lager): en manuel placering vinder over filens —————
+const RET_KEY='assistens_grav_ret_v1';let RET={};try{RET=JSON.parse(localStorage.getItem(RET_KEY)||'{}')||{};}catch(e){}
+function saveRet(){try{localStorage.setItem(RET_KEY,JSON.stringify(RET));}catch(e){toast('⚠ Kunne ikke gemme i browseren');}}
+function pos(g){const r=RET[g.id];return r&&Number.isFinite(r.fx)?r:g;}
+// ————— Data —————
+function prep(){
+  byId={};G=DOC.gravsteder.filter(g=>Number.isFinite(g.fx)&&Number.isFinite(g.fy));
+  G.forEach(g=>{byId[g.id]=g;const k=KAT[g.kat]||KAT.andet;
+    g._s=[g.navn,g.alias||'',g.plot,g.afd,'afd '+g.afd,'afdeling '+g.afd,k.navn,k.kort,g.aar||'',g.qr?'qr film':''].join(' ').toLowerCase();});
+  const afds=[];G.forEach(g=>{if(!afds.includes(g.afd))afds.push(g.afd);});
+  afds.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent='Afd. '+a+' ('+G.filter(g=>g.afd===a).length+')';afdSel.appendChild(o);});
+  legend.innerHTML=Object.keys(KAT).map(k=>'<button type="button" class="kat" data-k="'+k+'" aria-pressed="false"><span class="kdot" style="--c:'+KAT[k].c+'"></span>'+esc(KAT[k].navn)+'</button>').join('');
+  legend.onclick=e=>{const b=e.target.closest('.kat');if(!b)return;setKat(katOn===b.dataset.k?null:b.dataset.k);};
+}
+function setKat(k){katOn=k;legend.querySelectorAll('.kat').forEach(b=>{const on=b.dataset.k===k;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});syncHash();render();}
+// ————— Prikker på kortet —————
+function buildDots(){
+  dotsEl.innerHTML='';
+  const groups={};G.forEach(g=>{const p=pos(g),k=p.fx.toFixed(4)+','+p.fy.toFixed(4);(groups[k]=groups[k]||[]).push(g);});
+  const frag=document.createDocumentFragment();
+  Object.values(groups).forEach(gr=>gr.forEach((g,i)=>{
+    const p=pos(g),k=KAT[g.kat]||KAT.andet,d=document.createElement('button');d.type='button';d.className='dot';d.dataset.id=g.id;
+    d.style.setProperty('--c',k.c);d.style.left=(p.fx*100)+'%';d.style.top=(p.fy*100)+'%';
+    if(gr.length>1){const a=2*Math.PI*i/gr.length,r=7;d.style.marginLeft=(r*Math.cos(a)).toFixed(1)+'px';d.style.marginTop=(r*Math.sin(a)).toFixed(1)+'px';} // flere på samme gravsted (fx Bohr-familien): små forskydninger, så alle kan rammes
+    if(RET[g.id])d.classList.add('flyttet');
+    d.setAttribute('aria-label',g.navn+', '+g.plot);d.title=g.navn+' · '+g.plot;
+    frag.appendChild(d);}));
+  dotsEl.appendChild(frag);syncDots();
+}
+function syncDots(){const vis=visibleSet();dotsEl.querySelectorAll('.dot').forEach(d=>{d.classList.toggle('sel',d.dataset.id===sel);d.classList.toggle('dim',!vis.has(d.dataset.id)&&d.dataset.id!==sel);});}
+dotsEl.onclick=e=>{const d=e.target.closest('.dot');if(d)select(d.dataset.id,'map');};
+// ————— Filtre og liste —————
+function matches(g){const term=q.value.trim().toLowerCase();
+  if(curAfd&&g.afd!==curAfd)return false;if(katOn&&g.kat!==katOn)return false;
+  if(term&&!term.split(/\s+/).every(w=>g._s.includes(w)))return false;return true;}
+function visibleSet(){return new Set(G.filter(matches).map(g=>g.id));}
+function rowHtml(g){const k=KAT[g.kat]||KAT.andet,p=pos(g);
+  const dist=you?'<b>'+Math.round(distM(you,p))+' m</b>':'';
+  return '<div class="row'+(g.id===sel?' sel':'')+'" data-id="'+g.id+'" role="button" tabindex="0">'+
+   '<span class="kdot" style="--c:'+k.c+'"></span><span class="plot">'+esc(g.plot)+'</span>'+
+   '<div><div class="nm">'+esc(g.navn)+(g.qr?'<span class="qrtag">📱 film</span>':'')+'</div><div class="sub2">'+esc(k.kort)+(nearest?' · afd. '+esc(g.afd):'')+'</div></div>'+
+   '<div class="yr">'+(g.aar?'† '+g.aar:'')+dist+'</div></div>';}
+function render(){
+  let rows=G.filter(matches);
+  const akt=[];if(curAfd)akt.push('afd. '+curAfd);if(katOn)akt.push(KAT[katOn].kort);if(q.value.trim())akt.push('"'+q.value.trim()+'"');
+  $('listhead').textContent=akt.length?akt.join(' · '):'Alle gravsteder';
+  cnt.textContent=rows.length===G.length?G.length+' gravsteder':rows.length+' af '+G.length;
+  if(!rows.length){list.innerHTML='<div class="empty">Ingen gravsteder matcher.<button class="resetf" id="resetf">Nulstil søgning og filtre</button></div>';syncDots();return;}
+  let html='';
+  if(nearest&&you){rows=rows.slice().sort((a,b)=>distM(you,pos(a))-distM(you,pos(b)));html=rows.map(rowHtml).join('');}
+  else{let last=null;rows.forEach(g=>{if(g.afd!==last){last=g.afd;html+='<div class="afdhead"><b>'+esc(g.afd)+'</b>Afdeling '+esc(g.afd)+'</div>';}html+=rowHtml(g);});}
+  list.innerHTML=html;syncDots();
+}
+list.onclick=e=>{if(e.target.id==='resetf'){resetFilters();return;}const r=e.target.closest('.row');if(r)select(r.dataset.id,'list');};
+list.onkeydown=e=>{if(e.key!=='Enter'&&e.key!==' ')return;const r=e.target.closest('.row');if(r){e.preventDefault();select(r.dataset.id,'list');}};
+function resetFilters(){q.value='';curAfd='';afdSel.value='';katOn=null;legend.querySelectorAll('.kat').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false');});syncHash();render();}
+let qT=null;q.oninput=()=>{clearTimeout(qT);qT=setTimeout(()=>{syncHash();render();},120);}; // debounce: Safari afviser >100 replaceState på 10 s
+afdSel.onchange=()=>{curAfd=afdSel.value;syncHash();render();};
+// ————— Valg: kortet og listen følger hinanden —————
+function wikiUrl(g){const n=g.navn.replace(/[“”"].*?[“”"]/g,' ').replace(/\(.*?\)/g,' ').split(/,| samt | datter af /)[0].trim();
+  return 'https://da.wikipedia.org/w/index.php?search='+encodeURIComponent(n);}
+function select(id,from){
+  sel=byId[id]?id:null;
+  list.querySelectorAll('.row').forEach(r=>r.classList.toggle('sel',r.dataset.id===sel));syncDots();syncHash();
+  if(!sel){card.classList.remove('open');return;}
+  const g=byId[sel],k=KAT[g.kat]||KAT.andet,p=pos(g);
+  $('cName').innerHTML=esc(g.navn)+(g.aar?'<small>† '+g.aar+'</small>':'');
+  $('cMeta').innerHTML='<span>Gravsted <b>'+esc(g.plot)+'</b> · afd. '+esc(g.afd)+'</span><span><span class="kdot" style="--c:'+k.c+'"></span>'+esc(k.navn)+'</span>'+
+    (g.qr?'<span>📱 QR-kode på gravstedet – scan og se film</span>':'')+(you?'<span>📍 ca. '+Math.round(distM(you,p))+' m fra dig</span>':'');
+  $('cLinks').innerHTML='<a class="lookup" href="'+wikiUrl(g)+'" target="_blank" rel="noopener">Læs mere ↗</a><button class="lookup" id="cShare">Del link</button>'+
+    (mapwrapEl.classList.contains('zoom')?'':'<button class="lookup" id="cZoom">🔍 Forstør her</button>');
+  $('cNote').textContent=(RET[g.id]?'Rettet lokalt '+RET[g.id].ts.slice(0,16).replace('T',' ')+' · ':'')+'Fil: '+(g.src==='kort'?'manuel placering':'kommunens register')+(g.acc?' ±'+g.acc+' m':'')+(g.note?' · '+g.note:'');
+  card.classList.add('open');
+  const row=list.querySelector('.row[data-id="'+sel+'"]');
+  if(from==='map'&&row&&window.innerWidth>900)row.scrollIntoView({behavior:SB,block:'nearest'}); // på telefon er listen ikke en rulleboks: siden ville rulle væk fra kortet
+  if(from==='list'||from==='hash'){centerMap(p,true);if(from==='list'&&window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
+}
+card.onclick=e=>{if(e.target.id==='cClose')select(null);
+  else if(e.target.id==='cShare'){const u=location.href;const done=()=>toast('Link kopieret');
+    if(navigator.share)navigator.share({title:byId[sel].navn,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(done,()=>prompt('Kopiér linket:',u));else prompt('Kopiér linket:',u);}
+  else if(e.target.id==='cZoom'){setZoom(true);select(sel,'list');}};
+// ————— Links: #g=A17&q=…&afd=A&kat=digt&ret=1 —————
+function syncHash(){const p=new URLSearchParams();
+  if(sel)p.set('g',sel);if(curAfd)p.set('afd',curAfd);if(katOn)p.set('kat',katOn);const t=q.value.trim();if(t)p.set('q',t);
+  if(document.body.classList.contains('ret'))p.set('ret','1');
+  const h=p.toString();try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
+function readHash(){const p=new URLSearchParams(location.hash.slice(1));
+  const t=p.get('q');if(t)q.value=t;const a=p.get('afd');if(a&&[...afdSel.options].some(o=>o.value===a)){curAfd=a;afdSel.value=a;}
+  const k=p.get('kat');if(k&&KAT[k])setKat(k);else render();
+  if(p.get('ret')==='1')setRet(true);
+  const g=p.get('g');if(g&&byId[g])select(g,'hash');}
+// ————— Forstør —————
+function centerMap(f,smooth){if(!mapwrapEl.classList.contains('zoom')||!f)return;
+  const W=mapwrapEl.scrollWidth,H=mapwrapEl.scrollHeight,left=f.fx*W-mapwrapEl.clientWidth/2,top=f.fy*H-mapwrapEl.clientHeight/2;
+  if(smooth&&mapwrapEl.scrollTo)mapwrapEl.scrollTo({left:left,top:top,behavior:SB});else{mapwrapEl.scrollLeft=left;mapwrapEl.scrollTop=top;}}
+function setZoom(on){mapwrapEl.classList.toggle('zoom',on);$('zoomBtn').classList.toggle('on',on);$('zoomBtn').setAttribute('aria-pressed',on);
+  if(on)centerMap(sel?pos(byId[sel]):(you||{fx:0.55,fy:0.5}));}
+$('zoomBtn').onclick=()=>setZoom(!mapwrapEl.classList.contains('zoom'));
+// ————— Hvor er jeg? —————
+let hereWatch=null;const hereBtn=$('hereBtn');
+function stopHere(){if(hereWatch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(hereWatch);hereWatch=null;you=null;
+  youEl.hidden=true;hereBtn.classList.remove('on');hereBtn.setAttribute('aria-pressed','false');nearBtn.hidden=true;if(nearest){nearest=false;nearBtn.classList.remove('on');nearBtn.setAttribute('aria-pressed','false');}render();}
+hereBtn.onclick=()=>{
+  if(hereWatch!==null){stopHere();return;}
+  if(!navigator.geolocation){toast('Din browser tilbyder ikke GPS');return;}
+  hereBtn.classList.add('on');hereBtn.setAttribute('aria-pressed','true');toast('Henter din position …');
+  let told=false,lastRender=0;
+  hereWatch=navigator.geolocation.watchPosition(p=>{
+    const c=p.coords,f=llToFrac(c.latitude,c.longitude),ud=udenforM(f);
+    if(ud>60){youEl.hidden=true;you=null;if(!told){told=true;toast('Du er ca. '+Math.round(ud)+' m uden for kortet');}return;}
+    you={fx:Math.min(1,Math.max(0,f.fx)),fy:Math.min(1,Math.max(0,f.fy)),acc:c.accuracy,lat:c.latitude,lon:c.longitude};
+    youEl.style.left=(you.fx*100)+'%';youEl.style.top=(you.fy*100)+'%';
+    const rpx=c.accuracy/M_PER_PX;youEl.firstElementChild.style.width=(rpx/IMGW*200)+'%';youEl.firstElementChild.style.height=(rpx/IMGH*200)+'%';
+    youEl.hidden=false;nearBtn.hidden=false;
+    if(!told){told=true;let best=null,bd=Infinity;G.forEach(g=>{const d=distM(you,pos(g));if(d<bd){bd=d;best=g;}});
+      toast('Nærmest dig: '+best.navn+' ('+best.plot+'), ca. '+Math.round(bd)+' m · GPS ±'+Math.round(c.accuracy)+' m');
+      centerMap(you,true);if(window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
+    if(Date.now()-lastRender>4000){lastRender=Date.now();render();if(sel)select(sel,'gps');} // afstandene i listen og kortet opdateres i ro og mag
+  },err=>{stopHere();toast('GPS-fejl: '+err.message);},{enableHighAccuracy:true,timeout:20000,maximumAge:5000});
+};
+nearBtn.onclick=()=>{nearest=!nearest;nearBtn.classList.toggle('on',nearest);nearBtn.setAttribute('aria-pressed',nearest);render();};
+// ————— Rettetilstand: flyt en prik (gemmes lokalt, eksporteres som gravsteder.json) —————
+function nowTs(){return new Date().toISOString();}
+let retLast=null;
+function setRet(on){document.body.classList.toggle('ret',on);$('retToggle').textContent=on?'Skjul rettelser':'Ret placeringer';retCount();syncHash();if(on&&!sel)toast('Vælg et gravsted, og tryk så på kortet');}
+function retCount(){const n=Object.keys(RET).length;$('retcount').textContent=n?n+' rettet lokalt':'';}
+function retSet(id,fx,fy,src,extra){retLast={id:id,prev:RET[id]||null};
+  RET[id]=Object.assign({fx:+fx.toFixed(5),fy:+fy.toFixed(5),src:src,ts:nowTs()},extra||{});saveRet();buildDots();retCount();select(id,'ret');
+  toast(byId[id].navn+' flyttet — husk ⬇ Eksportér');}
+mapwrapEl.addEventListener('click',e=>{
+  if(!document.body.classList.contains('ret'))return;if(e.target.closest('.dot')&&!e.target.closest('.dot.sel'))return;
+  if(!sel){toast('Vælg først et gravsted');return;}
+  const r=$('mapimg').getBoundingClientRect(),fx=(e.clientX-r.left)/r.width,fy=(e.clientY-r.top)/r.height; // billedets boks, ikke rammens
+  if(fx<0||fx>1||fy<0||fy>1)return;retSet(sel,fx,fy,'kort');});
+$('retGPS').onclick=()=>{if(!sel){toast('Vælg først et gravsted');return;}if(!you){toast('Tænd 🧭 Hvor er jeg? først');return;}
+  retSet(sel,you.fx,you.fy,'gps',{lat:+you.lat.toFixed(6),lon:+you.lon.toFixed(6),acc:Math.round(you.acc)});};
+$('retUndo').onclick=()=>{if(!retLast){toast('Intet at fortryde');return;}if(retLast.prev)RET[retLast.id]=retLast.prev;else delete RET[retLast.id];
+  saveRet();buildDots();retCount();if(sel)select(sel,'ret');retLast=null;toast('Fortrudt');};
+$('retClear').onclick=()=>{if(!Object.keys(RET).length)return;if(!confirm('Slet alle lokale rettelser?'))return;RET={};saveRet();retLast=null;buildDots();retCount();if(sel)select(sel,'ret');};
+$('retExport').onclick=async()=>{
+  if(!Object.keys(RET).length){toast('Ingen rettelser at eksportere');return;}
+  let doc=null;try{const r=await fetch('gravsteder.json?t='+Date.now(),{cache:'no-store'});if(r.ok)doc=await r.json();}catch(e){} // nyeste fil først, så en gammel fane ikke overskriver andres rettelser
+  if(!doc||!Array.isArray(doc.gravsteder)){toast('⚠ Ingen forbindelse — prøv igen med net');return;}
+  let n=0;doc.gravsteder.forEach(g=>{const r=RET[g.id];if(!r)return;
+    if(g.src==='kort'&&g.ts&&g.ts>r.ts)return; // filen har en nyere manuel placering: den vinder
+    ['note','acc','lat','lon'].forEach(k=>delete g[k]);
+    g.fx=r.fx;g.fy=r.fy;g.src='kort';g.ts=r.ts;if(r.src==='gps'){g.lat=r.lat;g.lon=r.lon;g.acc=r.acc;g.note='GPS på stedet';}n++;});
+  doc.opdateret=nowTs().slice(0,10);
+  const txt=JSON.stringify(doc,null,1),file=new File([txt],'gravsteder.json',{type:'application/json'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'gravsteder.json'});return;}catch(e){if(e.name==='AbortError')return;}}
+  const a=document.createElement('a'),url=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.href=url;a.download='gravsteder.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  toast(n+' rettelser eksporteret — læg filen i repoet');};
+$('retToggle').onclick=()=>setRet(!document.body.classList.contains('ret'));
+// ————— Start —————
+fetch('gravsteder.json').then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{
+  DOC=d;prep();buildDots();readHash();retCount();
+  window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g');if(g&&g!==sel&&byId[g])select(g,'hash');});
+}).catch(e=>{$('status').textContent='Gravstederne kunne ikke hentes ('+e.message+'). Prøv igen, når du har forbindelse.';});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body></html>
