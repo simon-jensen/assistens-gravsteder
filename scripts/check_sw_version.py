@@ -3,12 +3,12 @@
 
 Kør:  python3 scripts/check_sw_version.py <fra-commit> <til-commit>
 Service workeren (sw.js) cacher siden hos besøgende under et navn med VERSION.
-Ændres index.html, gravsteder.json, kortet, fontene, ikonerne eller manifestet uden
+Ændres index.html, gravsteder.json, ruter.json, kortet, fontene, ikonerne eller manifestet uden
 et bump, ser besøgende den gamle udgave. Se CLAUDE.md, afsnit 1.
 """
 import re, subprocess, sys
 
-TRIGGERS = re.compile(r"^(index\.html|gravsteder\.json|kort[^/]*\.webp|fonts/.+|icon-\d+\.png|manifest\.webmanifest)$")
+TRIGGERS = re.compile(r"^(index\.html|gravsteder\.json|ruter\.json|kort[^/]*\.webp|fonts/.+|icon-\d+\.png|manifest\.webmanifest)$")
 
 
 def git(*args):

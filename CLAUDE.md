@@ -19,8 +19,8 @@ selv foreslår at tilføje sådanne linjer.
 `sw.js` cacher siden hos besøgende under et navn med `VERSION`. Ændrer du en
 af filerne herunder uden at bumpe `VERSION`, ser besøgende den gamle udgave.
 
-Filer, der udløser et bump: `index.html`, `gravsteder.json`, `kort*.webp`,
-alt i `fonts/`, `icon-*.png`, `manifest.webmanifest`.
+Filer, der udløser et bump: `index.html`, `gravsteder.json`, `ruter.json`,
+`kort*.webp`, alt i `fonts/`, `icon-*.png`, `manifest.webmanifest`.
 
 Gør sådan, i **samme commit** som ændringen:
 
@@ -80,6 +80,23 @@ gravstedsregister (CC BY 4.0 antaget; se `data/README.md`). Den bruges kun af
 `scripts/placer.py`. Brochurens afdelingsnavne afviger fra kommunens koder
 (U→UU, V→UV, Iris→IRIS, Ny russisk→NY.RUS, Gadens folk→GADEN, K-5-…→K5);
 tabellen står i scriptet.
+
+## 5b. Ruter: `ruter.json`, `data/laager.json` og `data/osm_assistens.json`
+
+`ruter.json` er rutegrafen (stier og fortove som knuder og kanter i kortets
+koordinater), bygget af `scripts/ruter.py` ud fra OSM-udtrækket
+`data/osm_assistens.json` (kopi af Trækortets; © OpenStreetMap-bidragydere,
+ODbL) og lågelisten `data/laager.json` (projektets egen: `aaben`, `lukket`,
+`udgang`). Regler:
+
+- **Ret aldrig `ruter.json` i hånden**; ret `laager.json` eller hent et nyt
+  OSM-udtræk, og kør `python3 scripts/ruter.py`. Bump `VERSION` bagefter.
+- `ruter.json` er afledt af OSM og er under ODbL (feltet `licens`). Den
+  flettes aldrig ind i `gravsteder.json`, og koordinater fra den eller fra
+  OSM må aldrig bruges til at placere et gravsted (så ville projektets egne
+  data blive en afledt database under ODbL).
+- Siden "snapper" start og mål til nærmeste kant selv; grafen indeholder
+  ingen gravsteder.
 
 ## 6. Lokal test
 

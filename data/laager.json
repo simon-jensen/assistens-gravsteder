@@ -1,0 +1,16 @@
+{
+ "note": "Låger i kirkegårdens mur og deres status, brugt af scripts/ruter.py til at klippe rutegrafen. status: aaben (begge veje), lukket (permanent lukket eller privat; ruten går aldrig igennem), udgang (sluse: kun ud af kirkegården). osm = node-id i OpenStreetMap; en låge uden osm-id får lon/lat. Ret listen, når en låge viser sig at være forkert, og kør scriptet igen.",
+ "laager": [
+  {"nr": 1, "osm": 477549805, "navn": "lågen mod Hans Tavsens Park (vestmuren)", "status": "aaben"},
+  {"nr": 2, "osm": 477549800, "navn": "lågen mod Jagtvej", "status": "aaben"},
+  {"nr": 3, "osm": 10870263838, "navn": "udgangsslusen mod Jagtvej", "status": "udgang"},
+  {"nr": 4, "osm": 7303890576, "navn": "lågen mod Nørrebrogade ved afd. G", "status": "lukket", "kilde": "OSM: access=private"},
+  {"nr": 5, "osm": 7303890582, "navn": "lågen ved Nørrebros Runddel", "status": "aaben"},
+  {"nr": 6, "osm": 477438186, "navn": "lågen ved Nørrebros Runddel", "status": "aaben"},
+  {"nr": 7, "osm": 477549792, "navn": "lågen mod Nørrebrogade ved afd. E", "status": "aaben"},
+  {"nr": 8, "osm": 13623507022, "navn": "lågen mod Kapelvej ved afd. A", "status": "lukket", "kilde": "permanent lukket (Simon Jensen, 8. oktober 2026)"},
+  {"nr": 9, "osm": 13730376355, "navn": "hovedindgangen fra Kapelvej", "status": "aaben"},
+  {"nr": 10, "osm": 477549809, "navn": "lågen ved Hans Tavsens Gade / Kapelvej", "status": "aaben"},
+  {"nr": 11, "navn": "udgangsslusen mod Kapelvej, vest for hovedindgangen", "status": "udgang", "lon": 12.552988, "lat": 55.689284, "kilde": "ikke i OSM; placeret på murens knæk ved afd. H (Simon Jensen, 8. oktober 2026)"}
+ ]
+}

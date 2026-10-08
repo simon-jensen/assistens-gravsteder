@@ -64,6 +64,28 @@ def main():
     for f in ("kort.webp", "kort@2x.webp", "kort-moerk.webp", "kort-moerk@2x.webp", "icon-192.png", "icon-512.png", "icon-180.png"):
         if not os.path.exists(os.path.join(ROOT, f)):
             err.append(f"filen '{f}' mangler")
+    # ruter.json (bygget af scripts/ruter.py) og data/laager.json
+    try:
+        R = json.load(open(os.path.join(ROOT, "ruter.json"), encoding="utf-8"))
+        N = len(R["n"])
+        if N < 100 or not R["e"]:
+            err.append("ruter.json: grafen er tom eller alt for lille")
+        for a, b in R["e"] + R.get("u", []):
+            if not (0 <= a < N and 0 <= b < N):
+                err.append(f"ruter.json: kant ({a}, {b}) peger uden for knuderne"); break
+        if "ODbL" not in R.get("licens", ""):
+            err.append("ruter.json: licensfeltet skal nævne ODbL (afledt af OpenStreetMap)")
+    except Exception as e:
+        err.append(f"ruter.json kan ikke læses: {e}")
+    try:
+        L = json.load(open(os.path.join(ROOT, "data", "laager.json"), encoding="utf-8"))["laager"]
+        for l in L:
+            if l.get("status") not in ("aaben", "lukket", "udgang"):
+                err.append(f"laager.json: {l.get('navn')}: status skal være aaben, lukket eller udgang")
+            if "osm" not in l and not (isinstance(l.get("lon"), float) and isinstance(l.get("lat"), float)):
+                err.append(f"laager.json: {l.get('navn')}: en låge uden osm-id skal have lon/lat")
+    except Exception as e:
+        err.append(f"data/laager.json kan ikke læses: {e}")
     if err:
         print("✗ gravsteder.json har fejl:")
         for e in err:
@@ -71,7 +93,7 @@ def main():
         return 1
     n_kort = sum(1 for g in gs if g.get("src") == "kort")
     n_usikre = sum(1 for g in gs if g.get("src") == "kk" and (g.get("acc") or 0) > 3)
-    print(f"✓ gravsteder.json: {len(gs)} gravsteder, {n_kort} manuelt placeret, {n_usikre} anslåede (acc > 3 m, se data/placering.md)")
+    print(f"✓ gravsteder.json: {len(gs)} gravsteder, {n_kort} manuelt placeret, {n_usikre} anslåede (acc > 3 m, se data/placering.md); ruter.json: {N} knuder, {len(R['e'])} kanter, {len(L)} låger")
     return 0
 
 

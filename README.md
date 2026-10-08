@@ -21,8 +21,15 @@ kommunens gravstedsregister, offline-drift og ingen byggetrin.
   usikkerhedsring og fortæller, hvilket gravsted du står nærmest. Med GPS tændt
   viser listen afstanden til hvert gravsted, og **📍 Nærmeste først** sorterer
   efter den.
-- **🔍 Forstør** gør kortet 2,5× og centrerer på det valgte gravsted; to-finger-
-  zoom virker også.
+- **➜ Rute hertil** på et gravsted tegner den korteste vej ad stierne fra din
+  position, med afstand og gangtid, og regner om, mens du går. Står du uden for
+  kirkegården, går ruten langs fortovene til den nærmeste *åbne* låge (se
+  lågelisten nedenfor). De sidste meter fra stien til gravstedet er stiplede,
+  fordi græsrækkerne mellem gravene ikke er kortlagt.
+- **🔍 Forstør** gør kortet 2,5× og centrerer på det valgte gravsted. To fingre
+  zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk
+  flytter kortet. Prikkerne beholder deres størrelse, så de dækker mindre jord,
+  jo tættere du zoomer.
 - **📱 film** betyder, at der står en QR-kode på gravstedet, som fører til en
   film om personen (kommunens egen ordning).
 - Siden virker **uden dækning**, når den har været åbnet én gang (service
@@ -45,6 +52,13 @@ kommunens register, 8 er anslåede og markeret i
 
 `scripts/placer.py` rører aldrig en manuel placering (`src: "kort"`), så den
 kan køres igen, når kommunens data opdateres.
+
+**Lågerne.** OpenStreetMap ved, hvor lågerne i muren er, men ikke om de er
+åbne. `data/laager.json` er projektets egen liste: status *aaben*, *lukket*
+(permanent lukket eller privat) eller *udgang* (sluse, kun ud). Ruten går
+aldrig gennem en lukket låge og aldrig ind gennem en sluse. Viser en låge sig
+at være forkert, så ret listen, kør `python3 scripts/ruter.py`, bump
+`VERSION`, og commit. En låge, OSM mangler, tilføjes med `lon`/`lat` på muren.
 
 ## Data og rettigheder
 
@@ -73,13 +87,21 @@ kortet, og fortegnelsen stammer fra kommunens egen brochure.
   afdelingsgrænser, gravsteder og LiDAR-detekterede træer (CC BY 4.0,
   bearbejdet). Intet er aflæst fra Københavns Kirkegårdes tegnede kort.
   Krediteringen står synligt under kortet.
+- **Ruterne** (`ruter.json`) er en lille graf af stier og fortove på og omkring
+  kirkegården, bygget af `scripts/ruter.py` ud fra OSM-udtrækket
+  `data/osm_assistens.json` (kopi af Trækortets, © OpenStreetMap-bidragydere,
+  ODbL) og lågelisten `data/laager.json`. Grafen er afledt af OSM-data og er
+  derfor selv under **ODbL**; den ligger i sin egen fil med licensen i feltet
+  `licens` og flettes aldrig ind i `gravsteder.json`. Hent aldrig koordinater
+  fra `ruter.json` eller OSM ind i projektets egne data.
 - **GPS-omregningen** bygger på fire hjørneankre (kirkegårdens hjørner fra OSM
   way 3099111), de samme som i Trækortet; de afviger 0,9–1,6 m fra kortet.
 - **Skrifttyperne** Fraunces, Outfit og Spline Sans Mono er selv-hostede under
   SIL Open Font License 1.1 (`fonts/OFL-*.txt`).
 - **Forslag til licens** (ikke besluttet, samme som Trækortet): koden
   (`index.html`, `sw.js`, `scripts/`, `tests/`) under MIT, projektets egne data
-  (`gravsteder.json`'s placeringer) under CC BY 4.0. Fortegnelsen og
+  (`gravsteder.json`'s placeringer og `data/laager.json`) under CC BY 4.0;
+  `ruter.json` og `data/osm_assistens.json` forbliver ODbL. Fortegnelsen og
   kommunens data er ikke projektets. Indtil da gælder almindelig ophavsret.
 
 *Til opfølgning:* (1) dokumentér tilladelsen til at gengive brochurens
@@ -95,9 +117,9 @@ HTML og JavaScript; `gravsteder.json` er data; `fonts/` er skrifttyperne. Kør
 `python3 -m http.server` i mappen og åbn `http://localhost:8000/` (GPS,
 udklipsholder og service worker kræver HTTPS eller localhost).
 
-**Offline:** `sw.js` cacher siden, data, kortet og fontene. **Bump `VERSION`
-i `sw.js` ved hvert deploy**, der ændrer `index.html`, `gravsteder.json`,
-kortet, fontene, ikonerne eller manifestet; ellers hænger gamle besøgende i
+**Offline:** `sw.js` cacher siden, data, ruter, kortet og fontene. **Bump
+`VERSION` i `sw.js` ved hvert deploy**, der ændrer `index.html`,
+`gravsteder.json`, `ruter.json`, kortet, fontene, ikonerne eller manifestet; ellers hænger gamle besøgende i
 den gamle udgave. CI (`.github/workflows/pages.yml`) fejler, hvis det glemmes.
 
 **Data:** `python3 scripts/check_data.py` tjekker `gravsteder.json` (kører
@@ -106,12 +128,17 @@ også i CI). `python3 scripts/placer.py` beregner placeringerne på ny fra
 bevares. Filen kan genskabes fra kommunens WFS med Trækortets
 `scripts/kk_hent.py` (fremgangsmåde i `data/README.md`).
 
+**Ruter:** `python3 scripts/ruter.py` bygger `ruter.json` på ny fra
+`data/osm_assistens.json` og `data/laager.json` og skriver statistik (knuder,
+kanter, hvilke låger der er gennemgang ved). Et friskt OSM-udtræk hentes med
+Trækortets `scripts/osm_slank.mjs` og kopieres hertil.
+
 **Kortet** er fire webp-filer (lys/mørk, 1× og 2×) i 1400 × 1216 px. Skal det
 fornys, renderes det i Trækort-repoet og kopieres hertil i samme størrelse;
 alle koordinater er brøkdele af det billede.
 
 **Test:** `tests/side.test.mjs` er en headless røgtest (Playwright/Chromium +
-en lokal server), der tjekker prikker, søgning, links, GPS-visning og
+en lokal server), der tjekker prikker, søgning, links, GPS-visning, zoom, ruter og
 rettetilstanden og tager skærmbilleder i lys og mørk tilstand. Den køres ikke i
 CI; se kommentaren øverst i filen.
 

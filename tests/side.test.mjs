@@ -95,6 +95,25 @@ try {
   if (UD) await page.screenshot({ path: path.join(UD, 'telefon_zoom.png') });
   await page.evaluate(() => document.getElementById('zoomBtn').click()); await page.waitForTimeout(350);
   ok(await page.locator('#card.open').count() === 1, 'kortet med det valgte gravsted er stadig åbent');
+  // Rute: fra positionen (inde, ved afd. J) til H. C. Andersen (P1); udefra (Nørrebrogade) gennem en låge
+  await page.goto(URL0 + '#g=P1'); await page.waitForSelector('.dot'); // nulstiller zoom og GPS
+  await page.click('#cRute'); await page.waitForTimeout(1500);
+  const rt = await page.locator('#rutetekst').textContent();
+  ok(/\d+ m · ca\. \d+ min/.test(rt), 'ruten viser afstand og gangtid: ' + rt);
+  const rm = +((rt.match(/(\d+) m/) || [])[1] || 0);
+  ok(rm > 100 && rm < 900, 'afstanden fra J til P er plausibel (' + rm + ' m)');
+  const npts = await page.locator('#rutelinje').evaluate(el => el.getAttribute('points').trim().split(/\s+/).length);
+  ok(npts >= 5, 'rutelinjen følger stierne (' + npts + ' punkter)');
+  ok((await page.locator('#rutestip').getAttribute('points')).trim().split(/\s+/).length === 2, 'den stiplede slutstrækning tegnes');
+  ok((await page.locator('#cRute').textContent()).includes('Rute vises'), 'knappen på kortet viser, at ruten er aktiv');
+  if (UD) await page.screenshot({ path: path.join(UD, 'telefon_rute.png') });
+  await page.waitForTimeout(4200); // ruten regnes højst om hvert 4. sekund
+  await ctx.setGeolocation({ latitude: 55.6918, longitude: 12.5530 }); await page.waitForTimeout(1200); // Nørrebrogade, uden for muren
+  const rt2 = await page.locator('#rutetekst').textContent();
+  ok(/gennem /.test(rt2), 'udefra går ruten gennem en låge: ' + rt2);
+  await page.click('#ruteStop');
+  ok(!(await page.evaluate(() => document.body.classList.contains('rute'))), 'Afslut rute slukker ruten');
+  await ctx.setGeolocation({ latitude: 55.6903, longitude: 12.5505 }); await page.click('#hereBtn'); await page.waitForTimeout(300); // GPS fra igen
   // Rettetilstand: tryk på kortet flytter den valgte prik og gemmes lokalt
   await page.click('#retToggle');
   ok(await page.evaluate(() => document.body.classList.contains('ret')), 'rettetilstand tændt');
