@@ -65,6 +65,36 @@ try {
   ok(await page.locator('.afdhead').count() === 0, 'ingen afdelingsoverskrifter, når der sorteres efter afstand');
   await page.click('#nearBtn'); await page.click('#hereBtn');
   ok(await page.locator('#youdot[hidden]').count() === 1, 'GPS slukkes igen');
+  // Zoom: knappen, to-finger-knib (syntetiske touch-events) og dobbelttryk; prikkerne beholder skærmstørrelsen
+  await page.locator('#mapwrap').scrollIntoViewIfNeeded();
+  const kOf = async () => parseFloat(((await page.locator('#mapinner').evaluate(el => el.style.transform)).match(/scale\(([\d.]+)/) || [])[1] || '1'); // browseren normaliserer "scale(1.0000)" til "scale(1)"
+  const dotW0 = (await page.locator('.dot[data-id="U1"]').boundingBox()).width;
+  await page.click('#zoomBtn'); await page.waitForTimeout(350);
+  ok(Math.abs(await kOf() - 2.5) < 0.01, 'Forstør giver 2,5×');
+  ok(await page.evaluate(() => document.getElementById('mapwrap').classList.contains('zoom')), 'zoom-tilstand sat');
+  const dotW1 = (await page.locator('.dot[data-id="U1"]').boundingBox()).width;
+  ok(Math.abs(dotW1 - dotW0) < 1.5, 'prikken beholder sin skærmstørrelse ved zoom (' + dotW0.toFixed(1) + ' → ' + dotW1.toFixed(1) + ' px)');
+  await page.click('#zoomBtn'); await page.waitForTimeout(350);
+  ok(Math.abs(await kOf() - 1) < 0.01, 'Forstør igen går tilbage til 1×');
+  await page.evaluate(() => { const m = document.getElementById('mapwrap'), r = m.getBoundingClientRect();
+    const mk = (id, x, y) => new Touch({ identifier: id, target: m, clientX: x, clientY: y, pageX: x, pageY: y });
+    const ev = (type, ts, ch) => new TouchEvent(type, { touches: ts, changedTouches: ch || ts, targetTouches: ts, bubbles: true, cancelable: true });
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    m.dispatchEvent(ev('touchstart', [mk(1, cx - 20, cy), mk(2, cx + 20, cy)]));
+    m.dispatchEvent(ev('touchmove', [mk(1, cx - 60, cy), mk(2, cx + 60, cy)]));
+    m.dispatchEvent(ev('touchend', [], [mk(1, cx - 60, cy), mk(2, cx + 60, cy)])); });
+  await page.waitForTimeout(100);
+  ok(Math.abs(await kOf() - 3) < 0.01, 'to-finger-knib 40 → 120 px giver 3×');
+  await page.evaluate(() => { const m = document.getElementById('mapwrap'), r = m.getBoundingClientRect();
+    const mk = (id, x, y) => new Touch({ identifier: id, target: m, clientX: x, clientY: y, pageX: x, pageY: y });
+    const ev = (type, ts, ch) => new TouchEvent(type, { touches: ts, changedTouches: ch || ts, targetTouches: ts, bubbles: true, cancelable: true });
+    const cx = r.left + 40, cy = r.top + 40;
+    for (let i = 0; i < 2; i++) { m.dispatchEvent(ev('touchstart', [mk(9, cx, cy)])); m.dispatchEvent(ev('touchend', [], [mk(9, cx, cy)])); } });
+  await page.waitForTimeout(350);
+  ok(Math.abs(await kOf() - 5) < 0.01, 'dobbelttryk ved 3× giver 5×');
+  if (UD) await page.screenshot({ path: path.join(UD, 'telefon_zoom.png') });
+  await page.evaluate(() => document.getElementById('zoomBtn').click()); await page.waitForTimeout(350);
+  ok(await page.locator('#card.open').count() === 1, 'kortet med det valgte gravsted er stadig åbent');
   // Rettetilstand: tryk på kortet flytter den valgte prik og gemmes lokalt
   await page.click('#retToggle');
   ok(await page.evaluate(() => document.body.classList.contains('ret')), 'rettetilstand tændt');

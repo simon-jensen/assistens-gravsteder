@@ -215,23 +215,22 @@ h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,42px)
 @media(max-width:900px){.layout{grid-template-columns:1fr}}
 .panel-title{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bark);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 .maptools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.mapwrap{position:relative;border:1px solid var(--map-frame);border-radius:5px;overflow:hidden;box-shadow:0 8px 26px -18px rgba(0,0,0,.5);background:#efede3;line-height:0}
+.mapwrap{position:relative;border:1px solid var(--map-frame);border-radius:5px;overflow:hidden;box-shadow:0 8px 26px -18px rgba(0,0,0,.5);background:#efede3;line-height:0;touch-action:pan-y;user-select:none;-webkit-user-select:none} /* pan-y: én finger ruller siden, to fingre zoomer kortet (egen kode, så det også virker som hjemmeskærms-app) */
 @media (prefers-color-scheme: dark){.mapwrap{background:#23271f}}
-.mapinner{position:relative;width:100%} /* prikker og "du er her" ligger her, så de følger med ved beskæring og forstørrelse */
+.mapinner{position:relative;width:100%;transform-origin:0 0;will-change:transform} /* prikker og "du er her" ligger her, så de følger med ved beskæring og forstørrelse (transform) */
 .mapinner picture{display:block}
 .mapwrap img{width:100%;height:auto;display:block}
 @media(max-width:900px){ /* på telefon beskæres park og gader væk (x 280–1290 af 1400): kortet bliver ca. 38 % større */
  .mapinner{width:calc(100% * 1400 / 1010);margin-left:calc(-100% * 280 / 1010)}
 }
-.mapwrap.zoom{overflow:auto;max-height:78vh;-webkit-overflow-scrolling:touch;cursor:grab}
-.mapwrap.zoom .mapinner{width:250%;margin-left:0}
+.mapwrap.zoom{cursor:grab;touch-action:none} /* forstørret: træk panorerer kortet i stedet for at rulle siden */
 #hereBtn.on{background:#2b6cd9;border-color:#2b6cd9;color:#fff}
 #zoomBtn.on{background:var(--bark);border-color:var(--bark);color:var(--paper)}
-#youdot{position:absolute;width:14px;height:14px;border-radius:50%;background:#2b6cd9;border:2px solid #fff;box-shadow:0 0 0 2px rgba(43,108,217,.45);transform:translate(-50%,-50%);z-index:6;pointer-events:none}
-#youdot[hidden]{display:none}
-#youdot i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:rgba(43,108,217,.14);border:1px solid rgba(43,108,217,.55)} /* GPS-usikkerhed */
+#youdot{position:absolute;width:14px;height:14px;border-radius:50%;background:#2b6cd9;border:2px solid #fff;box-shadow:0 0 0 2px rgba(43,108,217,.45);transform:translate(-50%,-50%) scale(var(--ik,1));z-index:6;pointer-events:none}
+#youdot[hidden],#youring[hidden]{display:none}
+#youring{position:absolute;transform:translate(-50%,-50%);border-radius:50%;background:rgba(43,108,217,.14);border:1px solid rgba(43,108,217,.55);z-index:5;pointer-events:none} /* GPS-usikkerhed i procent af kortet: følger med, når kortet forstørres */
 /* Gravsteder som prikker, farvet efter brochurens kategorier */
-.dot{position:absolute;width:7px;height:7px;border-radius:50%;transform:translate(-50%,-50%);z-index:3;padding:0;cursor:pointer;
+.dot{position:absolute;width:7px;height:7px;border-radius:50%;transform:translate(-50%,-50%) scale(var(--ik,1));z-index:3;padding:0;cursor:pointer; /* --ik = 1/zoom: prikken beholder sin skærmstørrelse og dækker mindre jord, jo mere der zoomes */
  border:1px solid var(--dot-ring);box-shadow:0 0 0 1px var(--dot-halo);background:var(--c);-webkit-tap-highlight-color:transparent;transition:width .12s,height .12s}
 .dot::after{content:"";position:absolute;inset:-11px} /* trykfladen er større end prikken: ca. 28 px */
 .dot:hover{width:11px;height:11px;z-index:4}
@@ -328,7 +327,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 </header>
 <div class="layout">
 <section>
-<div class="panel-title"><span>Kort</span><span class="maptools"><button class="filterbtn" id="hereBtn" title="Vis din GPS-position på kortet" aria-pressed="false">🧭 Hvor er jeg?</button><button class="filterbtn" id="zoomBtn" title="Forstør kortet — træk for at panorere" aria-pressed="false">🔍 Forstør</button></span></div>
+<div class="panel-title"><span>Kort</span><span class="maptools"><button class="filterbtn" id="hereBtn" title="Vis din GPS-position på kortet" aria-pressed="false">🧭 Hvor er jeg?</button><button class="filterbtn" id="zoomBtn" title="Forstør kortet 2,5× — to fingre eller dobbelttryk zoomer også, træk panorerer" aria-pressed="false">🔍 Forstør</button></span></div>
 <div class="retbar" id="retbar">
   <div><b>Ret placering.</b> Vælg et gravsted i listen eller på kortet, og tryk så på kortet, dér hvor gravstedet er. Eller stil dig ved gravstedet med GPS tændt og tryk <b>📡 Her</b>. Rettelserne gemmes kun i din browser, indtil du eksporterer filen og lægger den i repoet som <code>gravsteder.json</code>.</div>
   <div class="retbtns">
@@ -346,7 +345,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
    <img src="kort.webp" srcset="kort.webp 1x, kort@2x.webp 2x" width="1400" height="1216" decoding="async" fetchpriority="high" alt="Kort over Assistens Kirkegård med afdelingerne A–V" id="mapimg">
   </picture>
   <div id="dots"></div>
-  <div id="cross"></div><div id="youdot" hidden aria-label="Din position"><i></i></div>
+  <div id="cross"></div><div id="youring" hidden></div><div id="youdot" hidden aria-label="Din position"></div>
  </div>
 </div>
 <div class="card" id="card" aria-live="polite">
@@ -365,7 +364,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <div class="list" id="list"><div id="status">Henter gravstederne …</div></div>
 </section>
 </div>
-<footer><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>). <button class="clearchip" id="retToggle">Ret placeringer</button></footer>
+<footer><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>). <button class="clearchip" id="retToggle">Ret placeringer</button></footer>
 </div>
 <div id="toast" role="status"></div>
 <script>
@@ -430,7 +429,7 @@ function buildDots(){
   dotsEl.appendChild(frag);syncDots();
 }
 function syncDots(){const vis=visibleSet();dotsEl.querySelectorAll('.dot').forEach(d=>{d.classList.toggle('sel',d.dataset.id===sel);d.classList.toggle('dim',!vis.has(d.dataset.id)&&d.dataset.id!==sel);});}
-dotsEl.onclick=e=>{const d=e.target.closest('.dot');if(d)select(d.dataset.id,'map');};
+dotsEl.onclick=e=>{if(dragged)return;const d=e.target.closest('.dot');if(d)select(d.dataset.id,'map');};
 // ————— Filtre og liste —————
 function matches(g){const term=q.value.trim().toLowerCase();
   if(curAfd&&g.afd!==curAfd)return false;if(katOn&&g.kat!==katOn)return false;
@@ -491,17 +490,51 @@ function readHash(){const p=new URLSearchParams(location.hash.slice(1));
   const k=p.get('kat');if(k&&KAT[k])setKat(k);else render();
   if(p.get('ret')==='1')setRet(true);
   const g=p.get('g');if(g&&byId[g])select(g,'hash');}
-// ————— Forstør —————
-function centerMap(f,smooth){if(!mapwrapEl.classList.contains('zoom')||!f)return;
-  const W=mapwrapEl.scrollWidth,H=mapwrapEl.scrollHeight,left=f.fx*W-mapwrapEl.clientWidth/2,top=f.fy*H-mapwrapEl.clientHeight/2;
-  if(smooth&&mapwrapEl.scrollTo)mapwrapEl.scrollTo({left:left,top:top,behavior:SB});else{mapwrapEl.scrollLeft=left;mapwrapEl.scrollTop=top;}}
-function setZoom(on){mapwrapEl.classList.toggle('zoom',on);$('zoomBtn').classList.toggle('on',on);$('zoomBtn').setAttribute('aria-pressed',on);
-  if(on)centerMap(sel?pos(byId[sel]):(you||{fx:0.55,fy:0.5}));}
-$('zoomBtn').onclick=()=>setZoom(!mapwrapEl.classList.contains('zoom'));
+// ————— Zoom og panorering: to fingre, træk, dobbelttryk, ctrl/⌘+scroll og knappen —————
+// Egen kode frem for sidens zoom: som hjemmeskærms-app slår iOS sidezoom fra, og to fingre bør zoome kortet, ikke hele siden.
+// Kortet (.mapinner) får translate+scale; prikker og "du er her" modskaleres med --ik, så de beholder deres skærmstørrelse.
+const KMAX=8;let k=1,tx=0,ty=0,pinch=null,pan=null,dragged=false,lastTap=0;
+function geo(){const r=mapwrapEl.getBoundingClientRect();return {r:r,Ww:mapwrapEl.clientWidth,Hw:mapwrapEl.clientHeight,Wi:wrap.offsetWidth,Hi:wrap.offsetHeight,ox:wrap.offsetLeft};} // ox: mobilbeskæringens negative margin
+function clampT(g){if(k<=1.001){k=1;tx=0;ty=0;return;}tx=Math.min(-g.ox,Math.max(g.Ww-g.Wi*k-g.ox,tx));ty=Math.min(0,Math.max(g.Hw-g.Hi*k,ty));} // kortet må ikke trækkes ud af rammen
+function applyT(smooth){wrap.style.transition=smooth&&SB==='smooth'?'transform .25s':'none';
+  wrap.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+k.toFixed(4)+')';wrap.style.setProperty('--ik',(1/k).toFixed(4));
+  const on=k>1.01;mapwrapEl.classList.toggle('zoom',on);$('zoomBtn').classList.toggle('on',on);$('zoomBtn').setAttribute('aria-pressed',on);}
+function zoomAt(nk,sx,sy,smooth){const g=geo();nk=Math.min(KMAX,Math.max(1,nk));const px=(sx-g.ox-tx)/k,py=(sy-ty)/k;k=nk;tx=sx-g.ox-px*k;ty=sy-py*k;clampT(g);applyT(smooth);} // zoom om et punkt i rammen
+function centerMap(f,smooth){if(k<=1.01||!f)return;const g=geo();tx=g.Ww/2-g.ox-f.fx*g.Wi*k;ty=g.Hw/2-f.fy*g.Hi*k;clampT(g);applyT(smooth);}
+function setZoom(on){if(on){k=Math.max(k,2.5);const g=geo(),p=(sel?pos(byId[sel]):null)||you||{fx:0.55,fy:0.5};tx=g.Ww/2-g.ox-p.fx*g.Wi*k;ty=g.Hw/2-p.fy*g.Hi*k;clampT(g);applyT(true);}else{k=1;clampT(geo());applyT(true);}}
+$('zoomBtn').onclick=()=>setZoom(k<=1.01);
+const sxy=(e,g)=>[e.clientX-g.r.left,e.clientY-g.r.top];
+const trin=(sx,sy)=>zoomAt(k<2.4?2.5:(k<4.9?5:1),sx,sy,true); // dobbelttryk: 2,5× → 5× → tilbage
+mapwrapEl.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){const g=geo(),a=e.touches[0],b=e.touches[1];
+    pinch={d0:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),k0:k,px:((a.clientX+b.clientX)/2-g.r.left-g.ox-tx)/k,py:((a.clientY+b.clientY)/2-g.r.top-ty)/k};pan=null;e.preventDefault();}
+  else if(e.touches.length===1){const t=e.touches[0];pan=k>1.01?{x:t.clientX,y:t.clientY,tx0:tx,ty0:ty}:null;}
+},{passive:false});
+mapwrapEl.addEventListener('touchmove',e=>{
+  if(pinch&&e.touches.length===2){const g=geo(),a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+    k=Math.min(KMAX,Math.max(1,pinch.k0*d/pinch.d0));const cx=(a.clientX+b.clientX)/2-g.r.left,cy=(a.clientY+b.clientY)/2-g.r.top;
+    tx=cx-g.ox-pinch.px*k;ty=cy-pinch.py*k;clampT(g);applyT(false);dragged=true;e.preventDefault();}
+  else if(pan&&e.touches.length===1){const t=e.touches[0],dx=t.clientX-pan.x,dy=t.clientY-pan.y;if(Math.hypot(dx,dy)>4)dragged=true;
+    tx=pan.tx0+dx;ty=pan.ty0+dy;clampT(geo());applyT(false);e.preventDefault();}
+},{passive:false});
+mapwrapEl.addEventListener('touchend',e=>{
+  if(e.touches.length<2)pinch=null;
+  if(e.touches.length===0){const t=e.changedTouches[0],now=Date.now();
+    if(!dragged&&t&&now-lastTap<320){const g=geo(),[sx,sy]=sxy(t,g);trin(sx,sy);lastTap=0;e.preventDefault();}else lastTap=dragged?0:now;
+    pan=null;if(k<1.05&&k!==1)zoomAt(1,0,0,true);setTimeout(()=>{dragged=false;},60);}
+},{passive:false});
+mapwrapEl.addEventListener('touchcancel',()=>{pinch=null;pan=null;setTimeout(()=>{dragged=false;},60);});
+// mus og pegefelt: træk panorerer, når kortet er forstørret; ctrl/⌘+scroll (pegefeltets knib) zoomer; dobbeltklik forstørrer
+mapwrapEl.addEventListener('mousedown',e=>{if(k<=1.01||e.button!==0)return;pan={x:e.clientX,y:e.clientY,tx0:tx,ty0:ty};e.preventDefault();});
+addEventListener('mousemove',e=>{if(!pan||pinch||e.buttons===0)return;const dx=e.clientX-pan.x,dy=e.clientY-pan.y;if(Math.hypot(dx,dy)>4)dragged=true;tx=pan.tx0+dx;ty=pan.ty0+dy;clampT(geo());applyT(false);});
+addEventListener('mouseup',()=>{if(pan){pan=null;setTimeout(()=>{dragged=false;},60);}});
+mapwrapEl.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();const g=geo(),[sx,sy]=sxy(e,g);zoomAt(k*Math.exp(-e.deltaY*0.01),sx,sy,false);},{passive:false});
+mapwrapEl.addEventListener('dblclick',e=>{if(e.target.closest('.dot'))return;const g=geo(),[sx,sy]=sxy(e,g);trin(sx,sy);});
+addEventListener('resize',()=>{clampT(geo());applyT(false);});
 // ————— Hvor er jeg? —————
-let hereWatch=null;const hereBtn=$('hereBtn');
+let hereWatch=null;const hereBtn=$('hereBtn'),youRing=$('youring');
 function stopHere(){if(hereWatch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(hereWatch);hereWatch=null;you=null;
-  youEl.hidden=true;hereBtn.classList.remove('on');hereBtn.setAttribute('aria-pressed','false');nearBtn.hidden=true;if(nearest){nearest=false;nearBtn.classList.remove('on');nearBtn.setAttribute('aria-pressed','false');}render();}
+  youEl.hidden=true;youRing.hidden=true;hereBtn.classList.remove('on');hereBtn.setAttribute('aria-pressed','false');nearBtn.hidden=true;if(nearest){nearest=false;nearBtn.classList.remove('on');nearBtn.setAttribute('aria-pressed','false');}render();}
 hereBtn.onclick=()=>{
   if(hereWatch!==null){stopHere();return;}
   if(!navigator.geolocation){toast('Din browser tilbyder ikke GPS');return;}
@@ -509,11 +542,11 @@ hereBtn.onclick=()=>{
   let told=false,lastRender=0;
   hereWatch=navigator.geolocation.watchPosition(p=>{
     const c=p.coords,f=llToFrac(c.latitude,c.longitude),ud=udenforM(f);
-    if(ud>60){youEl.hidden=true;you=null;if(!told){told=true;toast('Du er ca. '+Math.round(ud)+' m uden for kortet');}return;}
+    if(ud>60){youEl.hidden=true;youRing.hidden=true;you=null;if(!told){told=true;toast('Du er ca. '+Math.round(ud)+' m uden for kortet');}return;}
     you={fx:Math.min(1,Math.max(0,f.fx)),fy:Math.min(1,Math.max(0,f.fy)),acc:c.accuracy,lat:c.latitude,lon:c.longitude};
-    youEl.style.left=(you.fx*100)+'%';youEl.style.top=(you.fy*100)+'%';
-    const rpx=c.accuracy/M_PER_PX;youEl.firstElementChild.style.width=(rpx/IMGW*200)+'%';youEl.firstElementChild.style.height=(rpx/IMGH*200)+'%';
-    youEl.hidden=false;nearBtn.hidden=false;
+    youEl.style.left=youRing.style.left=(you.fx*100)+'%';youEl.style.top=youRing.style.top=(you.fy*100)+'%';
+    const rpx=c.accuracy/M_PER_PX;youRing.style.width=(rpx/IMGW*200)+'%';youRing.style.height=(rpx/IMGH*200)+'%'; // usikkerhedsradius i billedpixels → procent af kortet (diameter = 2r)
+    youEl.hidden=false;youRing.hidden=false;nearBtn.hidden=false;
     if(!told){told=true;let best=null,bd=Infinity;G.forEach(g=>{const d=distM(you,pos(g));if(d<bd){bd=d;best=g;}});
       toast('Nærmest dig: '+best.navn+' ('+best.plot+'), ca. '+Math.round(bd)+' m · GPS ±'+Math.round(c.accuracy)+' m');
       centerMap(you,true);if(window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
@@ -530,7 +563,7 @@ function retSet(id,fx,fy,src,extra){retLast={id:id,prev:RET[id]||null};
   RET[id]=Object.assign({fx:+fx.toFixed(5),fy:+fy.toFixed(5),src:src,ts:nowTs()},extra||{});saveRet();buildDots();retCount();select(id,'ret');
   toast(byId[id].navn+' flyttet — husk ⬇ Eksportér');}
 mapwrapEl.addEventListener('click',e=>{
-  if(!document.body.classList.contains('ret'))return;if(e.target.closest('.dot')&&!e.target.closest('.dot.sel'))return;
+  if(!document.body.classList.contains('ret')||dragged)return;if(e.target.closest('.dot')&&!e.target.closest('.dot.sel'))return;
   if(!sel){toast('Vælg først et gravsted');return;}
   const r=$('mapimg').getBoundingClientRect(),fx=(e.clientX-r.left)/r.width,fy=(e.clientY-r.top)/r.height; // billedets boks, ikke rammens
   if(fx<0||fx>1||fy<0||fy>1)return;retSet(sel,fx,fy,'kort');});
