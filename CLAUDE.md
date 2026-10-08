@@ -52,7 +52,8 @@ id'er) og at de filer, service workeren precacher, findes. Headless-røgtesten
   (`digt`, `komp`, `kunst`, `scene`, `handel`, `vid`, `andet`, `faelles`),
   `qr` (1, hvis der er QR-kode på gravstedet), `fx`/`fy` (brøkdele af
   kortbilledet), `src` (`kk` = beregnet af `scripts/placer.py`; `kort` =
-  manuel placering med `ts`), `acc` (anslået usikkerhed i meter), `note`.
+  manuel placering med `ts`), `acc` (anslået usikkerhed i meter), `note`, og valgfrit `bekraeftet` (en
+  feltkontrol i fri tekst; scriptet bevarer feltet).
 - `navn`, `plot` og `kat` er kildens (brochurens) oplysninger. Ret dem kun
   med en begrundelse i commit-beskeden. `alias` (valgfri) giver ekstra
   søgeord, fx en anden stavemåde.
