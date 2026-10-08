@@ -16,7 +16,9 @@ alle kanter ved en "lukket" låge og ved OSM-låger tagget private/permit/no fje
 ruter.json er afledt af OpenStreetMap-data og er derfor selv under ODbL (feltet "licens"); den holdes
 adskilt fra gravsteder.json, som er projektets egne data. Format: n = knuder [[fx, fy], …] (brøkdele af
 kortet, 4 decimaler), e = tovejskanter [[a, b], …], u = envejskanter [[a, b], …] (kun a → b),
-laager = [{navn, status, n (knudeindeks eller null), fx, fy}, …]. Længder regnes på siden.
+laager = [{navn, status, n (knudeindeks eller null), fx, fy}, …], m = barrierer (mure, hegn, hække og
+kirkegårdens omrids) som polylinjer [[[fx, fy], …], …]: siden kobler start og mål til nærmeste stipunkt,
+der kan nås uden at krydse en af dem, så ruten ikke ender på den forkerte side af en mur. Længder regnes på siden.
 """
 import json, math, os, sys
 
@@ -218,8 +220,18 @@ def main(argv):
         comp.append(c)
     comp.sort(reverse=True)
     lg = [dict(navn=g["navn"], status=g["status"], n=idx.get(key(g["p"])), fx=round(frac(g["p"])[0], 4), fy=round(frac(g["p"])[1], 4)) for g in gates if g["navn"] != "privat låge (OSM)"]
+    # Barrierer: mure, hegn og hække på kortet samt kirkegårdens omrids; polylinjer i kortbrøk
+    BAR = {"wall", "fence", "retaining_wall", "hedge", "city_wall"}
+    barr, nseg = [], 0
+    for e in els:
+        t = e.get("tags") or {}
+        if e["type"] == "way" and (t.get("barrier") in BAR or e["id"] == 3099111):
+            pl = [[round(frac(q)[0], 4), round(frac(q)[1], 4)] for q in e["geom"]]
+            if any(-0.02 <= q[0] <= 1.02 and -0.02 <= q[1] <= 1.02 for q in pl):
+                barr.append(pl); nseg += len(pl) - 1
     print(f"{nways} gangbare veje → {len(keep)} knuder, {len(E)} tovejskanter, {len(U)} envejskanter; "
-          f"{cut_wall} kanter klippet ved muren, {cut_closed} ved lukkede låger; delnet inde: {len(comp)} ({comp[:5]})")
+          f"{cut_wall} kanter klippet ved muren, {cut_closed} ved lukkede låger; delnet inde: {len(comp)} ({comp[:5]}); "
+          f"{len(barr)} barrierer med {nseg} stykker")
     for navn, n in sorted(via.items()):
         print(f"  gennem {navn}: {n} kant(er)")
     if dry:
@@ -227,7 +239,7 @@ def main(argv):
     out = {"licens": "Afledt af OpenStreetMap-data: ODbL 1.0 · © OpenStreetMap-bidragydere · https://www.openstreetmap.org/copyright",
            "kilde": f"data/osm_assistens.json (hentet {osm.get('hentet', '?')}) og data/laager.json; bygget af scripts/ruter.py",
            "n": [[round(frac(k)[0], 4), round(frac(k)[1], 4)] for k in keep],
-           "e": sorted(E), "u": sorted(U), "laager": lg}
+           "e": sorted(E), "u": sorted(U), "laager": lg, "m": barr}
     with open(os.path.join(ROOT, "ruter.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
     print(f"skrev ruter.json ({os.path.getsize(os.path.join(ROOT, 'ruter.json')) // 1024} KB)")

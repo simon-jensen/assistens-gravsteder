@@ -113,6 +113,13 @@ try {
   ok(/gennem /.test(rt2), 'udefra går ruten gennem en låge: ' + rt2);
   await page.click('#ruteStop');
   ok(!(await page.evaluate(() => document.body.classList.contains('rute'))), 'Afslut rute slukker ruten');
+  // Fra Yoldi (D5, inde i D) til von Scholten (D4, ved muren mod L): ruten må ikke krydse muren i nogen ende
+  await page.waitForTimeout(4200); await ctx.setGeolocation({ latitude: 55.691257, longitude: 12.550173 }); await page.waitForTimeout(800);
+  const rD = await page.evaluate(() => { const rt = findRute(you, pos(byId['D4'])); if (!rt) return null;
+    const alle = rt.pts.concat([rt.slut, [pos(byId['D4']).fx, pos(byId['D4']).fy]]); let kryds = 0;
+    for (let i = 1; i < alle.length; i++) if (krydserMur(alle[i - 1], alle[i])) kryds++; return { m: Math.round(rt.m), kryds: kryds, n: rt.pts.length }; });
+  ok(rD && rD.kryds === 0, 'ruten Yoldi → von Scholten krydser ingen mur: ' + JSON.stringify(rD));
+  ok(rD && rD.m < 120, 'og er kort (' + (rD && rD.m) + ' m), ikke rundt om muren');
   await ctx.setGeolocation({ latitude: 55.6903, longitude: 12.5505 }); await page.click('#hereBtn'); await page.waitForTimeout(300); // GPS fra igen
   // Rettetilstand: tryk på kortet flytter den valgte prik og gemmes lokalt
   await page.goto(URL0 + '#g=U1'); await page.waitForSelector('.dot'); // U1 valgt igen (ruteblokken valgte P1)

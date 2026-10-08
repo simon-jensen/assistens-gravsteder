@@ -388,7 +388,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <button type="button" id="nyudgave" hidden>↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
-const UDGAVE='2026-10-08i'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
+const UDGAVE='2026-10-08j'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
 // ————— Kategorier (brochurens signaturer og farver) —————
 const KAT={
  digt:{navn:'Digtere, forfattere og filosoffer',kort:'digter/forfatter/filosof',c:'#f29b3a'},
@@ -595,12 +595,19 @@ function hentRuter(){if(RUTER)return Promise.resolve(RUTER);
     const P=i=>({fx:d.n[i][0],fy:d.n[i][1]}),L=(a,b)=>distM(P(a),P(b)),adj=d.n.map(()=>[]);
     d.e.forEach(([a,b])=>{const m=L(a,b);adj[a].push([b,m]);adj[b].push([a,m]);});(d.u||[]).forEach(([a,b])=>adj[a].push([b,L(a,b)]));
     d.adj=adj;d.len=L;RUTER=d;return d;});}
-function naermestKant(p){ // nærmeste punkt på en tovejskant: {a,b,t,fx,fy,m}
-  let best=null;const n=RUTER.n,px=p.fx*IMGW,py=p.fy*IMGH;
+function krydserMur(p,q){ // skærer det lige stykke p–q en mur, et hegn eller en hæk (RUTER.m)? Berøring tæller ikke.
+  const o=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+  for(const pl of RUTER.m||[])for(let i=1;i<pl.length;i++){const a=pl[i-1],b=pl[i];
+    const d1=o(a,b,p),d2=o(a,b,q),d3=o(p,q,a),d4=o(p,q,b);if(((d1>0)!==(d2>0))&&((d3>0)!==(d4>0))&&d1!==0&&d2!==0&&d3!==0&&d4!==0)return true;}
+  return false;}
+function naermestKant(p){ // nærmeste punkt på en tovejskant, som kan nås uden at krydse en barriere: {a,b,t,fx,fy,m}
+  const n=RUTER.n,px=p.fx*IMGW,py=p.fy*IMGH,kand=[];
   for(const [a,b] of RUTER.e){const ax=n[a][0]*IMGW,ay=n[a][1]*IMGH,dx=n[b][0]*IMGW-ax,dy=n[b][1]*IMGH-ay,L=dx*dx+dy*dy;
     let t=L?((px-ax)*dx+(py-ay)*dy)/L:0;t=Math.max(0,Math.min(1,t));const qx=ax+t*dx,qy=ay+t*dy,m=Math.hypot(px-qx,py-qy)*M_PER_PX;
-    if(!best||m<best.m)best={a:a,b:b,t:t,fx:qx/IMGW,fy:qy/IMGH,m:m};}
-  return best;}
+    if(m<=120)kand.push({a:a,b:b,t:t,fx:qx/IMGW,fy:qy/IMGH,m:m});}
+  if(!kand.length)return null;kand.sort((x,y)=>x.m-y.m);
+  const ok=kand.find(k=>!krydserMur([p.fx,p.fy],[k.fx,k.fy])); // ellers nærmeste (fx et gravsted helt omgivet af hæk)
+  return ok||kand[0];}
 function dijkstra(seeds){ // seeds: [[knude, startomkostning], …] → {dist, prev}; binær hob
   const N=RUTER.n.length,dist=new Float64Array(N).fill(Infinity),prev=new Int32Array(N).fill(-1),h=[];
   const push=(d,v)=>{h.push([d,v]);let i=h.length-1;while(i>0){const p=(i-1)>>1;if(h[p][0]<=h[i][0])break;[h[p],h[i]]=[h[i],h[p]];i=p;}};
