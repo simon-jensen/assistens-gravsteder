@@ -201,6 +201,7 @@
   --panel-bg:#23271f;--input-bg:#262a22;--mute:#a8a496;--faint:#9c9684;--card-hover:rgba(122,155,109,.12);--plot-text:#1c1f1a;--map-frame:#3a3f36;
   --dot-ring:rgba(244,241,230,.75);--dot-halo:rgba(0,0,0,.5);--andet:#f4f1e6;--handel:#111;}
  body{background-image:radial-gradient(circle at 15% 5%,rgba(122,155,109,.07),transparent 40%) !important;}
+ .dot[data-k="handel"]{box-shadow:0 0 0 2px rgba(244,241,230,.9)}
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -236,6 +237,8 @@ h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,42px)
 .dot:hover{width:11px;height:11px;z-index:4}
 .dot.sel{width:14px;height:14px;z-index:5;border-color:var(--ink);box-shadow:0 0 0 2px var(--gold)}
 .dot.sel::before{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--gold);animation:pulse 1.6s ease-out infinite;pointer-events:none}
+.dot[data-k="handel"]{box-shadow:0 0 0 2px #fff} /* sort prik: bred hvid ring, ellers forsvinder den på mure og bygninger (fx von Scholten på hjørnet ved D) */
+.dot[data-k="handel"].sel{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--gold)}
 .dot.dim{opacity:.22;pointer-events:none}
 body.ret .dot.sel{pointer-events:none} /* mens en placering rettes, går trykket igennem til kortet */
 @keyframes pulse{0%{width:14px;height:14px;opacity:.9}100%{width:70px;height:70px;opacity:0}}
@@ -385,7 +388,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <button type="button" id="nyudgave" hidden>↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
-const UDGAVE='2026-10-08g'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
+const UDGAVE='2026-10-08h'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
 // ————— Kategorier (brochurens signaturer og farver) —————
 const KAT={
  digt:{navn:'Digtere, forfattere og filosoffer',kort:'digter/forfatter/filosof',c:'#f29b3a'},
@@ -437,7 +440,7 @@ function buildDots(){
   const groups={};G.forEach(g=>{const p=pos(g),k=p.fx.toFixed(4)+','+p.fy.toFixed(4);(groups[k]=groups[k]||[]).push(g);});
   const frag=document.createDocumentFragment();
   Object.values(groups).forEach(gr=>gr.forEach((g,i)=>{
-    const p=pos(g),k=KAT[g.kat]||KAT.andet,d=document.createElement('button');d.type='button';d.className='dot';d.dataset.id=g.id;
+    const p=pos(g),k=KAT[g.kat]||KAT.andet,d=document.createElement('button');d.type='button';d.className='dot';d.dataset.id=g.id;d.dataset.k=g.kat;
     d.style.setProperty('--c',k.c);d.style.left=(p.fx*100)+'%';d.style.top=(p.fy*100)+'%';
     if(gr.length>1){const a=2*Math.PI*i/gr.length,r=7;d.style.marginLeft=(r*Math.cos(a)).toFixed(1)+'px';d.style.marginTop=(r*Math.sin(a)).toFixed(1)+'px';} // flere på samme gravsted (fx Bohr-familien): små forskydninger, så alle kan rammes
     if(RET[g.id])d.classList.add('flyttet');
