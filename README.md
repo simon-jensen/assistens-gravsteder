@@ -15,7 +15,9 @@ kommunens gravstedsregister, offline-drift og ingen byggetrin.
   kategori under kortet for kun at se den.
 - **Tryk på en prik** på kortet eller på en række i listen: gravstedet
   fremhæves begge steder, og et lille kort viser navn, dødsår, gravsted,
-  kategori og et opslagslink. **Del link** kopierer et link direkte til
+  kategori og **Læs mere**, et link til artiklen om personen på dansk
+  Wikipedia (feltet `wiki` i `gravsteder.json`; knappen mangler, hvor der
+  ingen artikel findes). **Del link** kopierer et link direkte til
   gravstedet, fx `#g=P1` (H. C. Andersen).
 - **🧭 Hvor er jeg?** viser din GPS-position som en blå prik med
   usikkerhedsring og fortæller, hvilket gravsted du står nærmest. Med GPS tændt
@@ -67,10 +69,22 @@ kortet, og fortegnelsen stammer fra kommunens egen brochure.
 
 - **Fortegnelsen** (navne, dødsår, gravstedsnumre, kategorier og
   QR-markering) er transskriberet fra Københavns Kommunes brochure *133
-  gravsteder på Assistens Kirkegård* (2019). Navnene står som i brochuren;
-  familien Holtens fire poster på C-703 er skrevet ud, så de kan søges hver
+  gravsteder på Assistens Kirkegård* (2019). Navnene står som i brochuren,
+  bortset fra fire stavefejl, der er rettet efter Dansk Biografisk Leksikon,
+  Wikidata og gravsted.dk, som alle bekræfter person, dødsår og gravsted:
+  Abilgaard → Abildgaard (A12), Magdelene → Magdalene Thoresen (D1), Matilde
+  → Mathilde Malling Hauschultz (E4) og Finn Juul → Finn Juhl (K4).
+  Brochurens stavning står i feltet `alias`, så den stadig kan søges.
+  Familien Holtens fire poster på C-703 er skrevet ud, så de kan søges hver
   for sig. Tilladelse til at gengive fortegnelsen er ikke dokumenteret (se
   *Til opfølgning*).
+- **Opslagslinkene** (`wiki` i `gravsteder.json`) er sat i hånden efter
+  opslag: dansk Wikipedia, hvor der findes en artikel om personen; ellers
+  Dansk Biografisk Leksikon eller Den Store Danske på lex.dk; ellers engelsk
+  Wikipedia. Hvert link er kontrolleret mod dødsår og erhverv, og for de
+  fleste mod Wikidatas eller gravsted.dk's oplysning om gravstedet. Sider,
+  der kun nævner personen i forbifarten, linkes ikke; 21 gravsteder har
+  derfor intet link.
 - **Placeringerne** (`fx`/`fy` i `gravsteder.json`) er beregnet af
   `scripts/placer.py` ud fra gravstedsnumrene og midtpunkterne i Københavns
   Kommunes gravstedsregister (`data/kk_gravsteder.json`, WFS-lag

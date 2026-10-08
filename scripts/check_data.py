@@ -38,6 +38,10 @@ def main():
             nr_in_afd.add(key)
             if gid != f"{g['afd']}{g['nr']}":
                 err.append(f"{gid}: id skal være afd + nr ({g['afd']}{g['nr']})")
+        if "wiki" not in g:
+            err.append(f"{gid}: feltet 'wiki' mangler (artiklens titel på da.wikipedia.org, en fuld URL eller null)")
+        elif g["wiki"] is not None and (not isinstance(g["wiki"], str) or not g["wiki"].strip() or "index.php?search=" in g["wiki"]):
+            err.append(f"{gid}: 'wiki' skal være en artikeltitel, en fuld URL (https://…) eller null, ikke en søgning")
         if g.get("kat") not in KAT:
             err.append(f"{gid}: ukendt kategori '{g.get('kat')}' (gyldige: {', '.join(sorted(KAT))})")
         if g.get("aar") is not None and not (isinstance(g["aar"], int) and 1700 <= g["aar"] <= 2100):
@@ -93,7 +97,8 @@ def main():
         return 1
     n_kort = sum(1 for g in gs if g.get("src") == "kort")
     n_usikre = sum(1 for g in gs if g.get("src") == "kk" and (g.get("acc") or 0) > 3)
-    print(f"✓ gravsteder.json: {len(gs)} gravsteder, {n_kort} manuelt placeret, {n_usikre} anslåede (acc > 3 m, se data/placering.md); ruter.json: {N} knuder, {len(R['e'])} kanter, {len(L)} låger")
+    n_uden_wiki = sum(1 for g in gs if g.get("wiki") is None)
+    print(f"✓ gravsteder.json: {len(gs)} gravsteder, {n_kort} manuelt placeret, {n_usikre} anslåede (acc > 3 m, se data/placering.md), {n_uden_wiki} uden opslagslink; ruter.json: {N} knuder, {len(R['e'])} kanter, {len(L)} låger")
     return 0
 
 

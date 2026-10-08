@@ -50,13 +50,26 @@ id'er) og at de filer, service workeren precacher, findes. Headless-røgtesten
 - Én post pr. gravsted: `id` (= `afd` + `nr`, fx `A17`), `navn`, `aar`
   (dødsår eller `null`), `plot` (brochurens nummer, fx `A-315/16`), `kat`
   (`digt`, `komp`, `kunst`, `scene`, `handel`, `vid`, `andet`, `faelles`),
-  `qr` (1, hvis der er QR-kode på gravstedet), `fx`/`fy` (brøkdele af
+  `qr` (1, hvis der er QR-kode på gravstedet), `wiki` (opslagslinket: artiklens
+  titel på da.wikipedia.org, fx `Friedrich Kuhlau`, eller en fuld URL til et
+  andet opslagsværk; `null` = der findes ingen artikel, og siden viser intet
+  link. Feltet er obligatorisk; linket må aldrig være en Wikipedia-søgning,
+  for den lander ofte på en forkert person eller en tom søgeside), `fx`/`fy` (brøkdele af
   kortbilledet), `src` (`kk` = beregnet af `scripts/placer.py`; `kort` =
   manuel placering med `ts`), `acc` (anslået usikkerhed i meter), `note`, og valgfrit `bekraeftet` (en
   feltkontrol i fri tekst; scriptet bevarer feltet).
-- `navn`, `plot` og `kat` er kildens (brochurens) oplysninger. Ret dem kun
-  med en begrundelse i commit-beskeden. `alias` (valgfri) giver ekstra
-  søgeord, fx en anden stavemåde.
+- `navn`, `plot` og `kat` er kildens (brochurens) oplysninger. Ret dem kun,
+  når mindst to uafhængige kilder (fx Dansk Biografisk Leksikon, Wikidata,
+  gravsted.dk) bekræfter, at det er samme person med samme dødsår og
+  gravsted, og skriv begrundelsen i commit-beskeden og i README. Brochurens
+  stavning bevares da i `alias`. `alias` (valgfri) giver i øvrigt ekstra
+  søgeord, fx Wikipedias navneform.
+- `wiki` vælges i denne rækkefølge: artikel på dansk Wikipedia; ellers
+  opslag på lex.dk (Dansk Biografisk Leksikon, Den Store Danske); ellers
+  engelsk Wikipedia. Et afsnit i en bredere artikel kan linkes med anker
+  (`#Afsnit`) eller tekstfragment (`#:~:text=…`), hvis afsnittet handler om
+  gravstedets person eller monument. Sider, der kun nævner personen (fx en
+  ægtefælles biografi), linkes ikke; så er feltet `null`.
 - **Ret aldrig `fx`/`fy` i hånden** på en `kk`-post: kør `scripts/placer.py`
   igen, eller gem en manuel placering som `src: "kort"` med `ts`
   (rettetilstanden på siden eksporterer præcis det). Scriptet bevarer

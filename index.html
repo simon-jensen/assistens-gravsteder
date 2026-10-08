@@ -388,7 +388,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <button type="button" id="nyudgave" hidden>↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
-const UDGAVE='2026-10-08j'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
+const UDGAVE='2026-10-08k'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
 // ————— Kategorier (brochurens signaturer og farver) —————
 const KAT={
  digt:{navn:'Digtere, forfattere og filosoffer',kort:'digter/forfatter/filosof',c:'#f29b3a'},
@@ -478,8 +478,8 @@ function resetFilters(){q.value='';curAfd='';afdSel.value='';katOn=null;legend.q
 let qT=null;q.oninput=()=>{clearTimeout(qT);qT=setTimeout(()=>{syncHash();render();},120);}; // debounce: Safari afviser >100 replaceState på 10 s
 afdSel.onchange=()=>{curAfd=afdSel.value;syncHash();render();};
 // ————— Valg: kortet og listen følger hinanden —————
-function wikiUrl(g){const n=g.navn.replace(/[“”"].*?[“”"]/g,' ').replace(/\(.*?\)/g,' ').split(/,| samt | datter af /)[0].trim();
-  return 'https://da.wikipedia.org/w/index.php?search='+encodeURIComponent(n);}
+// Opslagslink fra feltet wiki i gravsteder.json: en artikeltitel på da.wikipedia.org eller en fuld URL; null = ingen artikel, intet link
+function wikiUrl(g){if(!g.wiki)return null;return /^https?:\/\//.test(g.wiki)?g.wiki:'https://da.wikipedia.org/wiki/'+encodeURIComponent(g.wiki.replace(/ /g,'_'));}
 function select(id,from){
   sel=byId[id]?id:null;
   list.querySelectorAll('.row').forEach(r=>r.classList.toggle('sel',r.dataset.id===sel));syncDots();syncHash();
@@ -488,7 +488,8 @@ function select(id,from){
   $('cName').innerHTML=esc(g.navn)+(g.aar?'<small>† '+g.aar+'</small>':'');
   $('cMeta').innerHTML='<span>Gravsted <b>'+esc(g.plot)+'</b> · afd. '+esc(g.afd)+'</span><span><span class="kdot" style="--c:'+k.c+'"></span>'+esc(k.navn)+'</span>'+
     (g.qr?'<span>📱 QR-kode på gravstedet – scan og se film</span>':'')+(you?'<span>📍 ca. '+Math.round(distM(you,p))+' m fra dig</span>':'');
-  $('cLinks').innerHTML='<a class="lookup" href="'+wikiUrl(g)+'" target="_blank" rel="noopener">Læs mere ↗</a><button class="lookup" id="cRute" title="Korteste vej ad stierne fra din position">'+(ruteTil===g.id?'➜ Rute vises':'➜ Rute hertil')+'</button><button class="lookup" id="cShare">Del link</button>'+
+  const wu=wikiUrl(g);
+  $('cLinks').innerHTML=(wu?'<a class="lookup" href="'+esc(wu)+'" target="_blank" rel="noopener">Læs mere ↗</a>':'')+'<button class="lookup" id="cRute" title="Korteste vej ad stierne fra din position">'+(ruteTil===g.id?'➜ Rute vises':'➜ Rute hertil')+'</button><button class="lookup" id="cShare">Del link</button>'+
     (mapwrapEl.classList.contains('zoom')?'':'<button class="lookup" id="cZoom">🔍 Forstør her</button>');
   $('cNote').textContent=(RET[g.id]?'Rettet lokalt '+RET[g.id].ts.slice(0,16).replace('T',' ')+' · ':'')+'Fil: '+(g.src==='kort'?'manuel placering':'kommunens register')+(g.acc?' ±'+g.acc+' m':'')+(g.note?' · '+g.note:'');
   card.classList.add('open');
