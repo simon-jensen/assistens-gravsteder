@@ -97,4 +97,11 @@ grønt (Pages skal være slået til med Source: *GitHub Actions* i repoets
 indstillinger, ellers springes udgivelsen over med en advarsel); kun de filer, siden bruger, kopieres til `_site/` og udgives. Tilføjes
 en ny fil, siden henter, skal den med i den liste. Ændringer kan være op til
 10 minutter om at slå igennem, og første besøg efter et deploy kan vise den
-gamle side én gang (service workeren opdaterer i baggrunden).
+gamle side én gang (service workeren opdaterer i baggrunden; siden viser så
+knappen “Ny udgave af siden er klar”).
+
+Fejler udgivelsestrinnet (deploy-pages) forbigående, så start workflowet
+**forfra** (Actions → Tjek og udgiv → Run workflow) eller push en ny commit.
+Brug ikke “Re-run failed jobs”: det uploader artefaktet `github-pages` en
+gang til i samme kørsel, og deploy-pages afviser så med “Multiple artifacts
+named github-pages”.
