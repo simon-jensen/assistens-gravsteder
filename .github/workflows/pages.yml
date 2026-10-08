@@ -1,0 +1,73 @@
+# Tjekker gravsteder.json og VERSION-bumpet i sw.js ved hvert push og pull request, og udgiver main
+# til GitHub Pages — men kun når tjekket er grønt, så en fejlbehæftet datafil aldrig når besøgende.
+# Pages skal slås til én gang i repoets indstillinger (Settings → Pages → Source: "GitHub Actions");
+# indtil da springer udgivelsen over med en advarsel. Workflowets eget token kan ikke slå Pages til.
+name: Tjek og udgiv
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    name: Tjek data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gravsteder.json
+        run: python3 scripts/check_data.py
+      - name: VERSION i sw.js skal bumpes, når cachede filer ændres
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python3 scripts/check_sw_version.py "origin/${{ github.base_ref }}" HEAD
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            python3 scripts/check_sw_version.py "${{ github.event.before }}" "${{ github.sha }}"
+          else
+            echo "· Manuel kørsel: springer VERSION-tjek over"
+          fi
+  deploy:
+    name: Udgiv på GitHub Pages
+    needs: check
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Saml de filer, siden bruger
+        run: |
+          mkdir -p _site/fonts
+          cp index.html sw.js gravsteder.json manifest.webmanifest kort.webp kort@2x.webp kort-moerk.webp kort-moerk@2x.webp icon-180.png icon-192.png icon-512.png _site/
+          cp fonts/* _site/fonts/
+          du -sh _site
+      - name: Er Pages slået til?
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" --jq .build_type > /tmp/bt 2>/dev/null; then
+            echo "til=true" >> "$GITHUB_OUTPUT"; echo "· Pages er slået til (build_type: $(cat /tmp/bt))"
+          else
+            echo "til=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=GitHub Pages er ikke slået til::Slå det til én gang: Settings → Pages → Build and deployment → Source: GitHub Actions. Kør derefter dette workflow igen (Actions → Tjek og udgiv → Run workflow)."
+          fi
+      - if: steps.pages.outputs.til == 'true'
+        uses: actions/configure-pages@v5
+      - if: steps.pages.outputs.til == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - if: steps.pages.outputs.til == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4

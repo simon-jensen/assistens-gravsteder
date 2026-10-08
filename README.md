@@ -98,7 +98,7 @@ udklipsholder og service worker kræver HTTPS eller localhost).
 **Offline:** `sw.js` cacher siden, data, kortet og fontene. **Bump `VERSION`
 i `sw.js` ved hvert deploy**, der ændrer `index.html`, `gravsteder.json`,
 kortet, fontene, ikonerne eller manifestet; ellers hænger gamle besøgende i
-den gamle udgave. CI (`.github/workflows/check.yml`) fejler, hvis det glemmes.
+den gamle udgave. CI (`.github/workflows/pages.yml`) fejler, hvis det glemmes.
 
 **Data:** `python3 scripts/check_data.py` tjekker `gravsteder.json` (kører
 også i CI). `python3 scripts/placer.py` beregner placeringerne på ny fra
@@ -115,5 +115,11 @@ en lokal server), der tjekker prikker, søgning, links, GPS-visning og
 rettetilstanden og tager skærmbilleder i lys og mørk tilstand. Den køres ikke i
 CI; se kommentaren øverst i filen.
 
-Siden udgives fra `main` med GitHub Pages. Pages sender `cache-control:
+Siden udgives til GitHub Pages af `.github/workflows/pages.yml` ved hvert push
+til `main`, men kun når tjekket af `gravsteder.json` og `VERSION` er grønt, så
+en fejl aldrig når besøgende. Pages skal slås til én gang i repoets
+indstillinger (Settings → Pages → Build and deployment → Source: *GitHub
+Actions*); indtil da springer workflowet udgivelsen over med en advarsel (en lære fra Trækortet, hvor Pages udgiver
+`main` direkte). Kun de filer, siden bruger, udgives (`_site/`); `data/`,
+`scripts/` og `tests/` ligger kun i repoet. Pages sender `cache-control:
 max-age=600`, så ændringer kan være op til 10 minutter om at slå igennem.

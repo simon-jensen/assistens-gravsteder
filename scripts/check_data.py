@@ -2,7 +2,7 @@
 """Tjekker gravsteder.json, før den når GitHub Pages: en fejl i filen ville ellers tavst tømme siden.
 
 Kør:  python3 scripts/check_data.py
-Kører også i GitHub Actions ved push og pull request (.github/workflows/check.yml).
+Kører også i GitHub Actions ved push og pull request (.github/workflows/pages.yml), før siden udgives.
 """
 import json, os, re, sys
 

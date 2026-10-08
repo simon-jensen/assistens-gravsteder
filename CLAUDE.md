@@ -19,8 +19,8 @@ Gør sådan, i **samme commit** som ændringen:
 const VERSION = '2026-10-08';   // dagens dato; ved flere deploys samme dag: '2026-10-08b'
 ```
 
-CI (`.github/workflows/check.yml` → `scripts/check_sw_version.py`) fejler
-ellers. Filer i `data/` kræver ikke et bump (siden henter dem ikke).
+CI (`.github/workflows/pages.yml` → `scripts/check_sw_version.py`) fejler
+ellers, og siden udgives ikke. Filer i `data/` kræver ikke et bump (siden henter dem ikke).
 
 ## 2. Kør tjekket før du committer
 
@@ -79,6 +79,9 @@ Service workeren cacher også lokalt: ser du ikke dine ændringer, bump
 
 ## 7. Deploy
 
-GitHub Pages udgiver `main` direkte; ændringer kan være op til 10 minutter om
-at slå igennem, og første besøg efter et deploy kan vise den gamle side én
-gang (service workeren opdaterer i baggrunden).
+`.github/workflows/pages.yml` udgiver `main` til GitHub Pages, når tjekket er
+grønt (Pages skal være slået til med Source: *GitHub Actions* i repoets
+indstillinger, ellers springes udgivelsen over med en advarsel); kun de filer, siden bruger, kopieres til `_site/` og udgives. Tilføjes
+en ny fil, siden henter, skal den med i den liste. Ændringer kan være op til
+10 minutter om at slå igennem, og første besøg efter et deploy kan vise den
+gamle side én gang (service workeren opdaterer i baggrunden).
