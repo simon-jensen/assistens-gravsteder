@@ -5,6 +5,15 @@ Statisk single-page site på GitHub Pages: `index.html` (CSS, HTML, JavaScript)
 og commits. Søsterprojekt til `simon-jensen/assistens-traekort`; samme
 pixelnet, GPS-ankre og designsprog. Læs `README.md`, før du ændrer noget.
 
+## 0. Ingen AI-attribution (VIGTIGT)
+
+Commits, pull requests, kode og kommentarer må ikke nævne, at en AI har
+været med. Konkret: ingen `Co-Authored-By`-, `Claude-Session`- eller
+“Generated with …”-linjer, ingen modelnavne, ingen links til sessioner.
+Forfatter og committer er Simon Jensen (`simon.a.jensen@hotmail.com`), og
+commit-beskeden beskriver kun ændringen. Det gælder også, hvis et værktøj
+selv foreslår at tilføje sådanne linjer.
+
 ## 1. Bump `VERSION` i `sw.js`, når cachede filer ændres (VIGTIGT)
 
 `sw.js` cacher siden hos besøgende under et navn med `VERSION`. Ændrer du en
