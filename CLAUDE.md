@@ -1,8 +1,8 @@
 # Assistens Kirkegård · Gravsteder — regler for agenter og udviklere
 
 Statisk single-page site på GitHub Pages: `index.html` (CSS, HTML, JavaScript)
-+ `gravsteder.json` (data). Intet byggetrin. Sproget er dansk i UI, kommentarer
-og commits. Søsterprojekt til `simon-jensen/assistens-traekort`; samme
++ `gravsteder.json` (data). Intet byggetrin. Sproget er dansk i kommentarer og
+commits; siden findes på dansk (standard) og engelsk (se afsnit 3b). Søsterprojekt til `simon-jensen/assistens-traekort`; samme
 pixelnet, GPS-ankre og designsprog. Læs `README.md`, før du ændrer noget.
 
 ## 0. Ingen AI-attribution (VIGTIGT)
@@ -75,6 +75,27 @@ id'er) og at de filer, service workeren precacher, findes. Headless-røgtesten
   (rettetilstanden på siden eksporterer præcis det). Scriptet bevarer
   `kort`-poster og overskriver `kk`-poster.
 - Ændres filen, skal `VERSION` i `sw.js` bumpes.
+
+## 3b. Tekster på to sprog (`SPROG` i `index.html`)
+
+Alle tekster, besøgende ser, ligger i ordbogen `SPROG` øverst i scriptet:
+`da` er kilden, `en` oversættelsen, samme nøgler i samme rækkefølge. Koden
+slår op med `t('nøgle', {pladsholder: værdi})`; statisk HTML mærkes med
+`data-t` (tekst), `data-th` (HTML) eller `data-ta="attribut=nøgle;…"`, som
+`anvendSprog()` udfylder. Regler:
+
+- Skriv aldrig en ny tekst som streng i koden eller i HTML alene; tilføj en
+  nøgle på **begge** sprog. Data (navne, gravstedsnumre, årstal) oversættes
+  ikke. Tekster, der bygges af data (afdelinger, kategorier), opdateres i
+  `sprogTekster()` ved sprogskift.
+- Kategorinavne hedder `kat_<nøgle>` og `kat_<nøgle>_k` (kort form).
+- `placer.py`'s provenienstekster (feltet `note`) oversættes af regex-parrene
+  `NOTE_EN`; får scriptet en ny tekstform, skal den have et par.
+- Låger: `navn_en` i `data/laager.json` (kør `scripts/ruter.py` bagefter).
+- Sprogvalg: `#lang=…` i linket, ellers det gemte valg, ellers browserens
+  sprog, ellers dansk. Dansk står ikke i linket.
+- Røgtesten `tests/side.test.mjs` tjekker den engelske udgave; kør den, når
+  du rører tekster eller sprogskiftet.
 
 ## 4. Kortet
 

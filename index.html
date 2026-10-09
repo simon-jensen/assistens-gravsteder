@@ -209,7 +209,9 @@ body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);-w
  background-image:radial-gradient(circle at 15% 5%,rgba(90,122,79,.05),transparent 40%);}
 .wrap{max-width:1200px;margin:0 auto;padding:20px 16px 50px}
 header{border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:16px}
-.kicker{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--moss-d)}
+.kicker{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--moss-d);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px}
+.langbtn{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--line);color:var(--mute);border-radius:3px;padding:3px 9px;min-height:26px;cursor:pointer;-webkit-tap-highlight-color:transparent;flex:0 0 auto}
+.langbtn:hover{border-color:var(--ink);color:var(--ink)}
 h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,42px);line-height:1.03;margin:6px 0 4px;letter-spacing:-.01em}
 .sub{font-family:'Fraunces',serif;font-style:italic;font-size:14.5px;color:var(--mute);max-width:64ch}
 .layout{display:grid;grid-template-columns:1.15fr .85fr;gap:22px}
@@ -337,20 +339,20 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 </style></head>
 <body><div class="wrap">
 <header>
-<div class="kicker">Københavns Kommune · 133 gravsteder · kort af åbne data</div>
-<h1>Assistens Kirkegård — Gravsteder</h1>
-<div class="sub">De kendte gravsteder lagt på et kort, der virker i hånden: søg, tryk på en prik, og se hvor du selv står.</div>
+<div class="kicker"><span data-t="kicker">Københavns Kommune · 133 gravsteder · kort af åbne data</span><button type="button" class="langbtn" id="langBtn" lang="en" data-t="lang_switch" data-ta="title=lang_switch_title" title="Vis siden på engelsk">In English</button></div>
+<h1 data-t="h1">Assistens Kirkegård — Gravsteder</h1>
+<div class="sub" data-t="sub">De kendte gravsteder lagt på et kort, der virker i hånden: søg, tryk på en prik, og se hvor du selv står.</div>
 </header>
 <div class="layout">
 <section>
-<div class="panel-title"><span>Kort</span><span class="maptools"><button class="filterbtn" id="hereBtn" title="Vis din GPS-position på kortet" aria-pressed="false">🧭 Hvor er jeg?</button><button class="filterbtn" id="zoomBtn" title="Forstør kortet 2,5× — to fingre eller dobbelttryk zoomer også, træk panorerer" aria-pressed="false">🔍 Forstør</button></span></div>
+<div class="panel-title"><span data-t="panel_kort">Kort</span><span class="maptools"><button class="filterbtn" id="hereBtn" title="Vis din GPS-position på kortet" aria-pressed="false" data-t="here" data-ta="title=here_title">🧭 Hvor er jeg?</button><button class="filterbtn" id="zoomBtn" title="Forstør kortet 2,5× — to fingre eller dobbelttryk zoomer også, træk panorerer" aria-pressed="false" data-t="zoom" data-ta="title=zoom_title">🔍 Forstør</button></span></div>
 <div class="retbar" id="retbar">
-  <div><b>Ret placering.</b> Vælg et gravsted i listen eller på kortet, og tryk så på kortet, dér hvor gravstedet er. Eller stil dig ved gravstedet med GPS tændt og tryk <b>📡 Her</b>. Rettelserne gemmes kun i din browser, indtil du eksporterer filen og lægger den i repoet som <code>gravsteder.json</code>.</div>
+  <div data-th="retbar_html"><b>Ret placering.</b> Vælg et gravsted i listen eller på kortet, og tryk så på kortet, dér hvor gravstedet er. Eller stil dig ved gravstedet med GPS tændt og tryk <b>📡 Her</b>. Rettelserne gemmes kun i din browser, indtil du eksporterer filen og lægger den i repoet som <code>gravsteder.json</code>.</div>
   <div class="retbtns">
-    <button class="retbtn" id="retGPS">📡 Her</button>
-    <button class="retbtn" id="retExport">⬇ Eksportér gravsteder.json</button>
-    <button class="retbtn warn" id="retUndo">Fortryd rettelsen</button>
-    <button class="retbtn warn" id="retClear">Slet alle rettelser</button>
+    <button class="retbtn" id="retGPS" data-t="ret_gps">📡 Her</button>
+    <button class="retbtn" id="retExport" data-t="ret_export">⬇ Eksportér gravsteder.json</button>
+    <button class="retbtn warn" id="retUndo" data-t="ret_undo">Fortryd rettelsen</button>
+    <button class="retbtn warn" id="retClear" data-t="ret_clear">Slet alle rettelser</button>
     <span class="count" id="retcount" style="margin-left:auto"></span>
   </div>
 </div>
@@ -358,47 +360,279 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
  <div class="mapinner" id="mapinner">
   <picture>
    <source media="(prefers-color-scheme: dark)" srcset="kort-moerk.webp 1x, kort-moerk@2x.webp 2x" type="image/webp">
-   <img src="kort.webp" srcset="kort.webp 1x, kort@2x.webp 2x" width="1400" height="1216" decoding="async" fetchpriority="high" alt="Kort over Assistens Kirkegård med afdelingerne A–V" id="mapimg">
+   <img src="kort.webp" srcset="kort.webp 1x, kort@2x.webp 2x" width="1400" height="1216" decoding="async" fetchpriority="high" alt="Kort over Assistens Kirkegård med afdelingerne A–V" id="mapimg" data-ta="alt=map_alt">
   </picture>
   <div id="dots"></div>
   <svg id="rutesvg" viewBox="0 0 1400 1216" preserveAspectRatio="none" aria-hidden="true"><polyline id="rutehalo" points=""/><polyline id="rutelinje" points=""/><polyline id="rutestip" points=""/></svg>
-  <div id="cross"></div><div id="youring" hidden></div><div id="youdot" hidden aria-label="Din position"></div>
+  <div id="cross"></div><div id="youring" hidden></div><div id="youdot" hidden aria-label="Din position" data-ta="aria-label=you_aria"></div>
  </div>
 </div>
-<div class="rutebar" id="rutebar" aria-live="polite"><span id="rutetekst"></span><button class="lookup" id="ruteStop">✕ Afslut rute</button></div>
+<div class="rutebar" id="rutebar" aria-live="polite"><span id="rutetekst"></span><button class="lookup" id="ruteStop" data-t="rute_stop">✕ Afslut rute</button></div>
 <div class="card" id="card" aria-live="polite">
-  <button class="cClose" id="cClose" aria-label="Luk">×</button>
+  <button class="cClose" id="cClose" aria-label="Luk" data-ta="aria-label=close_aria">×</button>
   <div class="cName" id="cName"></div>
   <div class="cMeta" id="cMeta"></div>
   <div class="cLinks" id="cLinks"></div>
   <div class="cNote" id="cNote"></div>
 </div>
-<div class="legend" id="legend" aria-label="Kategorier — tryk for at filtrere"></div>
-<div class="maphint">Kortdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragydere</a> (ODbL) · afdelinger, gravsteder og trækroner: Københavns Kommune (CC BY 4.0, bearbejdet) · fortegnelse: Københavns Kommune, “133 gravsteder på Assistens Kirkegård” (2019). Prikkerne sidder på gravstedernes midtpunkter i kommunens register, men er større end gravstedet: forstør, når du er tæt på. Ruter: stier fra OpenStreetMap (ODbL), låger efter egen liste.</div>
+<div class="legend" id="legend" aria-label="Kategorier — tryk for at filtrere" data-ta="aria-label=legend_aria"></div>
+<div class="maphint" data-th="maphint_html">Kortdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragydere</a> (ODbL) · afdelinger, gravsteder og trækroner: Københavns Kommune (CC BY 4.0, bearbejdet) · fortegnelse: Københavns Kommune, “133 gravsteder på Assistens Kirkegård” (2019). Prikkerne sidder på gravstedernes midtpunkter i kommunens register, men er større end gravstedet: forstør, når du er tæt på. Ruter: stier fra OpenStreetMap (ODbL), låger efter egen liste.</div>
 </section>
 <section>
-<div class="panel-title"><span id="listhead">Alle gravsteder</span><span class="count" id="count" aria-live="polite"></span></div>
-<div class="controls"><input type="search" id="q" placeholder="Søg navn, gravsted eller afdeling…" aria-label="Søg navn, gravsted eller afdeling"><select id="afd" aria-label="Afdeling"><option value="">Alle afd.</option></select><button class="filterbtn" id="nearBtn" aria-pressed="false" hidden title="Sortér efter afstand fra din position">📍 Nærmeste først</button></div>
-<div class="list" id="list"><div id="status">Henter gravstederne …</div></div>
+<div class="panel-title"><span id="listhead" data-t="listhead_all">Alle gravsteder</span><span class="count" id="count" aria-live="polite"></span></div>
+<div class="controls"><input type="search" id="q" placeholder="Søg navn, gravsted eller afdeling…" aria-label="Søg navn, gravsted eller afdeling" data-ta="placeholder=q_placeholder;aria-label=q_aria"><select id="afd" aria-label="Afdeling" data-ta="aria-label=afd_aria"><option value="" data-t="afd_all">Alle afd.</option></select><button class="filterbtn" id="nearBtn" aria-pressed="false" hidden title="Sortér efter afstand fra din position" data-t="near" data-ta="title=near_title">📍 Nærmeste først</button></div>
+<div class="list" id="list"><div id="status" data-t="status_loading">Henter gravstederne …</div></div>
 </section>
 </div>
-<footer><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. <b>➜ Rute hertil</b> på et gravsted tegner den korteste vej ad stierne fra dig, også udefra gennem den rigtige åbne låge; de sidste meter fra stien til gravstedet er stiplede, fordi græsrækkerne ikke er kortlagt. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>). <button class="clearchip" id="retToggle">Ret placeringer</button><br><b>Udgave:</b> <span id="udgave"></span> — ser du ikke den nyeste, så luk siden helt og åbn den igen.</footer>
+<footer><span data-th="footer_html"><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. <b>➜ Rute hertil</b> på et gravsted tegner den korteste vej ad stierne fra dig, også udefra gennem den rigtige åbne låge; de sidste meter fra stien til gravstedet er stiplede, fordi græsrækkerne ikke er kortlagt. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>).</span> <button class="clearchip" id="retToggle">Ret placeringer</button><br><b data-t="udgave">Udgave:</b> <span id="udgave"></span> <span data-t="udgave_hint">— ser du ikke den nyeste, så luk siden helt og åbn den igen.</span></footer>
 </div>
 <div id="toast" role="status"></div>
-<button type="button" id="nyudgave" hidden>↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
+<button type="button" id="nyudgave" hidden data-t="nyudgave">↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
-const UDGAVE='2026-10-08k'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
-// ————— Kategorier (brochurens signaturer og farver) —————
-const KAT={
- digt:{navn:'Digtere, forfattere og filosoffer',kort:'digter/forfatter/filosof',c:'#f29b3a'},
- komp:{navn:'Komponister og musikere',kort:'komponist/musiker',c:'#5cb77a'},
- kunst:{navn:'Arkitekter, billedhuggere og malere',kort:'arkitekt/billedhugger/maler',c:'#e0272a'},
- scene:{navn:'Scenekunstnere',kort:'scenekunstner',c:'#f2dc1e'},
- handel:{navn:'Handel og industri',kort:'handel/industri',c:'var(--handel)'},
- vid:{navn:'Videnskabsfolk',kort:'videnskab',c:'#1f9ede'},
- andet:{navn:'Interessant monument eller andet',kort:'monument/andet',c:'var(--andet)'},
- faelles:{navn:'Fællesmonument',kort:'fællesmonument',c:'#6b6f7a'}};
+const UDGAVE='2026-10-09'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
+// ————— Sprog: alle tekster ligger i SPROG (da = kilde, en = oversættelse); t('nøgle',{pladsholder:…}) slår op —————
+// Statisk HTML mærkes med data-t (tekst), data-th (HTML) eller data-ta="attribut=nøgle;…" og udfyldes af anvendSprog().
+// Valg: #lang=… i linket, ellers det gemte valg, ellers browserens sprog (engelsk, hvis det står før dansk), ellers dansk.
+const SPROG={
+da:{
+ // <head> og sidehoved
+ title:'Assistens Kirkegård · Gravsteder',
+ meta_desc:'Find de 133 kendte gravsteder på Assistens Kirkegård i København, og se hvor du selv står.',
+ kicker:'Københavns Kommune · 133 gravsteder · kort af åbne data',
+ h1:'Assistens Kirkegård — Gravsteder',
+ sub:'De kendte gravsteder lagt på et kort, der virker i hånden: søg, tryk på en prik, og se hvor du selv står.',
+ lang_switch:'In English', // knappen, der skifter til det ANDET sprog. I den engelske ordbog skal den altså hedde 'På dansk' (uoversat dansk tekst)
+ lang_switch_title:'Vis siden på engelsk', // title-attribut på samme knap; i den engelske ordbog: 'Vis siden på dansk' (uoversat dansk tekst)
+ // kortpanelet
+ panel_kort:'Kort',
+ here:'🧭 Hvor er jeg?',
+ here_title:'Vis din GPS-position på kortet',
+ zoom:'🔍 Forstør',
+ zoom_title:'Forstør kortet 2,5× — to fingre eller dobbelttryk zoomer også, træk panorerer',
+ retbar_html:'<b>Ret placering.</b> Vælg et gravsted i listen eller på kortet, og tryk så på kortet, dér hvor gravstedet er. Eller stil dig ved gravstedet med GPS tændt og tryk <b>📡 Her</b>. Rettelserne gemmes kun i din browser, indtil du eksporterer filen og lægger den i repoet som <code>gravsteder.json</code>.',
+ ret_gps:'📡 Her',
+ ret_export:'⬇ Eksportér gravsteder.json',
+ ret_undo:'Fortryd rettelsen',
+ ret_clear:'Slet alle rettelser',
+ map_alt:'Kort over Assistens Kirkegård med afdelingerne A–V',
+ you_aria:'Din position',
+ rute_stop:'✕ Afslut rute',
+ close_aria:'Luk',
+ legend_aria:'Kategorier — tryk for at filtrere',
+ maphint_html:'Kortdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragydere</a> (ODbL) · afdelinger, gravsteder og trækroner: Københavns Kommune (CC BY 4.0, bearbejdet) · fortegnelse: Københavns Kommune, “133 gravsteder på Assistens Kirkegård” (2019). Prikkerne sidder på gravstedernes midtpunkter i kommunens register, men er større end gravstedet: forstør, når du er tæt på. Ruter: stier fra OpenStreetMap (ODbL), låger efter egen liste.',
+ // listepanelet
+ listhead_all:'Alle gravsteder',
+ q_placeholder:'Søg navn, gravsted eller afdeling…',
+ q_aria:'Søg navn, gravsted eller afdeling',
+ afd_aria:'Afdeling',
+ afd_all:'Alle afd.',
+ afd_option:'Afd. {a} ({n})', // rullemenuens punkter, fx "Afd. A (28)"
+ near:'📍 Nærmeste først',
+ near_title:'Sortér efter afstand fra din position',
+ status_loading:'Henter gravstederne …',
+ // sidefoden (retToggle-knappen og udgavenummeret ligger uden for disse tekster)
+ footer_html:'<b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. <b>➜ Rute hertil</b> på et gravsted tegner den korteste vej ad stierne fra dig, også udefra gennem den rigtige åbne låge; de sidste meter fra stien til gravstedet er stiplede, fordi græsrækkerne ikke er kortlagt. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>).',
+ udgave:'Udgave:',
+ udgave_hint:'— ser du ikke den nyeste, så luk siden helt og åbn den igen.',
+ nyudgave:'↻ Ny udgave af siden er klar — tryk for at genindlæse',
+ // kategorier (brochurens signaturer): navn (fuld) og kort form (bruges i listens underlinje og som filteroverskrift)
+ kat_digt:'Digtere, forfattere og filosoffer', kat_digt_k:'digter/forfatter/filosof',
+ kat_komp:'Komponister og musikere', kat_komp_k:'komponist/musiker',
+ kat_kunst:'Arkitekter, billedhuggere og malere', kat_kunst_k:'arkitekt/billedhugger/maler',
+ kat_scene:'Scenekunstnere', kat_scene_k:'scenekunstner',
+ kat_handel:'Handel og industri', kat_handel_k:'handel/industri',
+ kat_vid:'Videnskabsfolk', kat_vid_k:'videnskab',
+ kat_andet:'Interessant monument eller andet', kat_andet_k:'monument/andet',
+ kat_faelles:'Fællesmonument', kat_faelles_k:'fællesmonument',
+ // listen
+ qrtag:'📱 film', // lille mærke ved navnet; betyder at der er en QR-kode på gravstedet med en film
+ afd_kort:'afd. {a}', // kort form, fx i listens underlinje og i filteroverskriften: "afd. A"
+ afdhead:'Afdeling {a}', // overskrift over hver afdeling i listen
+ count_all:'{n} gravsteder',
+ count_some:'{n} af {m}',
+ empty:'Ingen gravsteder matcher.',
+ resetf:'Nulstil søgning og filtre',
+ // kortet (det lille kort med det valgte gravsted)
+ card_plot_html:'Gravsted <b>{plot}</b> · afd. {afd}',
+ card_qr:'📱 QR-kode på gravstedet – scan og se film',
+ card_dist:'📍 ca. {m} m fra dig',
+ read_more:'Læs mere ↗',
+ rute_btn_title:'Korteste vej ad stierne fra din position',
+ rute_vises:'➜ Rute vises',
+ rute_hertil:'➜ Rute hertil',
+ share:'Del link',
+ zoom_here:'🔍 Forstør her',
+ note_rettet:'Rettet lokalt {ts} · ', // ts = "2026-10-08 14:21"
+ note_fil:'Fil: ', // efterfølges af note_manuel eller note_kk, fx "Fil: kommunens register ±1.5 m · KK: A-58: direkte"
+ note_manuel:'manuel placering',
+ note_kk:'kommunens register',
+ // beskeder (toasts)
+ link_copied:'Link kopieret',
+ copy_prompt:'Kopiér linket:',
+ save_fail:'⚠ Kunne ikke gemme i browseren',
+ no_gps:'Din browser tilbyder ikke GPS',
+ getting_pos:'Henter din position …',
+ outside:'Du er ca. {m} m uden for kortet',
+ nearest_you:'Nærmest dig: {navn} ({plot}), ca. {m} m · GPS ±{acc} m',
+ gps_denied:'GPS afvist — giv siden lov til at bruge din position',
+ gps_wait:'Venter på GPS-signal …',
+ // ruten
+ rute_wait_html:'Rute til <b>{navn}</b>: venter på GPS …',
+ rute_none_html:'Rute til <b>{navn}</b>: ingen sti fundet herfra (står du for langt fra kortet?)',
+ rute_info_html:'Rute til <b>{navn}</b> ({plot}): <b>{m} m</b> · ca. {min} min',
+ rute_via:' · gennem {laage}', // laage = lågens navn, fx "lågen mod Jagtvej" / "hovedindgangen fra Kapelvej"
+ rute_err:'Ruterne kunne ikke hentes — prøv igen med net',
+ // rettetilstanden
+ ret_show:'Ret placeringer',
+ ret_hide:'Skjul rettelser',
+ ret_pick:'Vælg et gravsted, og tryk så på kortet',
+ ret_count:'{n} rettet lokalt',
+ ret_moved:'{navn} flyttet — husk ⬇ Eksportér',
+ ret_first:'Vælg først et gravsted',
+ ret_gps_first:'Tænd 🧭 Hvor er jeg? først',
+ ret_nothing:'Intet at fortryde',
+ ret_undone:'Fortrudt',
+ ret_clear_confirm:'Slet alle lokale rettelser?',
+ ret_none_export:'Ingen rettelser at eksportere',
+ ret_offline:'⚠ Ingen forbindelse — prøv igen med net',
+ ret_exported:'{n} rettelser eksporteret — læg filen i repoet',
+ load_fail:'Gravstederne kunne ikke hentes ({e}). Prøv igen, når du har forbindelse.'
+},
+en:{
+ // <head> og sidehoved
+ title:'Assistens Cemetery · Notable graves',
+ meta_desc:'Find the 133 notable graves at Assistens Cemetery in Copenhagen, and see where you are standing.',
+ kicker:'City of Copenhagen · 133 graves · map from open data',
+ h1:'Assistens Cemetery — Notable graves',
+ sub:'The notable graves on a map built for your phone: search, tap a dot and see where you are standing.',
+ lang_switch:'På dansk', // knappen viser det ANDET sprog: uoversat dansk tekst
+ lang_switch_title:'Vis siden på dansk', // uoversat dansk tekst
+ // kortpanelet
+ panel_kort:'Map',
+ here:'🧭 Where am I?',
+ here_title:'Show your GPS position on the map',
+ zoom:'🔍 Zoom in',
+ zoom_title:'Zoom the map 2.5× — pinching or double-tapping also zooms, drag to pan',
+ retbar_html:'<b>Edit placement.</b> Pick a grave in the list or on the map, then tap the map where the grave actually is. Or stand at the grave with GPS on and tap <b>📡 Here</b>. Corrections are only stored in your browser until you export the file and add it to the repo as <code>gravsteder.json</code>.',
+ ret_gps:'📡 Here',
+ ret_export:'⬇ Export gravsteder.json',
+ ret_undo:'Undo last correction',
+ ret_clear:'Delete all corrections',
+ map_alt:'Map of Assistens Cemetery with sections A–V',
+ you_aria:'Your position',
+ rute_stop:'✕ End route',
+ close_aria:'Close',
+ legend_aria:'Categories — tap to filter',
+ maphint_html:'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (ODbL) · sections, graves and tree crowns: City of Copenhagen (CC BY 4.0, adapted) · list of graves: City of Copenhagen, “133 gravsteder på Assistens Kirkegård” (133 graves at Assistens Cemetery, 2019). The dots sit at the centre of each grave in the city\'s register, but are larger than the grave itself: zoom in when you are close. Routes: paths from OpenStreetMap (ODbL), gates from the project\'s own list.',
+ // listepanelet
+ listhead_all:'All graves',
+ q_placeholder:'Search name, grave or section…',
+ q_aria:'Search name, grave or section',
+ afd_aria:'Section',
+ afd_all:'All sections',
+ afd_option:'Sect. {a} ({n})', // rullemenuens punkter, fx "Sect. A (28)"
+ near:'📍 Nearest first',
+ near_title:'Sort by distance from your position',
+ status_loading:'Loading the graves…',
+ // sidefoden (retToggle-knappen og udgavenummeret ligger uden for disse tekster)
+ footer_html:'<b>Source:</b> The list of the 133 graves (names, years of death, grave numbers and categories) comes from the City of Copenhagen\'s brochure “133 gravsteder på Assistens Kirkegård” (133 graves at Assistens Cemetery, 2019). The positions on the map are calculated from the grave numbers and the city\'s open register of graves; eight of them are estimates and should be checked on site (see <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 video</b> means there is a QR code at the grave that leads to a video about the person.<br><b>On site:</b> Tap <b>🧭 Where am I?</b> and a blue dot shows where you are; the list can then be sorted by distance. <b>➜ Route here</b> on a grave draws the shortest way along the paths from where you are, also from outside the walls through the right open gate; the last few metres from the path to the grave are dashed, because the grassy rows between the graves are not mapped. Pinch to zoom the map (also as an app on your home screen), double-tap to zoom in, drag to move the map; the dots keep their size, so they cover less ground the further you zoom in. The grave number (e.g. A-58) is section + number; the numbers run in sequence along the rows. Once opened, the page also works without a signal, and you can add it to your home screen.<br><b>Corrections:</b> If a dot is in the wrong place, it can be moved on site and exported to the repo (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>).',
+ udgave:'Version:',
+ udgave_hint:'— if you don\'t see the latest, close the page completely and open it again.',
+ nyudgave:'↻ A new version of the page is ready — tap to reload',
+ // kategorier (brochurens signaturer): navn (fuld) og kort form (bruges i listens underlinje og som filteroverskrift)
+ kat_digt:'Poets, writers and philosophers', kat_digt_k:'poet/writer/philosopher',
+ kat_komp:'Composers and musicians', kat_komp_k:'composer/musician',
+ kat_kunst:'Architects, sculptors and painters', kat_kunst_k:'architect/sculptor/painter',
+ kat_scene:'Performing artists', kat_scene_k:'performing artist',
+ kat_handel:'Trade and industry', kat_handel_k:'trade/industry',
+ kat_vid:'Scientists and scholars', kat_vid_k:'science',
+ kat_andet:'Notable monument or other', kat_andet_k:'monument/other',
+ kat_faelles:'Communal monument', kat_faelles_k:'communal monument',
+ // listen
+ qrtag:'📱 video', // lille mærke ved navnet: QR-kode på gravstedet med en film
+ afd_kort:'sect. {a}', // kort form, fx i listens underlinje og i filteroverskriften: "sect. A"
+ afdhead:'Section {a}', // overskrift over hver afdeling i listen
+ count_all:'{n} graves',
+ count_some:'{n} of {m}',
+ empty:'No graves match.',
+ resetf:'Clear search and filters',
+ // kortet (det lille kort med det valgte gravsted)
+ card_plot_html:'Grave <b>{plot}</b> · sect. {afd}',
+ card_qr:'📱 QR code at the grave – scan it to watch a video',
+ card_dist:'📍 about {m} m from you',
+ read_more:'Read more ↗',
+ rute_btn_title:'Shortest way along the paths from where you are',
+ rute_vises:'➜ Showing route',
+ rute_hertil:'➜ Route here',
+ share:'Share link',
+ zoom_here:'🔍 Zoom in here',
+ note_rettet:'Corrected locally {ts} · ', // ts = "2026-10-08 14:21"
+ note_fil:'File: ', // efterfølges af note_manuel eller note_kk, fx "File: city register ±1.5 m · KK: A-58: exact match"
+ note_manuel:'manual placement',
+ note_kk:'city register',
+ // beskeder (toasts)
+ link_copied:'Link copied',
+ copy_prompt:'Copy the link:',
+ save_fail:'⚠ Could not save in the browser',
+ no_gps:'Your browser does not support GPS',
+ getting_pos:'Finding your position…',
+ outside:'You are about {m} m outside the map',
+ nearest_you:'Nearest to you: {navn} ({plot}), about {m} m · GPS ±{acc} m',
+ gps_denied:'GPS denied — allow the page to use your location',
+ gps_wait:'Waiting for GPS signal…',
+ // ruten
+ rute_wait_html:'Route to <b>{navn}</b>: waiting for GPS…',
+ rute_none_html:'Route to <b>{navn}</b>: no path found from here (are you too far from the map?)',
+ rute_info_html:'Route to <b>{navn}</b> ({plot}): <b>{m} m</b> · about {min} min',
+ rute_via:' · through {laage}', // laage = lågens navn fra LAAGER_EN, fx "the gate to Jagtvej"
+ rute_err:'Could not load the routes — try again when you are online',
+ // rettetilstanden
+ ret_show:'Edit placements',
+ ret_hide:'Stop editing',
+ ret_pick:'Pick a grave, then tap the map',
+ ret_count:'{n} corrected locally',
+ ret_moved:'{navn} moved — remember to ⬇ Export',
+ ret_first:'Pick a grave first',
+ ret_gps_first:'Turn on 🧭 Where am I? first',
+ ret_nothing:'Nothing to undo',
+ ret_undone:'Undone',
+ ret_clear_confirm:'Delete all local corrections?',
+ ret_none_export:'No corrections to export',
+ ret_offline:'⚠ No connection — try again when you are online',
+ ret_exported:'Corrections exported: {n} — add the file to the repo',
+ load_fail:'Could not load the graves ({e}). Try again when you have a connection.'
+}};
+const NOTE_EN=[ // engelsk udgave af placer.py's provenienstekster (feltet note); anvendes i rækkefølge
+ [/anslået mellem ([\w.-]+) og ([\w.-]+) \(([\d.,]+) m fra hinanden\)/g,'estimated between $1 and $2 ($3 m apart)'],
+ [/midt mellem (\d+) gravsteder, ([\d.,]+) m spredning/g,'midpoint of $1 graves, $2 m spread'],
+ [/midtpunkt af ([\w.-]+) \((\d+) gravsteder\)/g,'centre of $1 ($2 graves)'],
+ [/afdelingens midtpunkt/g,'centre of the section'],
+ [/tolket som ([\w.-]+) nr\. ?([\w/]+)/g,'read as $1 no. $2'],
+ [/tjek i felten/g,'check on site'],
+ [/underafdeling ([\w.-]+), række (\d+)/g,'sub-section $1, row $2'],
+ [/direkte \(uden bogstav\)/g,'matched without letter suffix'],
+ [/\bdirekte\b/g,'exact match'],
+ [/ikke fundet/g,'not found'],
+ [/GPS på stedet/g,'GPS on site']
+];
+const SPROG_KEY='assistens_grav_sprog';
+function vaelgSprog(){const h=new URLSearchParams(location.hash.slice(1)).get('lang');if(h&&SPROG[h])return h;
+  try{const s=localStorage.getItem(SPROG_KEY);if(s&&SPROG[s])return s;}catch(e){}
+  const nl=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'da']).map(x=>String(x).toLowerCase()),f=nl.find(x=>/^(da|en)/.test(x));
+  return f&&f.startsWith('en')?'en':'da';}
+let L=vaelgSprog();
+function t(k,v){let s=SPROG[L][k];if(s==null)s=SPROG.da[k]!=null?SPROG.da[k]:k;if(v)for(const n in v)s=s.split('{'+n+'}').join(v[n]);return s;}
+function katKey(g){return KAT[g.kat]?g.kat:'andet';}
+function noteTekst(s){if(!s)return '';if(L==='da')return s;let r=s;NOTE_EN.forEach(p=>{r=r.replace(p[0],p[1]);});return r;} // placer.py's provenienstekster oversættes mønster for mønster
+function laageNavn(l){return (L!=='da'&&l.navn_en)||l.navn;}
+function anvendSprog(){document.documentElement.lang=L;document.title=t('title');const md=document.querySelector('meta[name="description"]');if(md)md.content=t('meta_desc');
+  document.querySelectorAll('[data-t]').forEach(el=>{el.textContent=t(el.dataset.t);});
+  document.querySelectorAll('[data-th]').forEach(el=>{el.innerHTML=t(el.dataset.th);});
+  document.querySelectorAll('[data-ta]').forEach(el=>el.dataset.ta.split(';').forEach(p=>{const i=p.indexOf('=');el.setAttribute(p.slice(0,i),t(p.slice(i+1)));}));
+  document.getElementById('langBtn').lang=L==='da'?'en':'da';document.getElementById('retToggle').textContent=document.body.classList.contains('ret')?t('ret_hide'):t('ret_show');}
+// ————— Kategorier (brochurens signaturer og farver; navnene ligger i SPROG som kat_<nøgle> og kat_<nøgle>_k) —————
+const KAT={digt:{c:'#f29b3a'},komp:{c:'#5cb77a'},kunst:{c:'#e0272a'},scene:{c:'#f2dc1e'},handel:{c:'var(--handel)'},vid:{c:'#1f9ede'},andet:{c:'var(--andet)'},faelles:{c:'#6b6f7a'}};
 const IMGW=1400,IMGH=1216,M_PER_PX=0.46,LON0=12.55,LAT0=55.69;
 // GPS → kortbrøk: fire hjørneankre (OSM way 3099111 parret med kortets pixelnet), samme som trækortet og scripts/placer.py.
 const ANCHORS=[{lat:55.690688,lon:12.544873,fx:336/IMGW,fy:48/IMGH},{lat:55.688026,lon:12.551794,fx:303/IMGW,fy:1186/IMGH},
@@ -421,18 +655,25 @@ let DOC=null,G=[],byId={},sel=null,katOn=null,curAfd='',nearest=false,you=null;
 let toastT=null;function toast(m){const el=$('toast');el.textContent=m;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
 // ————— Rettelser (lokalt lager): en manuel placering vinder over filens —————
 const RET_KEY='assistens_grav_ret_v1';let RET={};try{RET=JSON.parse(localStorage.getItem(RET_KEY)||'{}')||{};}catch(e){}
-function saveRet(){try{localStorage.setItem(RET_KEY,JSON.stringify(RET));}catch(e){toast('⚠ Kunne ikke gemme i browseren');}}
+function saveRet(){try{localStorage.setItem(RET_KEY,JSON.stringify(RET));}catch(e){toast(t('save_fail'));}}
 function pos(g){const r=RET[g.id];return r&&Number.isFinite(r.fx)?r:g;}
 // ————— Data —————
 function prep(){
   byId={};G=DOC.gravsteder.filter(g=>Number.isFinite(g.fx)&&Number.isFinite(g.fy));
-  G.forEach(g=>{byId[g.id]=g;const k=KAT[g.kat]||KAT.andet;
-    g._s=[g.navn,g.alias||'',g.plot,g.afd,'afd '+g.afd,'afdeling '+g.afd,k.navn,k.kort,g.aar||'',g.qr?'qr film':''].join(' ').toLowerCase();});
+  G.forEach(g=>{byId[g.id]=g;const kk=katKey(g),kn=Object.keys(SPROG).map(l=>SPROG[l]['kat_'+kk]+' '+SPROG[l]['kat_'+kk+'_k']).join(' '); // kategorinavne på alle sprog, så søgningen finder dem
+    g._s=[g.navn,g.alias||'',g.plot,g.afd,'afd '+g.afd,'afdeling '+g.afd,'section '+g.afd,kn,g.aar||'',g.qr?'qr film video':''].join(' ').toLowerCase();});
   const afds=[];G.forEach(g=>{if(!afds.includes(g.afd))afds.push(g.afd);});
-  afds.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent='Afd. '+a+' ('+G.filter(g=>g.afd===a).length+')';afdSel.appendChild(o);});
-  legend.innerHTML=Object.keys(KAT).map(k=>'<button type="button" class="kat" data-k="'+k+'" aria-pressed="false"><span class="kdot" style="--c:'+KAT[k].c+'"></span>'+esc(KAT[k].navn)+'</button>').join('');
+  afds.forEach(a=>{const o=document.createElement('option');o.value=a;afdSel.appendChild(o);});
+  legend.innerHTML=Object.keys(KAT).map(k=>'<button type="button" class="kat" data-k="'+k+'" aria-pressed="false"><span class="kdot" style="--c:'+KAT[k].c+'"></span><span></span></button>').join('');
   legend.onclick=e=>{const b=e.target.closest('.kat');if(!b)return;setKat(katOn===b.dataset.k?null:b.dataset.k);};
+  sprogTekster();
 }
+function sprogTekster(){ // de tekster, der bygges af data: rullemenuens afdelinger og signaturens kategorinavne
+  [...afdSel.options].forEach(o=>{if(o.value)o.textContent=t('afd_option',{a:o.value,n:G.filter(g=>g.afd===o.value).length});});
+  legend.querySelectorAll('.kat').forEach(b=>{b.lastChild.textContent=t('kat_'+b.dataset.k);});}
+function skiftSprog(l){if(!SPROG[l]||l===L)return;L=l;try{localStorage.setItem(SPROG_KEY,l);}catch(e){}anvendSprog();
+  if(DOC){sprogTekster();render();if(sel)select(sel,'sprog');retCount();if(ruteTil)opdaterRute();}syncHash();}
+$('langBtn').onclick=()=>skiftSprog(L==='da'?'en':'da');
 function setKat(k){katOn=k;legend.querySelectorAll('.kat').forEach(b=>{const on=b.dataset.k===k;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});syncHash();render();}
 // ————— Prikker på kortet —————
 function buildDots(){
@@ -455,21 +696,21 @@ function matches(g){const term=q.value.trim().toLowerCase();
   if(curAfd&&g.afd!==curAfd)return false;if(katOn&&g.kat!==katOn)return false;
   if(term&&!term.split(/\s+/).every(w=>g._s.includes(w)))return false;return true;}
 function visibleSet(){return new Set(G.filter(matches).map(g=>g.id));}
-function rowHtml(g){const k=KAT[g.kat]||KAT.andet,p=pos(g);
+function rowHtml(g){const kk=katKey(g),k=KAT[kk],p=pos(g);
   const dist=you?'<b>'+Math.round(distM(you,p))+' m</b>':'';
   return '<div class="row'+(g.id===sel?' sel':'')+'" data-id="'+g.id+'" role="button" tabindex="0">'+
    '<span class="kdot" style="--c:'+k.c+'"></span><span class="plot">'+esc(g.plot)+'</span>'+
-   '<div><div class="nm">'+esc(g.navn)+(g.qr?'<span class="qrtag">📱 film</span>':'')+'</div><div class="sub2">'+esc(k.kort)+(nearest?' · afd. '+esc(g.afd):'')+'</div></div>'+
+   '<div><div class="nm">'+esc(g.navn)+(g.qr?'<span class="qrtag">'+esc(t('qrtag'))+'</span>':'')+'</div><div class="sub2">'+esc(t('kat_'+kk+'_k'))+(nearest?' · '+esc(t('afd_kort',{a:g.afd})):'')+'</div></div>'+
    '<div class="yr">'+(g.aar?'† '+g.aar:'')+dist+'</div></div>';}
 function render(){
   let rows=G.filter(matches);
-  const akt=[];if(curAfd)akt.push('afd. '+curAfd);if(katOn)akt.push(KAT[katOn].kort);if(q.value.trim())akt.push('"'+q.value.trim()+'"');
-  $('listhead').textContent=akt.length?akt.join(' · '):'Alle gravsteder';
-  cnt.textContent=rows.length===G.length?G.length+' gravsteder':rows.length+' af '+G.length;
-  if(!rows.length){list.innerHTML='<div class="empty">Ingen gravsteder matcher.<button class="resetf" id="resetf">Nulstil søgning og filtre</button></div>';syncDots();return;}
+  const akt=[];if(curAfd)akt.push(t('afd_kort',{a:curAfd}));if(katOn)akt.push(t('kat_'+katOn+'_k'));if(q.value.trim())akt.push('"'+q.value.trim()+'"');
+  $('listhead').textContent=akt.length?akt.join(' · '):t('listhead_all');
+  cnt.textContent=rows.length===G.length?t('count_all',{n:G.length}):t('count_some',{n:rows.length,m:G.length});
+  if(!rows.length){list.innerHTML='<div class="empty">'+esc(t('empty'))+'<button class="resetf" id="resetf">'+esc(t('resetf'))+'</button></div>';syncDots();return;}
   let html='';
   if(nearest&&you){rows=rows.slice().sort((a,b)=>distM(you,pos(a))-distM(you,pos(b)));html=rows.map(rowHtml).join('');}
-  else{let last=null;rows.forEach(g=>{if(g.afd!==last){last=g.afd;html+='<div class="afdhead"><b>'+esc(g.afd)+'</b>Afdeling '+esc(g.afd)+'</div>';}html+=rowHtml(g);});}
+  else{let last=null;rows.forEach(g=>{if(g.afd!==last){last=g.afd;html+='<div class="afdhead"><b>'+esc(g.afd)+'</b>'+esc(t('afdhead',{a:g.afd}))+'</div>';}html+=rowHtml(g);});}
   list.innerHTML=html;syncDots();
 }
 list.onclick=e=>{if(e.target.id==='resetf'){resetFilters();return;}const r=e.target.closest('.row');if(r)select(r.dataset.id,'list');};
@@ -484,28 +725,28 @@ function select(id,from){
   sel=byId[id]?id:null;
   list.querySelectorAll('.row').forEach(r=>r.classList.toggle('sel',r.dataset.id===sel));syncDots();syncHash();
   if(!sel){card.classList.remove('open');return;}
-  const g=byId[sel],k=KAT[g.kat]||KAT.andet,p=pos(g);
+  const g=byId[sel],kk=katKey(g),k=KAT[kk],p=pos(g);
   $('cName').innerHTML=esc(g.navn)+(g.aar?'<small>† '+g.aar+'</small>':'');
-  $('cMeta').innerHTML='<span>Gravsted <b>'+esc(g.plot)+'</b> · afd. '+esc(g.afd)+'</span><span><span class="kdot" style="--c:'+k.c+'"></span>'+esc(k.navn)+'</span>'+
-    (g.qr?'<span>📱 QR-kode på gravstedet – scan og se film</span>':'')+(you?'<span>📍 ca. '+Math.round(distM(you,p))+' m fra dig</span>':'');
+  $('cMeta').innerHTML='<span>'+t('card_plot_html',{plot:esc(g.plot),afd:esc(g.afd)})+'</span><span><span class="kdot" style="--c:'+k.c+'"></span>'+esc(t('kat_'+kk))+'</span>'+
+    (g.qr?'<span>'+esc(t('card_qr'))+'</span>':'')+(you?'<span>'+esc(t('card_dist',{m:Math.round(distM(you,p))}))+'</span>':'');
   const wu=wikiUrl(g);
-  $('cLinks').innerHTML=(wu?'<a class="lookup" href="'+esc(wu)+'" target="_blank" rel="noopener">Læs mere ↗</a>':'')+'<button class="lookup" id="cRute" title="Korteste vej ad stierne fra din position">'+(ruteTil===g.id?'➜ Rute vises':'➜ Rute hertil')+'</button><button class="lookup" id="cShare">Del link</button>'+
-    (mapwrapEl.classList.contains('zoom')?'':'<button class="lookup" id="cZoom">🔍 Forstør her</button>');
-  $('cNote').textContent=(RET[g.id]?'Rettet lokalt '+RET[g.id].ts.slice(0,16).replace('T',' ')+' · ':'')+'Fil: '+(g.src==='kort'?'manuel placering':'kommunens register')+(g.acc?' ±'+g.acc+' m':'')+(g.note?' · '+g.note:'');
+  $('cLinks').innerHTML=(wu?'<a class="lookup" href="'+esc(wu)+'" target="_blank" rel="noopener">'+esc(t('read_more'))+'</a>':'')+'<button class="lookup" id="cRute" title="'+esc(t('rute_btn_title'))+'">'+esc(ruteTil===g.id?t('rute_vises'):t('rute_hertil'))+'</button><button class="lookup" id="cShare">'+esc(t('share'))+'</button>'+
+    (mapwrapEl.classList.contains('zoom')?'':'<button class="lookup" id="cZoom">'+esc(t('zoom_here'))+'</button>');
+  $('cNote').textContent=(RET[g.id]?t('note_rettet',{ts:RET[g.id].ts.slice(0,16).replace('T',' ')}):'')+t('note_fil')+(g.src==='kort'?t('note_manuel'):t('note_kk'))+(g.acc?' ±'+g.acc+' m':'')+(g.note?' · '+noteTekst(g.note):'');
   card.classList.add('open');
   const row=list.querySelector('.row[data-id="'+sel+'"]');
   if(from==='map'&&row&&window.innerWidth>900)row.scrollIntoView({behavior:SB,block:'nearest'}); // på telefon er listen ikke en rulleboks: siden ville rulle væk fra kortet
   if(from==='list'||from==='hash'){centerMap(p,true);if(from==='list'&&window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
 }
 card.onclick=e=>{if(e.target.id==='cClose')select(null);
-  else if(e.target.id==='cShare'){const u=location.href;const done=()=>toast('Link kopieret');
-    if(navigator.share)navigator.share({title:byId[sel].navn,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(done,()=>prompt('Kopiér linket:',u));else prompt('Kopiér linket:',u);}
+  else if(e.target.id==='cShare'){const u=location.href;const done=()=>toast(t('link_copied'));
+    if(navigator.share)navigator.share({title:byId[sel].navn,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(done,()=>prompt(t('copy_prompt'),u));else prompt(t('copy_prompt'),u);}
   else if(e.target.id==='cZoom'){setZoom(true);select(sel,'list');}
   else if(e.target.id==='cRute')startRute(sel);};
-// ————— Links: #g=A17&q=…&afd=A&kat=digt&ret=1 —————
+// ————— Links: #g=A17&q=…&afd=A&kat=digt&ret=1&lang=en —————
 function syncHash(){const p=new URLSearchParams();
-  if(sel)p.set('g',sel);if(curAfd)p.set('afd',curAfd);if(katOn)p.set('kat',katOn);const t=q.value.trim();if(t)p.set('q',t);
-  if(document.body.classList.contains('ret'))p.set('ret','1');
+  if(sel)p.set('g',sel);if(curAfd)p.set('afd',curAfd);if(katOn)p.set('kat',katOn);const tq=q.value.trim();if(tq)p.set('q',tq);
+  if(document.body.classList.contains('ret'))p.set('ret','1');if(L!=='da')p.set('lang',L); // dansk er standard og står ikke i linket
   const h=p.toString();try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
 function readHash(){const p=new URLSearchParams(location.hash.slice(1));
   const t=p.get('q');if(t)q.value=t;const a=p.get('afd');if(a&&[...afdSel.options].some(o=>o.value===a)){curAfd=a;afdSel.value=a;}
@@ -564,24 +805,24 @@ function stopHere(){if(hereWatch!==null&&navigator.geolocation)navigator.geoloca
   youEl.hidden=true;youRing.hidden=true;hereBtn.classList.remove('on');hereBtn.setAttribute('aria-pressed','false');nearBtn.hidden=true;if(nearest){nearest=false;nearBtn.classList.remove('on');nearBtn.setAttribute('aria-pressed','false');}render();}
 hereBtn.onclick=()=>{
   if(hereWatch!==null){stopHere();return;}
-  if(!navigator.geolocation){toast('Din browser tilbyder ikke GPS');return;}
-  hereBtn.classList.add('on');hereBtn.setAttribute('aria-pressed','true');toast('Henter din position …');
+  if(!navigator.geolocation){toast(t('no_gps'));return;}
+  hereBtn.classList.add('on');hereBtn.setAttribute('aria-pressed','true');toast(t('getting_pos'));
   let told=false,lastRender=0;
   hereWatch=navigator.geolocation.watchPosition(p=>{
     const c=p.coords,f=llToFrac(c.latitude,c.longitude),ud=udenforM(f);
-    if(ud>60){youEl.hidden=true;youRing.hidden=true;you=null;if(!told){told=true;toast('Du er ca. '+Math.round(ud)+' m uden for kortet');}return;}
+    if(ud>60){youEl.hidden=true;youRing.hidden=true;you=null;if(!told){told=true;toast(t('outside',{m:Math.round(ud)}));}return;}
     you={fx:Math.min(1,Math.max(0,f.fx)),fy:Math.min(1,Math.max(0,f.fy)),acc:c.accuracy,lat:c.latitude,lon:c.longitude};
     youEl.style.left=youRing.style.left=(you.fx*100)+'%';youEl.style.top=youRing.style.top=(you.fy*100)+'%';
     const rpx=c.accuracy/M_PER_PX;youRing.style.width=(rpx/IMGW*200)+'%';youRing.style.height=(rpx/IMGH*200)+'%'; // usikkerhedsradius i billedpixels → procent af kortet (diameter = 2r)
     youEl.hidden=false;youRing.hidden=false;nearBtn.hidden=false;
     if(!told){told=true;let best=null,bd=Infinity;G.forEach(g=>{const d=distM(you,pos(g));if(d<bd){bd=d;best=g;}});
-      toast('Nærmest dig: '+best.navn+' ('+best.plot+'), ca. '+Math.round(bd)+' m · GPS ±'+Math.round(c.accuracy)+' m');
+      toast(t('nearest_you',{navn:best.navn,plot:best.plot,m:Math.round(bd),acc:Math.round(c.accuracy)}));
       centerMap(you,true);if(window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
     if(Date.now()-lastRender>4000){lastRender=Date.now();render();if(sel)select(sel,'gps');opdaterRute();} // afstandene i listen, kortet og ruten opdateres i ro og mag
     else if(ruteTil&&!ruteVist)opdaterRute(); // første aflæsning efter "Rute hertil" uden GPS
   },err=>{ // kun et afslag slukker; et tabt signal (under træerne) eller en timeout giver en besked, og overvågningen fortsætter
-    if(err.code===1){stopHere();toast('GPS afvist — giv siden lov til at bruge din position');return;}
-    if(!gpsFejlT||Date.now()-gpsFejlT>30000){gpsFejlT=Date.now();toast('Venter på GPS-signal …');}
+    if(err.code===1){stopHere();toast(t('gps_denied'));return;}
+    if(!gpsFejlT||Date.now()-gpsFejlT>30000){gpsFejlT=Date.now();toast(t('gps_wait'));}
   },{enableHighAccuracy:true,timeout:20000,maximumAge:5000});
 };
 nearBtn.onclick=()=>{nearest=!nearest;nearBtn.classList.toggle('on',nearest);nearBtn.setAttribute('aria-pressed',nearest);render();};
@@ -616,7 +857,7 @@ function dijkstra(seeds){ // seeds: [[knude, startomkostning], …] → {dist, p
   seeds.forEach(([v,c])=>{if(c<dist[v]){dist[v]=c;push(c,v);}});
   while(h.length){const [d,v]=pop();if(d>dist[v])continue;for(const [w,m] of RUTER.adj[v]){const nd=d+m;if(nd<dist[w]){dist[w]=nd;prev[w]=v;push(nd,w);}}}
   return {dist:dist,prev:prev};}
-function findRute(fra,til){ // {fx,fy} × {fx,fy} → {pts:[[fx,fy]…] ad stierne, m: meter i alt, laage: navn|null} eller null
+function findRute(fra,til){ // {fx,fy} × {fx,fy} → {pts:[[fx,fy]…] ad stierne, m: meter i alt, laage: lågen fra ruter.json ({navn, navn_en, …}) | null} eller null
   const s=naermestKant(fra),t=naermestKant(til);if(!s||!t||s.m>80)return null;
   const n=RUTER.n,sl=RUTER.len(s.a,s.b),tl=RUTER.len(t.a,t.b);
   const r=dijkstra([[s.a,s.m+s.t*sl],[s.b,s.m+(1-s.t)*sl]]);
@@ -627,17 +868,17 @@ function findRute(fra,til){ // {fx,fy} × {fx,fy} → {pts:[[fx,fy]…] ad stier
   let pts=[[fra.fx,fra.fy],[s.fx,s.fy]].concat(path.map(v=>n[v]),[[t.fx,t.fy]]);
   if((s.a===t.a&&s.b===t.b)||(s.a===t.b&&s.b===t.a)){const direkte=s.m+Math.abs(s.t-t.t)*sl;if(direkte<total){total=direkte;pts=[[fra.fx,fra.fy],[s.fx,s.fy],[t.fx,t.fy]];path=[];}} // samme kant: gå ad kanten
   const laage=(RUTER.laager||[]).find(l=>l.n!==null&&path.includes(l.n));
-  return {pts:pts,slut:[t.fx,t.fy],m:total+t.m,laage:laage?laage.navn:null};}
+  return {pts:pts,slut:[t.fx,t.fy],m:total+t.m,laage:laage||null};}
 function tegnRute(rt,til){const P=p=>(p[0]*IMGW).toFixed(1)+','+(p[1]*IMGH).toFixed(1);const linje=rt.pts.map(P).join(' ');
   $('rutehalo').setAttribute('points',linje);$('rutelinje').setAttribute('points',linje);$('rutestip').setAttribute('points',P(rt.slut)+' '+P([til.fx,til.fy]));}
 function opdaterRute(){
   if(!ruteTil||!byId[ruteTil])return;const g=byId[ruteTil];
-  if(!you){$('rutetekst').innerHTML='Rute til <b>'+esc(g.navn)+'</b>: venter på GPS …';document.body.classList.add('rute');return;}
+  if(!you){$('rutetekst').innerHTML=t('rute_wait_html',{navn:esc(g.navn)});document.body.classList.add('rute');return;}
   hentRuter().then(()=>{const rt=findRute(you,pos(g));document.body.classList.add('rute');ruteVist=true;
-    if(!rt){$('rutetekst').innerHTML='Rute til <b>'+esc(g.navn)+'</b>: ingen sti fundet herfra (står du for langt fra kortet?)';['rutehalo','rutelinje','rutestip'].forEach(i=>$(i).setAttribute('points',''));return;}
+    if(!rt){$('rutetekst').innerHTML=t('rute_none_html',{navn:esc(g.navn)});['rutehalo','rutelinje','rutestip'].forEach(i=>$(i).setAttribute('points',''));return;}
     tegnRute(rt,pos(g));const min=Math.max(1,Math.round(rt.m/GANG_M_PR_MIN));
-    $('rutetekst').innerHTML='Rute til <b>'+esc(g.navn)+'</b> ('+esc(g.plot)+'): <b>'+Math.round(rt.m)+' m</b> · ca. '+min+' min'+(rt.laage?' · gennem '+esc(rt.laage):'');
-  }).catch(()=>{$('rutetekst').textContent='Ruterne kunne ikke hentes — prøv igen med net';});}
+    $('rutetekst').innerHTML=t('rute_info_html',{navn:esc(g.navn),plot:esc(g.plot),m:Math.round(rt.m),min:min})+(rt.laage?esc(t('rute_via',{laage:laageNavn(rt.laage)})):'');
+  }).catch(()=>{$('rutetekst').textContent=t('rute_err');});}
 function startRute(id){ruteTil=id;ruteVist=false;document.body.classList.add('rute');
   if(!you){if(hereWatch===null)hereBtn.click();opdaterRute();}else opdaterRute();
   if(sel===id)select(id,'rute');if(window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
@@ -646,25 +887,25 @@ $('ruteStop').onclick=stopRute;
 // ————— Rettetilstand: flyt en prik (gemmes lokalt, eksporteres som gravsteder.json) —————
 function nowTs(){return new Date().toISOString();}
 let retLast=null;
-function setRet(on){document.body.classList.toggle('ret',on);$('retToggle').textContent=on?'Skjul rettelser':'Ret placeringer';retCount();syncHash();if(on&&!sel)toast('Vælg et gravsted, og tryk så på kortet');}
-function retCount(){const n=Object.keys(RET).length;$('retcount').textContent=n?n+' rettet lokalt':'';}
+function setRet(on){document.body.classList.toggle('ret',on);$('retToggle').textContent=on?t('ret_hide'):t('ret_show');retCount();syncHash();if(on&&!sel)toast(t('ret_pick'));}
+function retCount(){const n=Object.keys(RET).length;$('retcount').textContent=n?t('ret_count',{n:n}):'';}
 function retSet(id,fx,fy,src,extra){retLast={id:id,prev:RET[id]||null};
   RET[id]=Object.assign({fx:+fx.toFixed(5),fy:+fy.toFixed(5),src:src,ts:nowTs()},extra||{});saveRet();buildDots();retCount();select(id,'ret');
-  toast(byId[id].navn+' flyttet — husk ⬇ Eksportér');}
+  toast(t('ret_moved',{navn:byId[id].navn}));}
 mapwrapEl.addEventListener('click',e=>{
   if(!document.body.classList.contains('ret')||dragged)return;if(e.target.closest('.dot')&&!e.target.closest('.dot.sel'))return;
-  if(!sel){toast('Vælg først et gravsted');return;}
+  if(!sel){toast(t('ret_first'));return;}
   const r=$('mapimg').getBoundingClientRect(),fx=(e.clientX-r.left)/r.width,fy=(e.clientY-r.top)/r.height; // billedets boks, ikke rammens
   if(fx<0||fx>1||fy<0||fy>1)return;retSet(sel,fx,fy,'kort');});
-$('retGPS').onclick=()=>{if(!sel){toast('Vælg først et gravsted');return;}if(!you){toast('Tænd 🧭 Hvor er jeg? først');return;}
+$('retGPS').onclick=()=>{if(!sel){toast(t('ret_first'));return;}if(!you){toast(t('ret_gps_first'));return;}
   retSet(sel,you.fx,you.fy,'gps',{lat:+you.lat.toFixed(6),lon:+you.lon.toFixed(6),acc:Math.round(you.acc)});};
-$('retUndo').onclick=()=>{if(!retLast){toast('Intet at fortryde');return;}if(retLast.prev)RET[retLast.id]=retLast.prev;else delete RET[retLast.id];
-  saveRet();buildDots();retCount();if(sel)select(sel,'ret');retLast=null;toast('Fortrudt');};
-$('retClear').onclick=()=>{if(!Object.keys(RET).length)return;if(!confirm('Slet alle lokale rettelser?'))return;RET={};saveRet();retLast=null;buildDots();retCount();if(sel)select(sel,'ret');};
+$('retUndo').onclick=()=>{if(!retLast){toast(t('ret_nothing'));return;}if(retLast.prev)RET[retLast.id]=retLast.prev;else delete RET[retLast.id];
+  saveRet();buildDots();retCount();if(sel)select(sel,'ret');retLast=null;toast(t('ret_undone'));};
+$('retClear').onclick=()=>{if(!Object.keys(RET).length)return;if(!confirm(t('ret_clear_confirm')))return;RET={};saveRet();retLast=null;buildDots();retCount();if(sel)select(sel,'ret');};
 $('retExport').onclick=async()=>{
-  if(!Object.keys(RET).length){toast('Ingen rettelser at eksportere');return;}
+  if(!Object.keys(RET).length){toast(t('ret_none_export'));return;}
   let doc=null;try{const r=await fetch('gravsteder.json?t='+Date.now(),{cache:'no-store'});if(r.ok)doc=await r.json();}catch(e){} // nyeste fil først, så en gammel fane ikke overskriver andres rettelser
-  if(!doc||!Array.isArray(doc.gravsteder)){toast('⚠ Ingen forbindelse — prøv igen med net');return;}
+  if(!doc||!Array.isArray(doc.gravsteder)){toast(t('ret_offline'));return;}
   let n=0;doc.gravsteder.forEach(g=>{const r=RET[g.id];if(!r)return;
     if(g.src==='kort'&&g.ts&&g.ts>r.ts)return; // filen har en nyere manuel placering: den vinder
     ['note','acc','lat','lon'].forEach(k=>delete g[k]);
@@ -673,13 +914,14 @@ $('retExport').onclick=async()=>{
   const txt=JSON.stringify(doc,null,1),file=new File([txt],'gravsteder.json',{type:'application/json'});
   if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'gravsteder.json'});return;}catch(e){if(e.name==='AbortError')return;}}
   const a=document.createElement('a'),url=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.href=url;a.download='gravsteder.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  toast(n+' rettelser eksporteret — læg filen i repoet');};
+  toast(t('ret_exported',{n:n}));};
 $('retToggle').onclick=()=>setRet(!document.body.classList.contains('ret'));
 // ————— Start —————
+anvendSprog();
 fetch('gravsteder.json').then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{
   DOC=d;prep();buildDots();readHash();retCount();
-  window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g');if(g&&g!==sel&&byId[g])select(g,'hash');});
-}).catch(e=>{$('status').textContent='Gravstederne kunne ikke hentes ('+e.message+'). Prøv igen, når du har forbindelse.';});
+  window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g'),l=p.get('lang');if(l&&SPROG[l])skiftSprog(l);if(g&&g!==sel&&byId[g])select(g,'hash');});
+}).catch(e=>{$('status').textContent=t('load_fail',{e:e.message});});
 $('udgave').textContent=UDGAVE;
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
   let havde=!!navigator.serviceWorker.controller; // første installation er ikke en opdatering

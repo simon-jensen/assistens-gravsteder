@@ -1,4 +1,4 @@
-// Headless røgtest af siden: prikker, søgning, links, GPS-visning, mørk tilstand og rettetilstanden.
+// Headless røgtest af siden: prikker, søgning, links, GPS-visning, mørk tilstand, rettetilstanden og den engelske udgave.
 // Kræver Playwright med Chromium. Kør fra repo-roden:
 //   node tests/side.test.mjs                 # starter selv en lokal server på en ledig port
 //   UD=/tmp/skaerm node tests/side.test.mjs  # skriver også skærmbilleder (telefon, lys/mørk) til mappen
@@ -145,6 +145,39 @@ try {
   ok((await p2.locator('#mapimg').evaluate(i => i.currentSrc)).includes('kort-moerk'), 'mørk tilstand bruger det mørke kort');
   if (UD) await p2.screenshot({ path: path.join(UD, 'telefon_moerk.png') });
   await ctx2.close();
+  // Engelsk udgave: vælges af browserens sprog, af #lang=en og af knappen; valget huskes, og linket bærer det
+  const ctx4 = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, locale: 'en-GB',
+    geolocation: { latitude: 55.6903, longitude: 12.5505 }, permissions: ['geolocation'], serviceWorkers: 'block' });
+  const p4 = await ctx4.newPage(); const errs4 = []; p4.on('pageerror', e => errs4.push(e.message));
+  await p4.goto(URL0 + '#g=P1'); await p4.waitForSelector('.dot');
+  ok(await p4.evaluate(() => document.documentElement.lang) === 'en' && (await p4.title()).includes('Assistens Cemetery'), 'engelsk browser får siden på engelsk');
+  ok((await p4.evaluate(() => location.hash)) === '#g=P1&lang=en', 'linket bærer sproget: ' + (await p4.evaluate(() => location.hash)));
+  ok((await p4.locator('#count').textContent()) === '133 graves' && (await p4.locator('#afd option').nth(1).textContent()) === 'Sect. A (28)', 'tæller og rullemenu på engelsk');
+  ok((await p4.locator('#cMeta').innerText()).includes('Grave P-513 · sect. P') && (await p4.locator('#cLinks').innerText()).includes('ROUTE HERE'), 'kortet med H. C. Andersen på engelsk');
+  ok((await p4.locator('.kat').first().innerText()) === 'Poets, writers and philosophers' && (await p4.locator('.afdhead').first().innerText()).endsWith('SECTION A'), 'signatur og afdelingsoverskrifter på engelsk');
+  ok((await p4.locator('#retToggle').innerText()).toUpperCase() === 'EDIT PLACEMENTS' && (await p4.locator('#langBtn').innerText()).toUpperCase() === 'PÅ DANSK', 'sidefodens knapper på engelsk');
+  await p4.fill('#q', 'painter'); await p4.waitForTimeout(250);
+  ok(await p4.locator('.row').count() === 22, 'søgning på "painter" finder kategorien (22 rækker)');
+  await p4.fill('#q', ''); await p4.waitForTimeout(250);
+  await p4.click('#hereBtn'); await p4.waitForTimeout(600);
+  ok((await p4.locator('#toast').innerText()).startsWith('Nearest to you'), 'GPS-besked på engelsk');
+  await p4.click('#cRute'); await p4.waitForTimeout(1500);
+  ok(/^Route to H\. C\. Andersen \(P-513\): \d+ m · about \d+ min/.test(await p4.locator('#rutetekst').textContent()), 'ruteteksten på engelsk: ' + (await p4.locator('#rutetekst').textContent()));
+  await p4.click('#retToggle');
+  ok((await p4.locator('#cNote').innerText()).includes('File: city register') && (await p4.locator('#cNote').innerText()).includes('exact match'), 'provenienslinjen oversættes: ' + (await p4.locator('#cNote').innerText()));
+  await p4.click('#retToggle');
+  await p4.click('#langBtn'); await p4.waitForTimeout(100);
+  ok(await p4.evaluate(() => document.documentElement.lang) === 'da' && (await p4.locator('h1').innerText()).includes('Kirkegård') && (await p4.locator('#rutetekst').textContent()).startsWith('Rute til'), 'knappen skifter til dansk, og ruteteksten følger med');
+  ok(!(await p4.evaluate(() => location.hash)).includes('lang='), 'dansk står ikke i linket');
+  await p4.reload(); await p4.waitForSelector('.dot');
+  ok(await p4.evaluate(() => document.documentElement.lang) === 'da', 'valget huskes efter genindlæsning');
+  await p4.goto('about:blank'); await p4.goto(URL0 + '#lang=en&afd=A'); await p4.waitForSelector('.dot');
+  ok(await p4.evaluate(() => document.documentElement.lang) === 'en' && (await p4.locator('#listhead').textContent()) === 'sect. A', '#lang=en i linket vinder over det gemte valg');
+  await p4.evaluate(() => { location.hash = '#g=P1&lang=da'; }); await p4.waitForTimeout(100);
+  ok(await p4.evaluate(() => document.documentElement.lang) === 'da' && (await p4.locator('#cName').innerText()).includes('Andersen'), 'et nyt link med lang=da i samme fane skifter sprog');
+  ok(errs4.length === 0, 'ingen JavaScript-fejl i den engelske udgave' + (errs4.length ? ': ' + errs4.join(' | ') : ''));
+  if (UD) await p4.screenshot({ path: path.join(UD, 'telefon_engelsk.png') });
+  await ctx4.close();
   const ctx3 = await browser.newContext({ viewport: { width: 1280, height: 900 }, serviceWorkers: 'block' });
   const p3 = await ctx3.newPage(); await p3.goto(URL0 + '#afd=A'); await p3.waitForSelector('.dot');
   ok(await p3.locator('.row').count() === 28, '#afd=A viser 28 rækker på skrivebordet');
