@@ -48,9 +48,12 @@ kommunens gravstedsregister, offline-drift og ingen byggetrin.
 
 Prikkerne er beregnet fra gravstedsnumrene (se nedenfor); 125 er fundet direkte i
 kommunens register, 8 er anslåede og markeret i
-[`data/placering.md`](data/placering.md). Sidder en prik forkert:
+[`data/placering.md`](data/placering.md). Rettetilstanden er et værktøj til
+vedligeholderen og vises ikke for besøgende; siden har ingen knap til den.
+Sidder en prik forkert:
 
-1. Tryk **Ret placeringer** nederst på siden (eller åbn linket med `#ret=1`).
+1. Åbn siden med `#ret=1` i linket (fx `…/assistens-gravsteder/#ret=1`); en
+   rettebjælke vises over kortet, og **Luk rettetilstand** lukker den igen.
 2. Vælg gravstedet, og tryk på kortet dér, hvor det er, eller stil dig ved det
    med **🧭 Hvor er jeg?** tændt og tryk **📡 Her**. Rettelsen ligger kun i din
    browser, indtil du eksporterer.

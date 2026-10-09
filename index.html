@@ -186,6 +186,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
     <button class="retbtn" id="retExport" data-t="ret_export">⬇ Eksportér gravsteder.json</button>
     <button class="retbtn warn" id="retUndo" data-t="ret_undo">Fortryd rettelsen</button>
     <button class="retbtn warn" id="retClear" data-t="ret_clear">Slet alle rettelser</button>
+    <button class="retbtn" id="retToggle" data-t="ret_hide">Luk rettetilstand</button>
     <span class="count" id="retcount" style="margin-left:auto"></span>
   </div>
 </div>
@@ -217,13 +218,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <div class="list" id="list"><div id="status" data-t="status_loading">Henter gravstederne …</div></div>
 </section>
 </div>
-<footer><span data-th="footer_html"><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. <b>➜ Rute hertil</b> på et gravsted tegner den korteste vej ad stierne fra dig, også udefra gennem den rigtige åbne låge; de sidste meter fra stien til gravstedet er stiplede, fordi græsrækkerne ikke er kortlagt. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>).</span> <button class="clearchip" id="retToggle">Ret placeringer</button><br><b data-t="udgave">Udgave:</b> <span id="udgave"></span> <span data-t="udgave_hint">— ser du ikke den nyeste, så luk siden helt og åbn den igen.</span></footer>
+<footer><span data-th="footer_html"><b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. <b>➜ Rute hertil</b> på et gravsted tegner den korteste vej ad stierne fra dig, også udefra gennem den rigtige åbne låge; de sidste meter fra stien til gravstedet er stiplede, fordi græsrækkerne ikke er kortlagt. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.</span><br><b data-t="udgave">Udgave:</b> <span id="udgave"></span> <span data-t="udgave_hint">— ser du ikke den nyeste, så luk siden helt og åbn den igen.</span></footer>
 </div>
 <div id="toast" role="status"></div>
 <button type="button" id="nyudgave" hidden data-t="nyudgave">↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
-const UDGAVE='2026-10-09b'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
+const UDGAVE='2026-10-09c'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
 // ————— Sprog: alle tekster ligger i SPROG (da = kilde, en = oversættelse); t('nøgle',{pladsholder:…}) slår op —————
 // Statisk HTML mærkes med data-t (tekst), data-th (HTML) eller data-ta="attribut=nøgle;…" og udfyldes af anvendSprog().
 // Valg: #lang=… i linket, ellers det gemte valg (knappen), ellers browserens sprog: dansk, hvis dansk/norsk/svensk står før engelsk, ellers engelsk.
@@ -264,8 +265,8 @@ da:{
  near:'📍 Nærmeste først',
  near_title:'Sortér efter afstand fra din position',
  status_loading:'Henter gravstederne …',
- // sidefoden (retToggle-knappen og udgavenummeret ligger uden for disse tekster)
- footer_html:'<b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. <b>➜ Rute hertil</b> på et gravsted tegner den korteste vej ad stierne fra dig, også udefra gennem den rigtige åbne låge; de sidste meter fra stien til gravstedet er stiplede, fordi græsrækkerne ikke er kortlagt. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.<br><b>Rettelser:</b> Sidder en prik forkert, kan den flyttes på stedet og eksporteres til repoet (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>).',
+ // sidefoden (udgavenummeret ligger uden for teksten)
+ footer_html:'<b>Kilde:</b> Fortegnelsen over de 133 gravsteder (navne, dødsår, gravstedsnumre og kategorier) er Københavns Kommunes brochure “133 gravsteder på Assistens Kirkegård” (2019). Placeringen på kortet er beregnet ud fra gravstedsnumrene og kommunens åbne gravstedsregister; otte af dem er anslåede og bør tjekkes på stedet (se <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 film</b> betyder, at der står en QR-kode på gravstedet, som fører til en film om personen.<br><b>I felten:</b> Tryk <b>🧭 Hvor er jeg?</b>, så viser en blå prik, hvor du står, og listen kan sortere efter afstand. <b>➜ Rute hertil</b> på et gravsted tegner den korteste vej ad stierne fra dig, også udefra gennem den rigtige åbne låge; de sidste meter fra stien til gravstedet er stiplede, fordi græsrækkerne ikke er kortlagt. To fingre zoomer kortet (også som app på hjemmeskærmen), dobbelttryk forstørrer, træk flytter kortet; prikkerne beholder deres størrelse, så de dækker mindre, jo tættere du zoomer. Gravstedsnummeret (fx A-58) er afdeling + nummer; numrene ligger fortløbende i rækkerne. Siden virker også uden dækning, når den har været åbnet én gang, og kan lægges på hjemmeskærmen.',
  udgave:'Udgave:',
  udgave_hint:'— ser du ikke den nyeste, så luk siden helt og åbn den igen.',
  nyudgave:'↻ Ny udgave af siden er klar — tryk for at genindlæse',
@@ -318,8 +319,7 @@ da:{
  rute_via:' · gennem {laage}', // laage = lågens navn, fx "lågen mod Jagtvej" / "hovedindgangen fra Kapelvej"
  rute_err:'Ruterne kunne ikke hentes — prøv igen med net',
  // rettetilstanden
- ret_show:'Ret placeringer',
- ret_hide:'Skjul rettelser',
+ ret_hide:'Luk rettetilstand',
  ret_pick:'Vælg et gravsted, og tryk så på kortet',
  ret_count:'{n} rettet lokalt',
  ret_moved:'{navn} flyttet — husk ⬇ Eksportér',
@@ -369,8 +369,8 @@ en:{
  near:'📍 Nearest first',
  near_title:'Sort by distance from your location',
  status_loading:'Loading the graves…',
- // sidefoden (retToggle-knappen og udgavenummeret ligger uden for disse tekster)
- footer_html:'<b>Source:</b> The list of the 133 graves (names, years of death, grave numbers and categories) comes from the City of Copenhagen’s brochure “133 gravsteder på Assistens Kirkegård” (133 graves at Assistens Cemetery, 2019). The positions on the map are calculated from the grave numbers and the city’s open register of graves; eight of them are estimates and should be checked on site (see <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 video</b> means there is a QR code at the grave that leads to a video about the person.<br><b>On site:</b> Tap <b>🧭 Where am I?</b> and a blue dot shows where you are; the list can then be sorted by distance. <b>➜ Route here</b> on a grave draws the shortest way along the paths from where you are, even from outside the walls, via the right open gate; the last few metres from the path to the grave are dashed, because the grassy rows between the graves are not mapped. Pinch to zoom the map (also as an app on your home screen), double-tap to zoom in, drag to move the map; the dots keep their size, so they cover less ground the more you zoom in. The grave number (e.g. A-58) is section + number; the numbers run in sequence along the rows. Once you have opened the page, it also works without a signal, and you can add it to your home screen.<br><b>Corrections:</b> If a dot is in the wrong place, it can be moved on site and exported to the repo (<a href="https://github.com/simon-jensen/assistens-gravsteder">github.com/simon-jensen/assistens-gravsteder</a>).',
+ // sidefoden (udgavenummeret ligger uden for teksten)
+ footer_html:'<b>Source:</b> The list of the 133 graves (names, years of death, grave numbers and categories) comes from the City of Copenhagen’s brochure “133 gravsteder på Assistens Kirkegård” (133 graves at Assistens Cemetery, 2019). The positions on the map are calculated from the grave numbers and the city’s open register of graves; eight of them are estimates and should be checked on site (see <a href="https://github.com/simon-jensen/assistens-gravsteder/blob/main/data/placering.md">data/placering.md</a>). <b>📱 video</b> means there is a QR code at the grave that leads to a video about the person.<br><b>On site:</b> Tap <b>🧭 Where am I?</b> and a blue dot shows where you are; the list can then be sorted by distance. <b>➜ Route here</b> on a grave draws the shortest way along the paths from where you are, even from outside the walls, via the right open gate; the last few metres from the path to the grave are dashed, because the grassy rows between the graves are not mapped. Pinch to zoom the map (also as an app on your home screen), double-tap to zoom in, drag to move the map; the dots keep their size, so they cover less ground the more you zoom in. The grave number (e.g. A-58) is section + number; the numbers run in sequence along the rows. Once you have opened the page, it also works without a signal, and you can add it to your home screen.',
  udgave:'Version:',
  udgave_hint:'— if you don’t see the latest version, close the page completely and open it again.',
  nyudgave:'↻ A new version of the page is ready — tap to reload',
@@ -423,8 +423,7 @@ en:{
  rute_via:' · through {laage}', // laage = navn_en fra ruter.json, fx "the gate to Jagtvej"
  rute_err:'Could not load the routes — try again when you are online',
  // rettetilstanden
- ret_show:'Edit positions',
- ret_hide:'Stop editing',
+ ret_hide:'Close edit mode',
  ret_pick:'Pick a grave, then tap the map',
  ret_count:'{n} corrected locally',
  ret_moved:'{navn} moved — remember to ⬇ Export',
@@ -466,7 +465,7 @@ function anvendSprog(){document.documentElement.lang=L;document.title=t('title')
   document.querySelectorAll('[data-t]').forEach(el=>{el.textContent=t(el.dataset.t);});
   document.querySelectorAll('[data-th]').forEach(el=>{el.innerHTML=t(el.dataset.th);});
   document.querySelectorAll('[data-ta]').forEach(el=>el.dataset.ta.split(';').forEach(p=>{const i=p.indexOf('=');el.setAttribute(p.slice(0,i),t(p.slice(i+1)));}));
-  document.getElementById('langBtn').lang=L==='da'?'en':'da';document.getElementById('retToggle').textContent=document.body.classList.contains('ret')?t('ret_hide'):t('ret_show');}
+  document.getElementById('langBtn').lang=L==='da'?'en':'da';}
 // ————— Kategorier (brochurens signaturer og farver; navnene ligger i SPROG som kat_<nøgle> og kat_<nøgle>_k) —————
 const KAT={digt:{c:'#f29b3a'},komp:{c:'#5cb77a'},kunst:{c:'#e0272a'},scene:{c:'#f2dc1e'},handel:{c:'var(--handel)'},vid:{c:'#1f9ede'},andet:{c:'var(--andet)'},faelles:{c:'#6b6f7a'}};
 const IMGW=1400,IMGH=1216,M_PER_PX=0.46,LON0=12.55,LAT0=55.69;
@@ -723,10 +722,10 @@ function startRute(id){ruteTil=id;ruteVist=false;document.body.classList.add('ru
   if(sel===id)select(id,'rute');if(window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
 function stopRute(){if(!ruteTil)return;ruteTil=null;ruteVist=false;document.body.classList.remove('rute');['rutehalo','rutelinje','rutestip'].forEach(i=>$(i).setAttribute('points',''));if(sel)select(sel,'rute');}
 $('ruteStop').onclick=stopRute;
-// ————— Rettetilstand: flyt en prik (gemmes lokalt, eksporteres som gravsteder.json) —————
+// ————— Rettetilstand (kun til vedligeholderen, åbnes med #ret=1): flyt en prik (gemmes lokalt, eksporteres som gravsteder.json) —————
 function nowTs(){return new Date().toISOString();}
 let retLast=null;
-function setRet(on){document.body.classList.toggle('ret',on);$('retToggle').textContent=on?t('ret_hide'):t('ret_show');retCount();syncHash();if(on&&!sel)toast(t('ret_pick'));}
+function setRet(on){document.body.classList.toggle('ret',on);retCount();syncHash();if(on&&!sel)toast(t('ret_pick'));}
 function retCount(){const n=Object.keys(RET).length;$('retcount').textContent=n?t('ret_count',{n:n}):'';}
 function retSet(id,fx,fy,src,extra){retLast={id:id,prev:RET[id]||null};
   RET[id]=Object.assign({fx:+fx.toFixed(5),fy:+fy.toFixed(5),src:src,ts:nowTs()},extra||{});saveRet();buildDots();retCount();select(id,'ret');
@@ -754,12 +753,14 @@ $('retExport').onclick=async()=>{
   if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'gravsteder.json'});return;}catch(e){if(e.name==='AbortError')return;}}
   const a=document.createElement('a'),url=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.href=url;a.download='gravsteder.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   toast(t('ret_exported',{n:n}));};
-$('retToggle').onclick=()=>setRet(!document.body.classList.contains('ret'));
+$('retToggle').onclick=()=>setRet(false);
 // ————— Start —————
 anvendSprog();
 fetch('gravsteder.json').then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{
   DOC=d;prep();buildDots();readHash();retCount();
-  window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g'),l=p.get('lang');if(harSprog(l))skiftSprog(l);if(g&&g!==sel&&byId[g])select(g,'hash');});
+  window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g'),l=p.get('lang'),r=p.get('ret')==='1';if(harSprog(l))skiftSprog(l);
+    if(r!==document.body.classList.contains('ret'))setRet(r); // #ret=1 skrevet i adresselinjen på en åben side er indgangen til rettetilstanden
+    if(g&&g!==sel&&byId[g])select(g,'hash');});
 }).catch(e=>{loadErr=e.message;const st=$('status');delete st.dataset.t;st.textContent=t('load_fail',{e:loadErr});});
 $('udgave').textContent=UDGAVE;
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));

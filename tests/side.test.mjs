@@ -124,9 +124,9 @@ try {
   ok(rD && rD.m < 120, 'og er kort (' + (rD && rD.m) + ' m), ikke rundt om muren');
   await ctx.setGeolocation({ latitude: 55.6903, longitude: 12.5505 }); await page.click('#hereBtn'); await page.waitForTimeout(300); // GPS fra igen
   // Rettetilstand: tryk på kortet flytter den valgte prik og gemmes lokalt
-  await page.goto(URL0 + '#g=U1'); await page.waitForSelector('.dot'); // U1 valgt igen (ruteblokken valgte P1)
-  await page.click('#retToggle');
-  ok(await page.evaluate(() => document.body.classList.contains('ret')), 'rettetilstand tændt');
+  await page.goto(URL0 + '#g=U1&ret=1'); await page.waitForSelector('.dot'); // U1 valgt igen (ruteblokken valgte P1); #ret=1 er den eneste indgang
+  ok(await page.evaluate(() => document.body.classList.contains('ret')), 'rettetilstand tændt med #ret=1');
+  ok(await page.locator('#retToggle').count() === 1 && await page.locator('footer button').count() === 0, 'ingen knap til rettetilstanden i sidefoden; luk-knappen sidder i rettebjælken');
   await page.locator('#mapwrap').scrollIntoViewIfNeeded();
   const img = await page.locator('#mapimg').boundingBox();
   await page.mouse.click(img.x + img.width * 0.3, img.y + img.height * 0.3); // et tomt sted i afd. S
@@ -136,6 +136,7 @@ try {
   await page.click('#retUndo');
   ok(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('assistens_grav_ret_v1') || '{}')).length) === 0, 'fortryd fjerner rettelsen');
   await page.click('#retToggle');
+  ok(!(await page.evaluate(() => document.body.classList.contains('ret'))) && !(await page.evaluate(() => location.hash)).includes('ret='), 'Luk rettetilstand slukker den og fjerner ret=1 fra linket');
   if (UD) { await page.goto(URL0 + '#g=P1'); await page.waitForSelector('.dot'); }
   const vSw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8').match(/const VERSION\s*=\s*'([^']+)'/)[1];
   ok((await page.locator('#udgave').textContent()) === vSw, 'udgaven i sidefoden er sw.js VERSION (' + vSw + ')');
@@ -158,7 +159,7 @@ try {
   ok((await p4.locator('#count').textContent()) === '133 graves' && (await p4.locator('#afd option').nth(1).textContent()) === 'Section A (28)', 'tæller og rullemenu på engelsk');
   ok((await p4.locator('#cMeta').innerText()).includes('Grave P-513 · section P') && (await p4.locator('#cLinks').textContent()).includes('Route here') && (await p4.locator('#cLinks').textContent()).includes('Read more (in Danish)'), 'kortet med H. C. Andersen på engelsk');
   ok((await p4.locator('.kat').first().innerText()) === 'Poets, writers and philosophers' && (await p4.locator('.afdhead').first().innerText()).endsWith('SECTION A'), 'signatur og afdelingsoverskrifter på engelsk');
-  ok((await p4.locator('#retToggle').textContent()) === 'Edit positions' && (await p4.locator('#langBtn').innerText()).toUpperCase() === 'PÅ DANSK', 'sidefodens knapper på engelsk');
+  ok((await p4.locator('#langBtn').innerText()).toUpperCase() === 'PÅ DANSK', 'sprogknappen viser det andet sprog');
   await p4.fill('#q', 'painter'); await p4.waitForTimeout(250);
   ok(await p4.locator('.row').count() === 22, 'søgning på "painter" finder kategorien (22 rækker)');
   await p4.fill('#q', ''); await p4.waitForTimeout(250);
@@ -169,8 +170,9 @@ try {
   await p4.waitForTimeout(4200); await ctx4.setGeolocation({ latitude: 55.6918, longitude: 12.5530 }); await p4.waitForTimeout(1200); // Nørrebrogade, uden for muren
   ok(/ · through the /.test(await p4.locator('#rutetekst').textContent()), 'lågen får sit engelske navn: ' + (await p4.locator('#rutetekst').textContent()));
   await ctx4.setGeolocation({ latitude: 55.6903, longitude: 12.5505 });
-  await p4.click('#retToggle');
+  await p4.evaluate(() => setRet(true));
   ok((await p4.locator('#cNote').innerText()).includes('File: city register') && (await p4.locator('#cNote').innerText()).includes('exact match'), 'provenienslinjen oversættes: ' + (await p4.locator('#cNote').innerText()));
+  ok((await p4.locator('#retToggle').textContent()) === 'Close edit mode', 'rettebjælkens luk-knap på engelsk');
   await p4.click('#retToggle');
   await p4.click('#langBtn'); await p4.waitForTimeout(100);
   ok(await p4.evaluate(() => document.documentElement.lang) === 'da' && (await p4.locator('h1').innerText()).includes('Kirkegård') && (await p4.locator('#rutetekst').textContent()).startsWith('Rute til'), 'knappen skifter til dansk, og ruteteksten følger med');
