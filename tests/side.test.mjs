@@ -1,4 +1,4 @@
-// Headless røgtest af siden: prikker, søgning, links, GPS-visning, mørk tilstand, rettetilstanden og den engelske udgave.
+// Headless røgtest af siden: prikker, søgning, links, GPS-visning, mørk tilstand og den engelske udgave.
 // Kræver Playwright med Chromium. Kør fra repo-roden:
 //   node tests/side.test.mjs                 # starter selv en lokal server på en ledig port
 //   UD=/tmp/skaerm node tests/side.test.mjs  # skriver også skærmbilleder (telefon, lys/mørk) til mappen
@@ -117,26 +117,12 @@ try {
   ok(!(await page.evaluate(() => document.body.classList.contains('rute'))), 'Afslut rute slukker ruten');
   // Fra Yoldi (D5, inde i D) til von Scholten (D4, ved muren mod L): ruten må ikke krydse muren i nogen ende
   await page.waitForTimeout(4200); await ctx.setGeolocation({ latitude: 55.691257, longitude: 12.550173 }); await page.waitForTimeout(800);
-  const rD = await page.evaluate(() => { const rt = findRute(you, pos(byId['D4'])); if (!rt) return null;
-    const alle = rt.pts.concat([rt.slut, [pos(byId['D4']).fx, pos(byId['D4']).fy]]); let kryds = 0;
+  const rD = await page.evaluate(() => { const rt = findRute(you, byId['D4']); if (!rt) return null;
+    const alle = rt.pts.concat([rt.slut, [byId['D4'].fx, byId['D4'].fy]]); let kryds = 0;
     for (let i = 1; i < alle.length; i++) if (krydserMur(alle[i - 1], alle[i])) kryds++; return { m: Math.round(rt.m), kryds: kryds, n: rt.pts.length }; });
   ok(rD && rD.kryds === 0, 'ruten Yoldi → von Scholten krydser ingen mur: ' + JSON.stringify(rD));
   ok(rD && rD.m < 120, 'og er kort (' + (rD && rD.m) + ' m), ikke rundt om muren');
   await ctx.setGeolocation({ latitude: 55.6903, longitude: 12.5505 }); await page.click('#hereBtn'); await page.waitForTimeout(300); // GPS fra igen
-  // Rettetilstand: tryk på kortet flytter den valgte prik og gemmes lokalt
-  await page.goto(URL0 + '#g=U1&ret=1'); await page.waitForSelector('.dot'); // U1 valgt igen (ruteblokken valgte P1); #ret=1 er den eneste indgang
-  ok(await page.evaluate(() => document.body.classList.contains('ret')), 'rettetilstand tændt med #ret=1');
-  ok(await page.locator('#retToggle').count() === 1 && await page.locator('footer button').count() === 0, 'ingen knap til rettetilstanden i sidefoden; luk-knappen sidder i rettebjælken');
-  await page.locator('#mapwrap').scrollIntoViewIfNeeded();
-  const img = await page.locator('#mapimg').boundingBox();
-  await page.mouse.click(img.x + img.width * 0.3, img.y + img.height * 0.3); // et tomt sted i afd. S
-  const ret = await page.evaluate(() => JSON.parse(localStorage.getItem('assistens_grav_ret_v1') || '{}'));
-  ok(ret.U1 && Math.abs(ret.U1.fx - 0.3) < 0.02 && Math.abs(ret.U1.fy - 0.3) < 0.02 && ret.U1.src === 'kort', 'rettelsen gemmes lokalt som src kort: ' + JSON.stringify(ret.U1));
-  ok(await page.locator('.dot.flyttet').count() === 1, 'den flyttede prik markeres');
-  await page.click('#retUndo');
-  ok(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('assistens_grav_ret_v1') || '{}')).length) === 0, 'fortryd fjerner rettelsen');
-  await page.click('#retToggle');
-  ok(!(await page.evaluate(() => document.body.classList.contains('ret'))) && !(await page.evaluate(() => location.hash)).includes('ret='), 'Luk rettetilstand slukker den og fjerner ret=1 fra linket');
   if (UD) { await page.goto(URL0 + '#g=P1'); await page.waitForSelector('.dot'); }
   const vSw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8').match(/const VERSION\s*=\s*'([^']+)'/)[1];
   ok((await page.locator('#udgave').textContent()) === vSw, 'udgaven i sidefoden er sw.js VERSION (' + vSw + ')');
@@ -170,10 +156,6 @@ try {
   await p4.waitForTimeout(4200); await ctx4.setGeolocation({ latitude: 55.6918, longitude: 12.5530 }); await p4.waitForTimeout(1200); // Nørrebrogade, uden for muren
   ok(/ · through the /.test(await p4.locator('#rutetekst').textContent()), 'lågen får sit engelske navn: ' + (await p4.locator('#rutetekst').textContent()));
   await ctx4.setGeolocation({ latitude: 55.6903, longitude: 12.5505 });
-  await p4.evaluate(() => setRet(true));
-  ok((await p4.locator('#cNote').innerText()).includes('File: city register') && (await p4.locator('#cNote').innerText()).includes('exact match'), 'provenienslinjen oversættes: ' + (await p4.locator('#cNote').innerText()));
-  ok((await p4.locator('#retToggle').textContent()) === 'Close edit mode', 'rettebjælkens luk-knap på engelsk');
-  await p4.click('#retToggle');
   await p4.click('#langBtn'); await p4.waitForTimeout(100);
   ok(await p4.evaluate(() => document.documentElement.lang) === 'da' && (await p4.locator('h1').innerText()).includes('Kirkegård') && (await p4.locator('#rutetekst').textContent()).startsWith('Rute til'), 'knappen skifter til dansk, og ruteteksten følger med');
   ok(!(await p4.evaluate(() => location.hash)).includes('lang='), 'dansk står ikke i linket');

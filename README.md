@@ -44,26 +44,16 @@ kommunens gravstedsregister, offline-drift og ingen byggetrin.
   sprog; den engelske knap siger *Read more (in Danish)*, når opslaget er på
   dansk Wikipedia eller lex.dk.
 
-## Rettelser af placeringer
+## Placeringerne og lågerne
 
 Prikkerne er beregnet fra gravstedsnumrene (se nedenfor); 125 er fundet direkte i
 kommunens register, 8 er anslåede og markeret i
-[`data/placering.md`](data/placering.md). Rettetilstanden er et værktøj til
-vedligeholderen og vises ikke for besøgende; siden har ingen knap til den.
-Sidder en prik forkert:
-
-1. Åbn siden med `#ret=1` i linket (fx `…/assistens-gravsteder/#ret=1`); en
-   rettebjælke vises over kortet, og **Luk rettetilstand** lukker den igen.
-2. Vælg gravstedet, og tryk på kortet dér, hvor det er, eller stil dig ved det
-   med **🧭 Hvor er jeg?** tændt og tryk **📡 Her**. Rettelsen ligger kun i din
-   browser, indtil du eksporterer.
-3. **⬇ Eksportér gravsteder.json** henter den nyeste fil fra repoet, lægger
-   dine rettelser oven på (som `src: "kort"` med tidsstempel) og deler/downloader
-   den. Læg den i repoets rod, kør `python3 scripts/check_data.py`, bump
-   `VERSION` i `sw.js`, og commit.
-
-`scripts/placer.py` rører aldrig en manuel placering (`src: "kort"`), så den
-kan køres igen, når kommunens data opdateres.
+[`data/placering.md`](data/placering.md). Siden har ingen rettefunktion;
+besøgende kan ikke flytte prikker. Sidder en prik forkert, rettes den i
+`gravsteder.json`: sæt `src: "kort"`, `fx`/`fy` (brøkdele af kortbilledet) og
+et tidsstempel `ts`, kør `python3 scripts/check_data.py`, bump `VERSION` i
+`sw.js`, og commit. `scripts/placer.py` rører aldrig en manuel placering
+(`src: "kort"`), så den kan køres igen, når kommunens data opdateres.
 
 **Lågerne.** OpenStreetMap ved, hvor lågerne i muren er, men ikke om de er
 åbne. `data/laager.json` er projektets egen liste: status *aaben*, *lukket*
@@ -153,8 +143,7 @@ statisk HTML mærkes med `data-t` (tekst), `data-th` (HTML) eller
 `data-ta="attribut=nøgle"` og udfyldes af `anvendSprog()`. En ny tekst
 tilføjes på begge sprog, aldrig som streng i koden. Kategorinavnene hedder
 `kat_<nøgle>` og `kat_<nøgle>_k` og indgår på alle sprog i søgningen.
-`placer.py`'s provenienstekster (feltet `note`) oversættes mønster for mønster
-af `NOTE_EN`, og lågerne har `navn_en` i `data/laager.json`.
+Lågerne har `navn_en` i `data/laager.json`.
 
 **Data:** `python3 scripts/check_data.py` tjekker `gravsteder.json` (kører
 også i CI). `python3 scripts/placer.py` beregner placeringerne på ny fra
@@ -172,8 +161,8 @@ fornys, renderes det i Trækort-repoet og kopieres hertil i samme størrelse;
 alle koordinater er brøkdele af det billede.
 
 **Test:** `tests/side.test.mjs` er en headless røgtest (Playwright/Chromium +
-en lokal server), der tjekker prikker, søgning, links, GPS-visning, zoom, ruter,
-rettetilstanden og den engelske udgave og tager skærmbilleder i lys og mørk tilstand. Den køres ikke i
+en lokal server), der tjekker prikker, søgning, links, GPS-visning, zoom, ruter
+og den engelske udgave og tager skærmbilleder i lys og mørk tilstand. Den køres ikke i
 CI; se kommentaren øverst i filen.
 
 Siden udgives til GitHub Pages af `.github/workflows/pages.yml` ved hvert push

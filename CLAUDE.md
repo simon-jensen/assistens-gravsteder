@@ -71,9 +71,10 @@ id'er) og at de filer, service workeren precacher, findes. Headless-røgtesten
   gravstedets person eller monument. Sider, der kun nævner personen (fx en
   ægtefælles biografi), linkes ikke; så er feltet `null`.
 - **Ret aldrig `fx`/`fy` i hånden** på en `kk`-post: kør `scripts/placer.py`
-  igen, eller gem en manuel placering som `src: "kort"` med `ts`
-  (rettetilstanden på siden eksporterer præcis det). Scriptet bevarer
-  `kort`-poster og overskriver `kk`-poster.
+  igen, eller gem en manuel placering som `src: "kort"` med `fx`/`fy` og `ts`.
+  Scriptet bevarer `kort`-poster og overskriver `kk`-poster. Siden har ingen
+  rettefunktion (besøgende skal ikke flytte prikker); placeringer rettes kun i
+  filen.
 - Ændres filen, skal `VERSION` i `sw.js` bumpes.
 
 ## 3b. Tekster på to sprog (`SPROG` i `index.html`)
@@ -89,8 +90,6 @@ slår op med `t('nøgle', {pladsholder: værdi})`; statisk HTML mærkes med
   ikke. Tekster, der bygges af data (afdelinger, kategorier), opdateres i
   `sprogTekster()` ved sprogskift.
 - Kategorinavne hedder `kat_<nøgle>` og `kat_<nøgle>_k` (kort form).
-- `placer.py`'s provenienstekster (feltet `note`) oversættes af regex-parrene
-  `NOTE_EN`; får scriptet en ny tekstform, skal den have et par.
 - Låger: `navn_en` i `data/laager.json` (kør `scripts/ruter.py` bagefter).
 - Sprogvalg: `#lang=…` i linket (gemmes ikke), ellers det valg, knappen har
   gemt, ellers browserens sprog (dansk for da/nb/nn/no/sv, ellers engelsk).

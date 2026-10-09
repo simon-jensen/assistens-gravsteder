@@ -79,7 +79,6 @@ h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,42px)
 .dot[data-k="handel"]{box-shadow:0 0 0 2px #fff} /* sort prik: bred hvid ring, ellers forsvinder den på mure og bygninger (fx von Scholten på hjørnet ved D) */
 .dot[data-k="handel"].sel{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--gold)}
 .dot.dim{opacity:.22;pointer-events:none}
-body.ret .dot.sel{pointer-events:none} /* mens en placering rettes, går trykket igennem til kortet */
 @keyframes pulse{0%{width:14px;height:14px;opacity:.9}100%{width:70px;height:70px;opacity:0}}
 .maphint{font-family:'Spline Sans Mono',monospace;font-size:10px;color:var(--faint);margin-top:7px;letter-spacing:.04em;line-height:1.5}
 .maphint a{color:inherit}
@@ -98,8 +97,6 @@ body.ret .dot.sel{pointer-events:none} /* mens en placering rettes, går trykket
 .cMeta{font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--mute);margin-top:5px;display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center}
 .cMeta .kdot{width:9px;height:9px}
 .cLinks{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
-.cNote{font-family:'Spline Sans Mono',monospace;font-size:10.5px;color:var(--faint);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px;display:none}
-body.ret .cNote{display:block}
 .controls{display:flex;gap:8px;margin-bottom:11px;align-items:center;flex-wrap:wrap}
 input[type=search]{flex:1 1 180px;font-family:'Outfit';font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:3px;background:var(--input-bg);color:var(--ink);min-width:0}
 input[type=search]:focus{outline:none;border-color:var(--moss)}
@@ -149,19 +146,8 @@ body.rute .rutebar{display:flex}
 .rutebar .lookup{margin-left:auto}
 #nyudgave{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:80;background:var(--gold);color:#3a2f0a;border:0;border-radius:6px;padding:10px 16px;font-family:'Spline Sans Mono',monospace;font-size:12px;cursor:pointer;box-shadow:0 6px 20px -8px rgba(0,0,0,.5);max-width:92vw}
 #nyudgave[hidden]{display:none}
-/* — Rettetilstand: flyt en prik med et tryk på kortet (#ret=1 eller knappen i sidefoden; se README) — */
-.retbar{display:none;margin:0 0 10px;padding:9px 12px;border:1.5px dashed var(--moss-d);border-radius:5px;background:var(--card-hover);font-family:'Spline Sans Mono',monospace;font-size:11.5px;line-height:1.55}
-body.ret .retbar{display:block}
-body.ret .mapwrap{cursor:crosshair}
-.retbar b{color:var(--moss-d)}
-.retbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
-.retbtn{font-family:'Spline Sans Mono',monospace;font-size:11px;border:1px solid var(--bark);background:transparent;color:var(--bark);border-radius:3px;cursor:pointer;padding:5px 10px;min-height:36px}
-.retbtn:hover{background:var(--bark);color:var(--paper)}
-.retbtn.warn{border-color:var(--rare);color:var(--rare)}
-.retbtn.warn:hover{background:var(--rare);color:#fff}
-.dot.flyttet{box-shadow:0 0 0 1.5px var(--dot-halo),0 0 0 4px rgba(200,162,74,.55)}
 @media (prefers-color-scheme: dark){ /* hvid tekst på de lyse mørk-tilstands-farver giver for lav kontrast */
- .filterbtn.on,#toast,.lookup:hover,.retbtn:hover,.retbtn.warn:hover{color:var(--plot-text)}
+ .filterbtn.on,#toast,.lookup:hover{color:var(--plot-text)}
 }
 @media (prefers-reduced-motion: reduce){
  .dot.sel::before{animation:none}
@@ -179,17 +165,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <div class="layout">
 <section>
 <div class="panel-title"><span data-t="panel_kort">Kort</span><span class="maptools"><button class="filterbtn" id="hereBtn" title="Vis din GPS-position på kortet" aria-pressed="false" data-t="here" data-ta="title=here_title">🧭 Hvor er jeg?</button><button class="filterbtn" id="zoomBtn" title="Forstør kortet 2,5× — to fingre eller dobbelttryk zoomer også, træk panorerer" aria-pressed="false" data-t="zoom" data-ta="title=zoom_title">🔍 Forstør</button></span></div>
-<div class="retbar" id="retbar">
-  <div data-th="retbar_html"><b>Ret placering.</b> Vælg et gravsted i listen eller på kortet, og tryk så på kortet, dér hvor gravstedet er. Eller stil dig ved gravstedet med GPS tændt og tryk <b>📡 Her</b>. Rettelserne gemmes kun i din browser, indtil du eksporterer filen og lægger den i repoet som <code>gravsteder.json</code>.</div>
-  <div class="retbtns">
-    <button class="retbtn" id="retGPS" data-t="ret_gps">📡 Her</button>
-    <button class="retbtn" id="retExport" data-t="ret_export">⬇ Eksportér gravsteder.json</button>
-    <button class="retbtn warn" id="retUndo" data-t="ret_undo">Fortryd rettelsen</button>
-    <button class="retbtn warn" id="retClear" data-t="ret_clear">Slet alle rettelser</button>
-    <button class="retbtn" id="retToggle" data-t="ret_hide">Luk rettetilstand</button>
-    <span class="count" id="retcount" style="margin-left:auto"></span>
-  </div>
-</div>
 <div class="mapwrap" id="mapwrap">
  <div class="mapinner" id="mapinner">
   <picture>
@@ -207,7 +182,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
   <div class="cName" id="cName"></div>
   <div class="cMeta" id="cMeta"></div>
   <div class="cLinks" id="cLinks"></div>
-  <div class="cNote" id="cNote"></div>
 </div>
 <div class="legend" id="legend" aria-label="Kategorier — tryk for at filtrere" data-ta="aria-label=legend_aria"></div>
 <div class="maphint" data-th="maphint_html">Kortdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragydere</a> (ODbL) · afdelinger, gravsteder og trækroner: Københavns Kommune (CC BY 4.0, bearbejdet) · fortegnelse: Københavns Kommune, “133 gravsteder på Assistens Kirkegård” (2019). Prikkerne sidder på gravstedernes midtpunkter i kommunens register, men er større end gravstedet: forstør, når du er tæt på. Ruter: stier fra OpenStreetMap (ODbL), låger efter egen liste.</div>
@@ -224,7 +198,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <button type="button" id="nyudgave" hidden data-t="nyudgave">↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
-const UDGAVE='2026-10-09c'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
+const UDGAVE='2026-10-09d'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
 // ————— Sprog: alle tekster ligger i SPROG (da = kilde, en = oversættelse); t('nøgle',{pladsholder:…}) slår op —————
 // Statisk HTML mærkes med data-t (tekst), data-th (HTML) eller data-ta="attribut=nøgle;…" og udfyldes af anvendSprog().
 // Valg: #lang=… i linket, ellers det gemte valg (knappen), ellers browserens sprog: dansk, hvis dansk/norsk/svensk står før engelsk, ellers engelsk.
@@ -244,11 +218,6 @@ da:{
  here_title:'Vis din GPS-position på kortet',
  zoom:'🔍 Forstør',
  zoom_title:'Forstør kortet 2,5× — to fingre eller dobbelttryk zoomer også, træk panorerer',
- retbar_html:'<b>Ret placering.</b> Vælg et gravsted i listen eller på kortet, og tryk så på kortet, dér hvor gravstedet er. Eller stil dig ved gravstedet med GPS tændt og tryk <b>📡 Her</b>. Rettelserne gemmes kun i din browser, indtil du eksporterer filen og lægger den i repoet som <code>gravsteder.json</code>.',
- ret_gps:'📡 Her',
- ret_export:'⬇ Eksportér gravsteder.json',
- ret_undo:'Fortryd rettelsen',
- ret_clear:'Slet alle rettelser',
  map_alt:'Kort over Assistens Kirkegård med afdelingerne A–V',
  you_aria:'Din position',
  rute_stop:'✕ Afslut rute',
@@ -298,14 +267,9 @@ da:{
  rute_hertil:'➜ Rute hertil',
  share:'Del link',
  zoom_here:'🔍 Forstør her',
- note_rettet:'Rettet lokalt {ts} · ', // ts = "2026-10-08 14:21"
- note_fil:'Fil: ', // efterfølges af note_manuel eller note_kk, fx "Fil: kommunens register ±1.5 m · KK: A-58: direkte"
- note_manuel:'manuel placering',
- note_kk:'kommunens register',
  // beskeder (toasts)
  link_copied:'Link kopieret',
  copy_prompt:'Kopiér linket:',
- save_fail:'⚠ Kunne ikke gemme i browseren',
  no_gps:'Din browser tilbyder ikke GPS',
  getting_pos:'Henter din position …',
  outside:'Du er ca. {m} m uden for kortet',
@@ -318,19 +282,6 @@ da:{
  rute_info_html:'Rute til <b>{navn}</b> ({plot}): <b>{m} m</b> · ca. {min} min',
  rute_via:' · gennem {laage}', // laage = lågens navn, fx "lågen mod Jagtvej" / "hovedindgangen fra Kapelvej"
  rute_err:'Ruterne kunne ikke hentes — prøv igen med net',
- // rettetilstanden
- ret_hide:'Luk rettetilstand',
- ret_pick:'Vælg et gravsted, og tryk så på kortet',
- ret_count:'{n} rettet lokalt',
- ret_moved:'{navn} flyttet — husk ⬇ Eksportér',
- ret_first:'Vælg først et gravsted',
- ret_gps_first:'Tænd 🧭 Hvor er jeg? først',
- ret_nothing:'Intet at fortryde',
- ret_undone:'Fortrudt',
- ret_clear_confirm:'Slet alle lokale rettelser?',
- ret_none_export:'Ingen rettelser at eksportere',
- ret_offline:'⚠ Ingen forbindelse — prøv igen med net',
- ret_exported:'{n} rettelser eksporteret — læg filen i repoet',
  load_fail:'Gravstederne kunne ikke hentes ({e}). Prøv igen, når du har forbindelse.'
 },
 en:{
@@ -348,11 +299,6 @@ en:{
  here_title:'Show your location on the map',
  zoom:'🔍 Zoom in',
  zoom_title:'Zoom the map 2.5× — you can also pinch or double-tap to zoom, and drag to pan',
- retbar_html:'<b>Edit position.</b> Pick a grave in the list or on the map, then tap the map where the grave actually is. Or stand at the grave with GPS on and tap <b>📡 Here</b>. Corrections are only stored in your browser until you export the file and add it to the repo as <code>gravsteder.json</code>.',
- ret_gps:'📡 Here',
- ret_export:'⬇ Export gravsteder.json',
- ret_undo:'Undo last correction',
- ret_clear:'Delete all corrections',
  map_alt:'Map of Assistens Cemetery with sections A–V',
  you_aria:'Your location',
  rute_stop:'✕ End route',
@@ -402,14 +348,9 @@ en:{
  rute_hertil:'➜ Route here',
  share:'Share link',
  zoom_here:'🔍 Zoom in here',
- note_rettet:'Corrected locally {ts} · ', // ts = "2026-10-08 14:21"
- note_fil:'File: ', // efterfølges af note_manuel eller note_kk, fx "File: city register ±1.5 m · KK: A-58: exact match"
- note_manuel:'placed manually',
- note_kk:'city register',
  // beskeder (toasts)
  link_copied:'Link copied',
  copy_prompt:'Copy the link:',
- save_fail:'⚠ Could not save in the browser',
  no_gps:'Your browser does not support GPS',
  getting_pos:'Finding your location…',
  outside:'You are about {m} m outside the map',
@@ -422,34 +363,8 @@ en:{
  rute_info_html:'Route to <b>{navn}</b> ({plot}): <b>{m} m</b> · about {min} min',
  rute_via:' · through {laage}', // laage = navn_en fra ruter.json, fx "the gate to Jagtvej"
  rute_err:'Could not load the routes — try again when you are online',
- // rettetilstanden
- ret_hide:'Close edit mode',
- ret_pick:'Pick a grave, then tap the map',
- ret_count:'{n} corrected locally',
- ret_moved:'{navn} moved — remember to ⬇ Export',
- ret_first:'Pick a grave first',
- ret_gps_first:'Turn on 🧭 Where am I? first',
- ret_nothing:'Nothing to undo',
- ret_undone:'Undone',
- ret_clear_confirm:'Delete all local corrections?',
- ret_none_export:'No corrections to export',
- ret_offline:'⚠ No connection — try again when you are online',
- ret_exported:'Corrections exported: {n} — add the file to the repo',
  load_fail:'Could not load the graves ({e}). Try again when you have a connection.'
 }};
-const NOTE_EN=[ // engelsk udgave af placer.py's provenienstekster (feltet note); anvendes i rækkefølge
- [/anslået mellem ([\w.-]+) og ([\w.-]+) \(([\d.,]+) m fra hinanden\)/g,'estimated between $1 and $2 ($3 m apart)'],
- [/midt mellem (\d+) gravsteder, ([\d.,]+) m spredning/g,'midpoint of $1 graves, $2 m spread'],
- [/midtpunkt af ([\w.-]+) \((\d+) gravsteder\)/g,'centre of $1 ($2 graves)'],
- [/afdelingens midtpunkt/g,'centre of the section'],
- [/tolket som ([\w.-]+) nr\. ?([\w/]+)/g,'read as $1 no. $2'],
- [/tjek i felten/g,'check on site'],
- [/underafdeling ([\w.-]+), række (\d+)/g,'sub-section $1, row $2'],
- [/direkte \(uden bogstav\)/g,'matched without letter suffix'],
- [/\bdirekte\b/g,'exact match'],
- [/ikke fundet/g,'not found'],
- [/GPS på stedet/g,'GPS on site']
-];
 const SPROG_KEY='assistens_grav_sprog';
 const harSprog=l=>typeof l==='string'&&Object.prototype.hasOwnProperty.call(SPROG,l);
 function vaelgSprog(){const h=new URLSearchParams(location.hash.slice(1)).get('lang');if(harSprog(h))return h;
@@ -459,7 +374,6 @@ function vaelgSprog(){const h=new URLSearchParams(location.hash.slice(1)).get('l
 let L=vaelgSprog();
 function t(k,v){let s=SPROG[L][k];if(s==null)s=SPROG.da[k]!=null?SPROG.da[k]:k;if(v)for(const n in v)s=s.split('{'+n+'}').join(v[n]);return s;}
 function katKey(g){return KAT[g.kat]?g.kat:'andet';}
-function noteTekst(s){if(!s)return '';if(L==='da')return s;let r=s;NOTE_EN.forEach(p=>{r=r.replace(p[0],p[1]);});return r;} // placer.py's provenienstekster oversættes mønster for mønster
 function laageNavn(l){return (L!=='da'&&l.navn_en)||l.navn;}
 function anvendSprog(){document.documentElement.lang=L;document.title=t('title');const md=document.querySelector('meta[name="description"]');if(md)md.content=t('meta_desc');
   document.querySelectorAll('[data-t]').forEach(el=>{el.textContent=t(el.dataset.t);});
@@ -488,10 +402,6 @@ const wrap=$('mapinner'),mapwrapEl=$('mapwrap'),dotsEl=$('dots'),list=$('list'),
   legend=$('legend'),card=$('card'),nearBtn=$('nearBtn'),youEl=$('youdot');
 let DOC=null,G=[],byId={},sel=null,katOn=null,curAfd='',nearest=false,you=null,loadErr=null;
 let toastT=null;function toast(m){const el=$('toast');el.textContent=m;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
-// ————— Rettelser (lokalt lager): en manuel placering vinder over filens —————
-const RET_KEY='assistens_grav_ret_v1';let RET={};try{RET=JSON.parse(localStorage.getItem(RET_KEY)||'{}')||{};}catch(e){}
-function saveRet(){try{localStorage.setItem(RET_KEY,JSON.stringify(RET));}catch(e){toast(t('save_fail'));}}
-function pos(g){const r=RET[g.id];return r&&Number.isFinite(r.fx)?r:g;}
 // ————— Data —————
 function prep(){
   byId={};G=DOC.gravsteder.filter(g=>Number.isFinite(g.fx)&&Number.isFinite(g.fy));
@@ -508,7 +418,7 @@ function sprogTekster(){ // de tekster, der bygges af data: søgeteksten, rullem
   [...afdSel.options].forEach(o=>{if(o.value)o.textContent=t('afd_option',{a:o.value,n:G.filter(g=>g.afd===o.value).length});});
   legend.querySelectorAll('.kat').forEach(b=>{b.lastChild.textContent=t('kat_'+b.dataset.k);});}
 function skiftSprog(l,gem){if(!harSprog(l)||l===L)return;L=l;if(gem)try{localStorage.setItem(SPROG_KEY,l);}catch(e){}anvendSprog(); // gem: kun knappen husker valget, ikke et link
-  if(DOC){sprogTekster();render();if(sel)select(sel,'sprog');retCount();if(ruteTil)opdaterRute();syncHash();}
+  if(DOC){sprogTekster();render();if(sel)select(sel,'sprog');if(ruteTil)opdaterRute();syncHash();}
   else{if(loadErr!==null)$('status').textContent=t('load_fail',{e:loadErr}); // før data er hentet: rør kun lang i linket, så #g=…&afd=… overlever
     const p=new URLSearchParams(location.hash.slice(1));if(L==='da')p.delete('lang');else p.set('lang',L);const h=p.toString();try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}}
 $('langBtn').onclick=()=>skiftSprog(L==='da'?'en':'da',true);
@@ -516,13 +426,12 @@ function setKat(k){katOn=k;legend.querySelectorAll('.kat').forEach(b=>{const on=
 // ————— Prikker på kortet —————
 function buildDots(){
   dotsEl.innerHTML='';
-  const groups={};G.forEach(g=>{const p=pos(g),k=p.fx.toFixed(4)+','+p.fy.toFixed(4);(groups[k]=groups[k]||[]).push(g);});
+  const groups={};G.forEach(g=>{const k=g.fx.toFixed(4)+','+g.fy.toFixed(4);(groups[k]=groups[k]||[]).push(g);});
   const frag=document.createDocumentFragment();
   Object.values(groups).forEach(gr=>gr.forEach((g,i)=>{
-    const p=pos(g),k=KAT[g.kat]||KAT.andet,d=document.createElement('button');d.type='button';d.className='dot';d.dataset.id=g.id;d.dataset.k=g.kat;
-    d.style.setProperty('--c',k.c);d.style.left=(p.fx*100)+'%';d.style.top=(p.fy*100)+'%';
+    const k=KAT[g.kat]||KAT.andet,d=document.createElement('button');d.type='button';d.className='dot';d.dataset.id=g.id;d.dataset.k=g.kat;
+    d.style.setProperty('--c',k.c);d.style.left=(g.fx*100)+'%';d.style.top=(g.fy*100)+'%';
     if(gr.length>1){const a=2*Math.PI*i/gr.length,r=7;d.style.marginLeft=(r*Math.cos(a)).toFixed(1)+'px';d.style.marginTop=(r*Math.sin(a)).toFixed(1)+'px';} // flere på samme gravsted (fx Bohr-familien): små forskydninger, så alle kan rammes
-    if(RET[g.id])d.classList.add('flyttet');
     d.setAttribute('aria-label',g.navn+', '+g.plot);d.title=g.navn+' · '+g.plot;
     frag.appendChild(d);}));
   dotsEl.appendChild(frag);syncDots();
@@ -534,8 +443,8 @@ function matches(g){const term=q.value.trim().toLowerCase();
   if(curAfd&&g.afd!==curAfd)return false;if(katOn&&g.kat!==katOn)return false;
   if(term&&!term.split(/\s+/).every(w=>g._s.includes(w)))return false;return true;}
 function visibleSet(){return new Set(G.filter(matches).map(g=>g.id));}
-function rowHtml(g){const kk=katKey(g),k=KAT[kk],p=pos(g);
-  const dist=you?'<b>'+Math.round(distM(you,p))+' m</b>':'';
+function rowHtml(g){const kk=katKey(g),k=KAT[kk];
+  const dist=you?'<b>'+Math.round(distM(you,g))+' m</b>':'';
   return '<div class="row'+(g.id===sel?' sel':'')+'" data-id="'+g.id+'" role="button" tabindex="0">'+
    '<span class="kdot" style="--c:'+k.c+'"></span><span class="plot">'+esc(g.plot)+'</span>'+
    '<div><div class="nm">'+esc(g.navn)+(g.qr?'<span class="qrtag">'+esc(t('qrtag'))+'</span>':'')+'</div><div class="sub2">'+esc(t('kat_'+kk+'_k'))+(nearest?' · '+esc(t('afd_kort',{a:g.afd})):'')+'</div></div>'+
@@ -547,7 +456,7 @@ function render(){
   cnt.textContent=rows.length===G.length?t('count_all',{n:G.length}):t('count_some',{n:rows.length,m:G.length});
   if(!rows.length){list.innerHTML='<div class="empty">'+esc(t('empty'))+'<button class="resetf" id="resetf">'+esc(t('resetf'))+'</button></div>';syncDots();return;}
   let html='';
-  if(nearest&&you){rows=rows.slice().sort((a,b)=>distM(you,pos(a))-distM(you,pos(b)));html=rows.map(rowHtml).join('');}
+  if(nearest&&you){rows=rows.slice().sort((a,b)=>distM(you,a)-distM(you,b));html=rows.map(rowHtml).join('');}
   else{let last=null;rows.forEach(g=>{if(g.afd!==last){last=g.afd;html+='<div class="afdhead"><b>'+esc(g.afd)+'</b>'+esc(t('afdhead',{a:g.afd}))+'</div>';}html+=rowHtml(g);});}
   list.innerHTML=html;syncDots();
 }
@@ -563,33 +472,31 @@ function select(id,from){
   sel=byId[id]?id:null;
   list.querySelectorAll('.row').forEach(r=>r.classList.toggle('sel',r.dataset.id===sel));syncDots();syncHash();
   if(!sel){card.classList.remove('open');return;}
-  const g=byId[sel],kk=katKey(g),k=KAT[kk],p=pos(g);
+  const g=byId[sel],kk=katKey(g),k=KAT[kk];
   $('cName').innerHTML=esc(g.navn)+(g.aar?'<small>† '+g.aar+'</small>':'');
   $('cMeta').innerHTML='<span>'+t('card_plot_html',{plot:esc(g.plot),afd:esc(g.afd)})+'</span><span><span class="kdot" style="--c:'+k.c+'"></span>'+esc(t('kat_'+kk))+'</span>'+
-    (g.qr?'<span>'+esc(t('card_qr'))+'</span>':'')+(you?'<span>'+esc(t('card_dist',{m:Math.round(distM(you,p))}))+'</span>':'');
+    (g.qr?'<span>'+esc(t('card_qr'))+'</span>':'')+(you?'<span>'+esc(t('card_dist',{m:Math.round(distM(you,g))}))+'</span>':'');
   const wu=wikiUrl(g);
   $('cLinks').innerHTML=(wu?'<a class="lookup" href="'+esc(wu)+'" target="_blank" rel="noopener">'+esc(t(/\/\/(da\.wikipedia\.org|lex\.dk)\//.test(wu)?'read_more_da':'read_more'))+'</a>':'')+'<button class="lookup" id="cRute" title="'+esc(t('rute_btn_title'))+'">'+esc(ruteTil===g.id?t('rute_vises'):t('rute_hertil'))+'</button><button class="lookup" id="cShare">'+esc(t('share'))+'</button>'+
     (mapwrapEl.classList.contains('zoom')?'':'<button class="lookup" id="cZoom">'+esc(t('zoom_here'))+'</button>');
-  $('cNote').textContent=(RET[g.id]?t('note_rettet',{ts:RET[g.id].ts.slice(0,16).replace('T',' ')}):'')+t('note_fil')+(g.src==='kort'?t('note_manuel'):t('note_kk'))+(g.acc?' ±'+g.acc+' m':'')+(g.note?' · '+noteTekst(g.note):'');
   card.classList.add('open');
   const row=list.querySelector('.row[data-id="'+sel+'"]');
   if(from==='map'&&row&&window.innerWidth>900)row.scrollIntoView({behavior:SB,block:'nearest'}); // på telefon er listen ikke en rulleboks: siden ville rulle væk fra kortet
-  if(from==='list'||from==='hash'){centerMap(p,true);if(from==='list'&&window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
+  if(from==='list'||from==='hash'){centerMap(g,true);if(from==='list'&&window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
 }
 card.onclick=e=>{if(e.target.id==='cClose')select(null);
   else if(e.target.id==='cShare'){const u=location.href;const done=()=>toast(t('link_copied'));
     if(navigator.share)navigator.share({title:byId[sel].navn,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(done,()=>prompt(t('copy_prompt'),u));else prompt(t('copy_prompt'),u);}
   else if(e.target.id==='cZoom'){setZoom(true);select(sel,'list');}
   else if(e.target.id==='cRute')startRute(sel);};
-// ————— Links: #g=A17&q=…&afd=A&kat=digt&ret=1&lang=en —————
+// ————— Links: #g=A17&q=…&afd=A&kat=digt&lang=en —————
 function syncHash(){const p=new URLSearchParams();
   if(sel)p.set('g',sel);if(curAfd)p.set('afd',curAfd);if(katOn)p.set('kat',katOn);const tq=q.value.trim();if(tq)p.set('q',tq);
-  if(document.body.classList.contains('ret'))p.set('ret','1');if(L!=='da')p.set('lang',L); // dansk er standard og står ikke i linket
+  if(L!=='da')p.set('lang',L); // dansk er standard og står ikke i linket
   const h=p.toString();try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
 function readHash(){const p=new URLSearchParams(location.hash.slice(1));
   const tq=p.get('q');if(tq)q.value=tq;const a=p.get('afd');if(a&&[...afdSel.options].some(o=>o.value===a)){curAfd=a;afdSel.value=a;}
   const k=p.get('kat');if(k&&KAT[k])setKat(k);else render();
-  if(p.get('ret')==='1')setRet(true);
   const g=p.get('g');if(g&&byId[g])select(g,'hash');}
 // ————— Zoom og panorering: to fingre, træk, dobbelttryk, ctrl/⌘+scroll og knappen —————
 // Egen kode frem for sidens zoom: som hjemmeskærms-app slår iOS sidezoom fra, og to fingre bør zoome kortet, ikke hele siden.
@@ -602,7 +509,7 @@ function applyT(smooth){wrap.style.transition=smooth&&SB==='smooth'?'transform .
   const on=k>1.01;mapwrapEl.classList.toggle('zoom',on);$('zoomBtn').classList.toggle('on',on);$('zoomBtn').setAttribute('aria-pressed',on);}
 function zoomAt(nk,sx,sy,smooth){const g=geo();nk=Math.min(KMAX,Math.max(1,nk));const px=(sx-g.ox-tx)/k,py=(sy-ty)/k;k=nk;tx=sx-g.ox-px*k;ty=sy-py*k;clampT(g);applyT(smooth);} // zoom om et punkt i rammen
 function centerMap(f,smooth){if(k<=1.01||!f)return;const g=geo();tx=g.Ww/2-g.ox-f.fx*g.Wi*k;ty=g.Hw/2-f.fy*g.Hi*k;clampT(g);applyT(smooth);}
-function setZoom(on){if(on){k=Math.max(k,2.5);const g=geo(),p=(sel?pos(byId[sel]):null)||you||{fx:0.55,fy:0.5};tx=g.Ww/2-g.ox-p.fx*g.Wi*k;ty=g.Hw/2-p.fy*g.Hi*k;clampT(g);applyT(true);}else{k=1;clampT(geo());applyT(true);}}
+function setZoom(on){if(on){k=Math.max(k,2.5);const g=geo(),p=(sel?byId[sel]:null)||you||{fx:0.55,fy:0.5};tx=g.Ww/2-g.ox-p.fx*g.Wi*k;ty=g.Hw/2-p.fy*g.Hi*k;clampT(g);applyT(true);}else{k=1;clampT(geo());applyT(true);}}
 $('zoomBtn').onclick=()=>setZoom(k<=1.01);
 const sxy=(e,g)=>[e.clientX-g.r.left,e.clientY-g.r.top];
 const trin=(sx,sy)=>zoomAt(k<2.4?2.5:(k<4.9?5:1),sx,sy,true); // dobbelttryk: 2,5× → 5× → tilbage
@@ -653,7 +560,7 @@ hereBtn.onclick=()=>{
     youEl.style.left=youRing.style.left=(you.fx*100)+'%';youEl.style.top=youRing.style.top=(you.fy*100)+'%';
     const rpx=c.accuracy/M_PER_PX;youRing.style.width=(rpx/IMGW*200)+'%';youRing.style.height=(rpx/IMGH*200)+'%'; // usikkerhedsradius i billedpixels → procent af kortet (diameter = 2r)
     youEl.hidden=false;youRing.hidden=false;nearBtn.hidden=false;
-    if(!told){told=true;let best=null,bd=Infinity;G.forEach(g=>{const d=distM(you,pos(g));if(d<bd){bd=d;best=g;}});
+    if(!told){told=true;let best=null,bd=Infinity;G.forEach(g=>{const d=distM(you,g);if(d<bd){bd=d;best=g;}});
       toast(t('nearest_you',{navn:best.navn,plot:best.plot,m:Math.round(bd),acc:Math.round(c.accuracy)}));
       centerMap(you,true);if(window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
     if(Date.now()-lastRender>4000){lastRender=Date.now();render();if(sel)select(sel,'gps');opdaterRute();} // afstandene i listen, kortet og ruten opdateres i ro og mag
@@ -712,9 +619,9 @@ function tegnRute(rt,til){const P=p=>(p[0]*IMGW).toFixed(1)+','+(p[1]*IMGH).toFi
 function opdaterRute(){
   if(!ruteTil||!byId[ruteTil])return;const g=byId[ruteTil];
   if(!you){$('rutetekst').innerHTML=t('rute_wait_html',{navn:esc(g.navn)});document.body.classList.add('rute');return;}
-  hentRuter().then(()=>{const rt=findRute(you,pos(g));document.body.classList.add('rute');ruteVist=true;
+  hentRuter().then(()=>{const rt=findRute(you,g);document.body.classList.add('rute');ruteVist=true;
     if(!rt){$('rutetekst').innerHTML=t('rute_none_html',{navn:esc(g.navn)});['rutehalo','rutelinje','rutestip'].forEach(i=>$(i).setAttribute('points',''));return;}
-    tegnRute(rt,pos(g));const min=Math.max(1,Math.round(rt.m/GANG_M_PR_MIN));
+    tegnRute(rt,g);const min=Math.max(1,Math.round(rt.m/GANG_M_PR_MIN));
     $('rutetekst').innerHTML=t('rute_info_html',{navn:esc(g.navn),plot:esc(g.plot),m:Math.round(rt.m),min:min})+(rt.laage?esc(t('rute_via',{laage:laageNavn(rt.laage)})):'');
   }).catch(()=>{$('rutetekst').textContent=t('rute_err');});}
 function startRute(id){ruteTil=id;ruteVist=false;document.body.classList.add('rute');
@@ -722,45 +629,11 @@ function startRute(id){ruteTil=id;ruteVist=false;document.body.classList.add('ru
   if(sel===id)select(id,'rute');if(window.innerWidth<=900)mapwrapEl.scrollIntoView({behavior:SB,block:'start'});}
 function stopRute(){if(!ruteTil)return;ruteTil=null;ruteVist=false;document.body.classList.remove('rute');['rutehalo','rutelinje','rutestip'].forEach(i=>$(i).setAttribute('points',''));if(sel)select(sel,'rute');}
 $('ruteStop').onclick=stopRute;
-// ————— Rettetilstand (kun til vedligeholderen, åbnes med #ret=1): flyt en prik (gemmes lokalt, eksporteres som gravsteder.json) —————
-function nowTs(){return new Date().toISOString();}
-let retLast=null;
-function setRet(on){document.body.classList.toggle('ret',on);retCount();syncHash();if(on&&!sel)toast(t('ret_pick'));}
-function retCount(){const n=Object.keys(RET).length;$('retcount').textContent=n?t('ret_count',{n:n}):'';}
-function retSet(id,fx,fy,src,extra){retLast={id:id,prev:RET[id]||null};
-  RET[id]=Object.assign({fx:+fx.toFixed(5),fy:+fy.toFixed(5),src:src,ts:nowTs()},extra||{});saveRet();buildDots();retCount();select(id,'ret');
-  toast(t('ret_moved',{navn:byId[id].navn}));}
-mapwrapEl.addEventListener('click',e=>{
-  if(!document.body.classList.contains('ret')||dragged)return;if(e.target.closest('.dot')&&!e.target.closest('.dot.sel'))return;
-  if(!sel){toast(t('ret_first'));return;}
-  const r=$('mapimg').getBoundingClientRect(),fx=(e.clientX-r.left)/r.width,fy=(e.clientY-r.top)/r.height; // billedets boks, ikke rammens
-  if(fx<0||fx>1||fy<0||fy>1)return;retSet(sel,fx,fy,'kort');});
-$('retGPS').onclick=()=>{if(!sel){toast(t('ret_first'));return;}if(!you){toast(t('ret_gps_first'));return;}
-  retSet(sel,you.fx,you.fy,'gps',{lat:+you.lat.toFixed(6),lon:+you.lon.toFixed(6),acc:Math.round(you.acc)});};
-$('retUndo').onclick=()=>{if(!retLast){toast(t('ret_nothing'));return;}if(retLast.prev)RET[retLast.id]=retLast.prev;else delete RET[retLast.id];
-  saveRet();buildDots();retCount();if(sel)select(sel,'ret');retLast=null;toast(t('ret_undone'));};
-$('retClear').onclick=()=>{if(!Object.keys(RET).length)return;if(!confirm(t('ret_clear_confirm')))return;RET={};saveRet();retLast=null;buildDots();retCount();if(sel)select(sel,'ret');};
-$('retExport').onclick=async()=>{
-  if(!Object.keys(RET).length){toast(t('ret_none_export'));return;}
-  let doc=null;try{const r=await fetch('gravsteder.json?t='+Date.now(),{cache:'no-store'});if(r.ok)doc=await r.json();}catch(e){} // nyeste fil først, så en gammel fane ikke overskriver andres rettelser
-  if(!doc||!Array.isArray(doc.gravsteder)){toast(t('ret_offline'));return;}
-  let n=0;doc.gravsteder.forEach(g=>{const r=RET[g.id];if(!r)return;
-    if(g.src==='kort'&&g.ts&&g.ts>r.ts)return; // filen har en nyere manuel placering: den vinder
-    ['note','acc','lat','lon'].forEach(k=>delete g[k]);
-    g.fx=r.fx;g.fy=r.fy;g.src='kort';g.ts=r.ts;if(r.src==='gps'){g.lat=r.lat;g.lon=r.lon;g.acc=r.acc;g.note='GPS på stedet';}n++;});
-  doc.opdateret=nowTs().slice(0,10);
-  const txt=JSON.stringify(doc,null,1),file=new File([txt],'gravsteder.json',{type:'application/json'});
-  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'gravsteder.json'});return;}catch(e){if(e.name==='AbortError')return;}}
-  const a=document.createElement('a'),url=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.href=url;a.download='gravsteder.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  toast(t('ret_exported',{n:n}));};
-$('retToggle').onclick=()=>setRet(false);
 // ————— Start —————
 anvendSprog();
 fetch('gravsteder.json').then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{
-  DOC=d;prep();buildDots();readHash();retCount();
-  window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g'),l=p.get('lang'),r=p.get('ret')==='1';if(harSprog(l))skiftSprog(l);
-    if(r!==document.body.classList.contains('ret'))setRet(r); // #ret=1 skrevet i adresselinjen på en åben side er indgangen til rettetilstanden
-    if(g&&g!==sel&&byId[g])select(g,'hash');});
+  DOC=d;prep();buildDots();readHash();
+  window.addEventListener('hashchange',()=>{const p=new URLSearchParams(location.hash.slice(1)),g=p.get('g'),l=p.get('lang');if(harSprog(l))skiftSprog(l);if(g&&g!==sel&&byId[g])select(g,'hash');});
 }).catch(e=>{loadErr=e.message;const st=$('status');delete st.dataset.t;st.textContent=t('load_fail',{e:loadErr});});
 $('udgave').textContent=UDGAVE;
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
