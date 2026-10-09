@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import net from 'net';
 const require = createRequire(import.meta.url);
-let pw; try { pw = require('playwright'); } catch (e) { pw = createRequire('/opt/node-tools/node_modules/')('playwright'); }
+let pw; try { pw = require('playwright'); } catch (e) { pw = createRequire('/opt/node-tools/node_modules/')('playwright'); } // repoet har ingen node_modules; i cloud-miljøet ligger Playwright globalt dér
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const UD = process.env.UD ? path.resolve(process.env.UD) : null;

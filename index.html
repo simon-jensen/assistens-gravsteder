@@ -11,188 +11,24 @@
 <link rel="preload" href="fonts/Outfit-normal-300-latin-5.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/Fraunces-normal-400-latin-3.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-/* Selv-hostede skrifttyper (hentet fra Google Fonts 2026-08-25, OFL-licens).
- * Kun latin/latin-ext-subsets; dansk (æøå) ligger i latin. */
-
-/* latin-ext */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/Fraunces-italic-400-latin-ext-0.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/Fraunces-italic-400-latin-1.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/Fraunces-normal-400-latin-ext-2.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/Fraunces-normal-400-latin-3.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url(fonts/Fraunces-normal-400-latin-ext-2.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url(fonts/Fraunces-normal-400-latin-3.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Spline Sans Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/SplineSansMono-normal-400-latin-ext-6.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Spline Sans Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(fonts/SplineSansMono-normal-400-latin-7.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* latin-ext */
-@font-face {
-  font-family: 'Spline Sans Mono';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(fonts/SplineSansMono-normal-400-latin-ext-6.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-/* latin */
-@font-face {
-  font-family: 'Spline Sans Mono';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(fonts/SplineSansMono-normal-400-latin-7.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+/* Selv-hostede skrifttyper (hentet fra Google Fonts 2026-08-25, OFL-licens). Kun latin/latin-ext-subsets; dansk (æøå) ligger i latin.
+ * Én fil pr. familie: vægtintervallet (fx 300–600) lader siden bruge 400/500/600 uden at browseren laver syntetisk fed. */
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 400; font-display: swap; src: url(fonts/Fraunces-italic-400-latin-ext-0.woff2) format('woff2'); /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 400; font-display: swap; src: url(fonts/Fraunces-italic-400-latin-1.woff2) format('woff2'); /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(fonts/Fraunces-normal-400-latin-ext-2.woff2) format('woff2'); /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(fonts/Fraunces-normal-400-latin-3.woff2) format('woff2'); /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 300 600; font-display: swap; src: url(fonts/Outfit-normal-300-latin-ext-4.woff2) format('woff2'); /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 300 600; font-display: swap; src: url(fonts/Outfit-normal-300-latin-5.woff2) format('woff2'); /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 400 500; font-display: swap; src: url(fonts/SplineSansMono-normal-400-latin-ext-6.woff2) format('woff2'); /* latin-ext */
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 400 500; font-display: swap; src: url(fonts/SplineSansMono-normal-400-latin-7.woff2) format('woff2'); /* latin */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 :root{--ink:#23271f;--paper:#f4f1e6;--moss:#5a7a4f;--moss-d:#3f5a37;--bark:#7a5c3e;--rare:#a04724;--line:#c8c0a8;--gold:#c8a24a;
  --panel-bg:#f4f1e6;--input-bg:#fbf9f0;--mute:#555;--faint:#6f6a5c;--card-hover:rgba(90,122,79,.05);--plot-text:#fff;--map-frame:#c8c0a8;
  --dot-ring:rgba(35,39,31,.6);--dot-halo:rgba(255,255,255,.85);--andet:#fff;--handel:#23201f;}
@@ -245,10 +81,6 @@ h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,4.5vw,42px)
 .dot.dim{opacity:.22;pointer-events:none}
 body.ret .dot.sel{pointer-events:none} /* mens en placering rettes, går trykket igennem til kortet */
 @keyframes pulse{0%{width:14px;height:14px;opacity:.9}100%{width:70px;height:70px;opacity:0}}
-#cross{position:absolute;width:22px;height:22px;transform:translate(-50%,-50%);z-index:6;pointer-events:none;display:none}
-#cross::before,#cross::after{content:"";position:absolute;background:var(--gold)}
-#cross::before{left:50%;top:-5px;bottom:-5px;width:2px;transform:translateX(-50%)}
-#cross::after{top:50%;left:-5px;right:-5px;height:2px;transform:translateY(-50%)}
 .maphint{font-family:'Spline Sans Mono',monospace;font-size:10px;color:var(--faint);margin-top:7px;letter-spacing:.04em;line-height:1.5}
 .maphint a{color:inherit}
 .legend{display:flex;gap:6px 10px;flex-wrap:wrap;margin-top:9px;align-items:center}
@@ -365,7 +197,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
   </picture>
   <div id="dots"></div>
   <svg id="rutesvg" viewBox="0 0 1400 1216" preserveAspectRatio="none" aria-hidden="true"><polyline id="rutehalo" points=""/><polyline id="rutelinje" points=""/><polyline id="rutestip" points=""/></svg>
-  <div id="cross"></div><div id="youring" hidden></div><div id="youdot" hidden aria-label="Din position" data-ta="aria-label=you_aria"></div>
+  <div id="youring" hidden></div><div id="youdot" hidden aria-label="Din position" data-ta="aria-label=you_aria"></div>
  </div>
 </div>
 <div class="rutebar" id="rutebar" aria-live="polite"><span id="rutetekst"></span><button class="lookup" id="ruteStop" data-t="rute_stop">✕ Afslut rute</button></div>
@@ -391,7 +223,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,.r
 <button type="button" id="nyudgave" hidden data-t="nyudgave">↻ Ny udgave af siden er klar — tryk for at genindlæse</button>
 <script>
 'use strict';
-const UDGAVE='2026-10-09'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
+const UDGAVE='2026-10-09b'; // skal være lig VERSION i sw.js (scripts/check_data.py tjekker det)
 // ————— Sprog: alle tekster ligger i SPROG (da = kilde, en = oversættelse); t('nøgle',{pladsholder:…}) slår op —————
 // Statisk HTML mærkes med data-t (tekst), data-th (HTML) eller data-ta="attribut=nøgle;…" og udfyldes af anvendSprog().
 // Valg: #lang=… i linket, ellers det gemte valg (knappen), ellers browserens sprog: dansk, hvis dansk/norsk/svensk står før engelsk, ellers engelsk.

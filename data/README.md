@@ -18,6 +18,13 @@ og genskabes derfra: hent WFS-laget som beskrevet i Trækortets `data/README.md`
 kør `scripts/kk_hent.py`, og kopiér `data/kk_gravsteder.json` hertil. Kør
 derefter `python3 scripts/placer.py` her.
 
+`kk_gravsteder.json` og `osm_assistens.json` er kopier af Trækortets filer og
+beholdes bevidst her (760 KB) frem for at hentes fra trækort-repoet, når
+scripterne skal køres: `placer.py` og `ruter.py` skal kunne genskabe
+`gravsteder.json`'s placeringer og `ruter.json` byte for byte fra det, der
+ligger i dette repo, og licensoplysningerne (`kilde`, `hentet`) står i filerne.
+Fornys de, kopieres de fra Trækortet i samme format.
+
 `scripts/ruter.py` bygger `ruter.json` i roden af `osm_assistens.json` og
 `laager.json`; grafen er afledt af OSM og dermed selv under ODbL, adskilt fra
 `gravsteder.json`.
