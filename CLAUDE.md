@@ -92,8 +92,9 @@ slår op med `t('nøgle', {pladsholder: værdi})`; statisk HTML mærkes med
 - `placer.py`'s provenienstekster (feltet `note`) oversættes af regex-parrene
   `NOTE_EN`; får scriptet en ny tekstform, skal den have et par.
 - Låger: `navn_en` i `data/laager.json` (kør `scripts/ruter.py` bagefter).
-- Sprogvalg: `#lang=…` i linket, ellers det gemte valg, ellers browserens
-  sprog, ellers dansk. Dansk står ikke i linket.
+- Sprogvalg: `#lang=…` i linket (gemmes ikke), ellers det valg, knappen har
+  gemt, ellers browserens sprog (dansk for da/nb/nn/no/sv, ellers engelsk).
+  Dansk står ikke i linket. Søgeteksten bygges kun af det viste sprogs ord.
 - Røgtesten `tests/side.test.mjs` tjekker den engelske udgave; kør den, når
   du rører tekster eller sprogskiftet.
 

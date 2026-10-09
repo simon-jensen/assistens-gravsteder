@@ -36,11 +36,13 @@ kommunens gravstedsregister, offline-drift og ingen byggetrin.
   film om personen (kommunens egen ordning).
 - Siden virker **uden dækning**, når den har været åbnet én gang (service
   worker), og kan lægges på hjemmeskærmen som en app.
-- **In English:** Knappen øverst skifter mellem dansk og engelsk. Siden vælger
-  selv engelsk, når browserens sprog er engelsk (og dansk ikke står før), og
-  husker valget. `#lang=en` i et link (fx `#g=P1&lang=en`) åbner siden på
-  engelsk uanset valget; dansk er standard og står ikke i linket. Navne,
-  gravstedsnumre og opslagslinkene (dansk Wikipedia) er de samme på begge sprog.
+- **In English:** Knappen øverst skifter mellem dansk og engelsk og husker
+  valget. Første gang vælger siden dansk, hvis browserens sprog er dansk, norsk
+  eller svensk, ellers engelsk. `#lang=en` i et link (fx `#g=P1&lang=en`) åbner
+  siden på engelsk uanset valget (uden at ændre det); dansk er standard og står
+  ikke i linket. Navne, gravstedsnumre og opslagslinkene er de samme på begge
+  sprog; den engelske knap siger *Read more (in Danish)*, når opslaget er på
+  dansk Wikipedia eller lex.dk.
 
 ## Rettelser af placeringer
 

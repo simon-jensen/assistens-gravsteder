@@ -38,6 +38,8 @@ try {
   ok(await page.locator('.row').count() === 3, 'søgning "bohr" giver 3 rækker');
   ok((await page.locator('#count').textContent()).startsWith('3 af 133'), 'tælleren viser 3 af 133'); // textContent: panel-title har text-transform
   ok(await page.locator('.dot:not(.dim)').count() === 3 + 1 || await page.locator('.dot:not(.dim)').count() === 3, 'andre prikker dæmpes ved søgning');
+  await page.fill('#q', 'lars'); await page.waitForTimeout(250);
+  ok(await page.locator('.row').count() === 1, 'dansk søgning "lars" rammer kun dansk tekst (1 række, ikke "scholars")');
   await page.fill('#q', ''); await page.waitForTimeout(250);
   await page.selectOption('#afd', 'R');
   ok(await page.locator('.row').count() === 6, 'afdeling R har 6 gravsteder');
@@ -151,11 +153,12 @@ try {
   const p4 = await ctx4.newPage(); const errs4 = []; p4.on('pageerror', e => errs4.push(e.message));
   await p4.goto(URL0 + '#g=P1'); await p4.waitForSelector('.dot');
   ok(await p4.evaluate(() => document.documentElement.lang) === 'en' && (await p4.title()).includes('Assistens Cemetery'), 'engelsk browser får siden på engelsk');
+  ok(await p4.evaluate(() => Object.keys(SPROG.da).join() === Object.keys(SPROG.en).join()), 'ordbogen har samme nøgler på dansk og engelsk');
   ok((await p4.evaluate(() => location.hash)) === '#g=P1&lang=en', 'linket bærer sproget: ' + (await p4.evaluate(() => location.hash)));
-  ok((await p4.locator('#count').textContent()) === '133 graves' && (await p4.locator('#afd option').nth(1).textContent()) === 'Sect. A (28)', 'tæller og rullemenu på engelsk');
-  ok((await p4.locator('#cMeta').innerText()).includes('Grave P-513 · sect. P') && (await p4.locator('#cLinks').innerText()).includes('ROUTE HERE'), 'kortet med H. C. Andersen på engelsk');
+  ok((await p4.locator('#count').textContent()) === '133 graves' && (await p4.locator('#afd option').nth(1).textContent()) === 'Section A (28)', 'tæller og rullemenu på engelsk');
+  ok((await p4.locator('#cMeta').innerText()).includes('Grave P-513 · section P') && (await p4.locator('#cLinks').textContent()).includes('Route here') && (await p4.locator('#cLinks').textContent()).includes('Read more (in Danish)'), 'kortet med H. C. Andersen på engelsk');
   ok((await p4.locator('.kat').first().innerText()) === 'Poets, writers and philosophers' && (await p4.locator('.afdhead').first().innerText()).endsWith('SECTION A'), 'signatur og afdelingsoverskrifter på engelsk');
-  ok((await p4.locator('#retToggle').innerText()).toUpperCase() === 'EDIT PLACEMENTS' && (await p4.locator('#langBtn').innerText()).toUpperCase() === 'PÅ DANSK', 'sidefodens knapper på engelsk');
+  ok((await p4.locator('#retToggle').textContent()) === 'Edit positions' && (await p4.locator('#langBtn').innerText()).toUpperCase() === 'PÅ DANSK', 'sidefodens knapper på engelsk');
   await p4.fill('#q', 'painter'); await p4.waitForTimeout(250);
   ok(await p4.locator('.row').count() === 22, 'søgning på "painter" finder kategorien (22 rækker)');
   await p4.fill('#q', ''); await p4.waitForTimeout(250);
@@ -163,6 +166,9 @@ try {
   ok((await p4.locator('#toast').innerText()).startsWith('Nearest to you'), 'GPS-besked på engelsk');
   await p4.click('#cRute'); await p4.waitForTimeout(1500);
   ok(/^Route to H\. C\. Andersen \(P-513\): \d+ m · about \d+ min/.test(await p4.locator('#rutetekst').textContent()), 'ruteteksten på engelsk: ' + (await p4.locator('#rutetekst').textContent()));
+  await p4.waitForTimeout(4200); await ctx4.setGeolocation({ latitude: 55.6918, longitude: 12.5530 }); await p4.waitForTimeout(1200); // Nørrebrogade, uden for muren
+  ok(/ · through the /.test(await p4.locator('#rutetekst').textContent()), 'lågen får sit engelske navn: ' + (await p4.locator('#rutetekst').textContent()));
+  await ctx4.setGeolocation({ latitude: 55.6903, longitude: 12.5505 });
   await p4.click('#retToggle');
   ok((await p4.locator('#cNote').innerText()).includes('File: city register') && (await p4.locator('#cNote').innerText()).includes('exact match'), 'provenienslinjen oversættes: ' + (await p4.locator('#cNote').innerText()));
   await p4.click('#retToggle');
@@ -172,9 +178,15 @@ try {
   await p4.reload(); await p4.waitForSelector('.dot');
   ok(await p4.evaluate(() => document.documentElement.lang) === 'da', 'valget huskes efter genindlæsning');
   await p4.goto('about:blank'); await p4.goto(URL0 + '#lang=en&afd=A'); await p4.waitForSelector('.dot');
-  ok(await p4.evaluate(() => document.documentElement.lang) === 'en' && (await p4.locator('#listhead').textContent()) === 'sect. A', '#lang=en i linket vinder over det gemte valg');
+  ok(await p4.evaluate(() => document.documentElement.lang) === 'en' && (await p4.locator('#listhead').textContent()) === 'section A', '#lang=en i linket vinder over det gemte valg');
   await p4.evaluate(() => { location.hash = '#g=P1&lang=da'; }); await p4.waitForTimeout(100);
   ok(await p4.evaluate(() => document.documentElement.lang) === 'da' && (await p4.locator('#cName').innerText()).includes('Andersen'), 'et nyt link med lang=da i samme fane skifter sprog');
+  // Sprogskift, før data er hentet, må ikke slette #g=…&afd=… fra linket
+  await ctx4.route('**/gravsteder.json', async route => { await new Promise(r => setTimeout(r, 1500)); await route.continue(); });
+  await p4.goto('about:blank'); await p4.goto(URL0 + '#g=P1&afd=P'); await p4.click('#langBtn');
+  await p4.waitForSelector('.dot');
+  ok((await p4.evaluate(() => location.hash)) === '#g=P1&afd=P&lang=en' && (await p4.locator('#cName').innerText()).includes('Andersen'), 'sprogskift før data bevarer linket: ' + (await p4.evaluate(() => location.hash)));
+  await ctx4.unroute('**/gravsteder.json');
   ok(errs4.length === 0, 'ingen JavaScript-fejl i den engelske udgave' + (errs4.length ? ': ' + errs4.join(' | ') : ''));
   if (UD) await p4.screenshot({ path: path.join(UD, 'telefon_engelsk.png') });
   await ctx4.close();
