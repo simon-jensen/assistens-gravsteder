@@ -55,6 +55,8 @@ def main():
             err.append(f"{gid}: 'src' skal være 'kk' (scriptets) eller 'kort' (manuel)")
         if g.get("src") == "kort" and not TS_RE.match(str(g.get("ts", ""))):
             err.append(f"{gid}: en manuel placering (src kort) skal have et tidsstempel 'ts'")
+        if "kilde" in g and g["kilde"] != "egen":
+            err.append(f"{gid}: 'kilde' må kun være 'egen' (et gravsted uden for brochuren) eller udelades")
     # Filer, service workeren precacher, skal findes; udgaven i sidefoden skal være sw.js' VERSION
     sw = open(os.path.join(ROOT, "sw.js"), encoding="utf-8").read()
     idx = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
@@ -62,6 +64,12 @@ def main():
     v_idx = re.search(r"const UDGAVE='([^']+)'", idx)
     if not v_sw or not v_idx or v_sw.group(1) != v_idx.group(1):
         err.append(f"UDGAVE i index.html ({v_idx.group(1) if v_idx else '?'}) skal være lig VERSION i sw.js ({v_sw.group(1) if v_sw else '?'})")
+    # Sidehovedets og metabeskrivelsens faste tal (vises, til data er hentet) skal være antallet af poster
+    for pat, hvad in ((r'<span data-t="kicker">[^<]*?(\d+) gravsteder', "sidehovedets faste tekst"),
+                      (r'<meta name="description" content="Find de (\d+) ', "metabeskrivelsen")):
+        m = re.search(pat, idx)
+        if not m or int(m.group(1)) != len(gs):
+            err.append(f"index.html: {hvad} siger {m.group(1) if m else '?'} gravsteder, men filen har {len(gs)}")
     for f in re.findall(r"'\./([^']+)'", sw):
         if not os.path.exists(os.path.join(ROOT, f)):
             err.append(f"sw.js precacher '{f}', men filen findes ikke")
@@ -98,7 +106,8 @@ def main():
     n_kort = sum(1 for g in gs if g.get("src") == "kort")
     n_usikre = sum(1 for g in gs if g.get("src") == "kk" and (g.get("acc") or 0) > 3)
     n_uden_wiki = sum(1 for g in gs if g.get("wiki") is None)
-    print(f"✓ gravsteder.json: {len(gs)} gravsteder, {n_kort} manuelt placeret, {n_usikre} anslåede (acc > 3 m, se data/placering.md), {n_uden_wiki} uden opslagslink; ruter.json: {N} knuder, {len(R['e'])} kanter, {len(L)} låger")
+    n_egen = sum(1 for g in gs if g.get("kilde") == "egen")
+    print(f"✓ gravsteder.json: {len(gs)} gravsteder ({n_egen} uden for brochuren), {n_kort} manuelt placeret, {n_usikre} anslåede (acc > 3 m, se data/placering.md), {n_uden_wiki} uden opslagslink; ruter.json: {N} knuder, {len(R['e'])} kanter, {len(L)} låger")
     return 0
 
 

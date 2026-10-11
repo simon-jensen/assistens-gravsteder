@@ -58,6 +58,12 @@ id'er) og at de filer, service workeren precacher, findes. Headless-røgtesten
   kortbilledet), `src` (`kk` = beregnet af `scripts/placer.py`; `kort` =
   manuel placering med `ts`), `acc` (anslået usikkerhed i meter), `note`, og valgfrit `bekraeftet` (en
   feltkontrol i fri tekst; scriptet bevarer feltet).
+- `kilde: "egen"` (valgfri) markerer et gravsted, der ikke står i brochuren;
+  så er `navn`, `plot` og `kat` projektets egne og skal have kilde i README
+  (person og dødsår fra et opslagsværk, nummeret fra kommunens register).
+  Siden markerer posten i kortet og nævner den i sidefoden. Sidehovedets og
+  metabeskrivelsens faste tal skal være lig antallet af poster
+  (`check_data.py` tjekker det); `README.md` og testens tællinger rettes med.
 - `navn`, `plot` og `kat` er kildens (brochurens) oplysninger. Ret dem kun,
   når mindst to uafhængige kilder (fx Dansk Biografisk Leksikon, Wikidata,
   gravsted.dk) bekræfter, at det er samme person med samme dødsår og

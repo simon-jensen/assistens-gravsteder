@@ -439,6 +439,23 @@
    "note": "KK: A-979: direkte"
   },
   {
+   "id": "A29",
+   "afd": "A",
+   "nr": 29,
+   "navn": "Carl Christian Rafn",
+   "alias": "C.C. Rafn",
+   "aar": 1864,
+   "plot": "A-792",
+   "kat": "vid",
+   "wiki": "C.C. Rafn",
+   "kilde": "egen",
+   "fx": 0.68438,
+   "fy": 0.80594,
+   "src": "kk",
+   "acc": 1.5,
+   "note": "KK: A-792: direkte"
+  },
+  {
    "id": "B1",
    "afd": "B",
    "nr": 1,

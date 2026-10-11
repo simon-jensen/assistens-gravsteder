@@ -29,14 +29,18 @@ try {
   const errs = []; page.on('pageerror', e => errs.push(e.message)); page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
   await page.goto(URL0 + '#g=P1');
   await page.waitForSelector('.dot');
-  ok(await page.locator('.dot').count() === 133, '133 prikker på kortet');
-  ok(await page.locator('.row').count() === 133, '133 rækker i listen');
+  ok(await page.locator('.dot').count() === 134, '134 prikker på kortet');
+  ok(await page.locator('.row').count() === 134, '134 rækker i listen');
   ok(await page.locator('#card.open').count() === 1 && (await page.locator('#cName').innerText()).includes('H. C. Andersen'), '#g=P1 vælger H. C. Andersen');
   ok(await page.locator('.dot.sel').count() === 1, 'den valgte prik er fremhævet');
+  ok((await page.locator('.kicker span').first().textContent()).includes('134 gravsteder') && (await page.locator('#egen').textContent()).includes('Carl Christian Rafn'), 'antallet beregnes af data, og sidefoden nævner gravstedet uden for brochuren');
+  await page.goto(URL0 + '#g=A29'); await page.waitForSelector('.dot');
+  ok((await page.locator('#cMeta').innerText()).includes('Ikke i kommunens brochure'), 'A29 (Rafn) markeres som tilføjet af projektet');
+  await page.goto(URL0 + '#g=P1'); await page.waitForSelector('.dot');
   if (UD) await page.screenshot({ path: path.join(UD, 'telefon_lys.png'), fullPage: false });
   await page.fill('#q', 'bohr'); await page.waitForTimeout(250);
   ok(await page.locator('.row').count() === 3, 'søgning "bohr" giver 3 rækker');
-  ok((await page.locator('#count').textContent()).startsWith('3 af 133'), 'tælleren viser 3 af 133'); // textContent: panel-title har text-transform
+  ok((await page.locator('#count').textContent()).startsWith('3 af 134'), 'tælleren viser 3 af 134'); // textContent: panel-title har text-transform
   ok(await page.locator('.dot:not(.dim)').count() === 3 + 1 || await page.locator('.dot:not(.dim)').count() === 3, 'andre prikker dæmpes ved søgning');
   await page.fill('#q', 'lars'); await page.waitForTimeout(250);
   ok(await page.locator('.row').count() === 1, 'dansk søgning "lars" rammer kun dansk tekst (1 række, ikke "scholars")');
@@ -142,7 +146,7 @@ try {
   ok(await p4.evaluate(() => document.documentElement.lang) === 'en' && (await p4.title()).includes('Assistens Cemetery'), 'engelsk browser får siden på engelsk');
   ok(await p4.evaluate(() => Object.keys(SPROG.da).join() === Object.keys(SPROG.en).join()), 'ordbogen har samme nøgler på dansk og engelsk');
   ok((await p4.evaluate(() => location.hash)) === '#g=P1&lang=en', 'linket bærer sproget: ' + (await p4.evaluate(() => location.hash)));
-  ok((await p4.locator('#count').textContent()) === '133 graves' && (await p4.locator('#afd option').nth(1).textContent()) === 'Section A (28)', 'tæller og rullemenu på engelsk');
+  ok((await p4.locator('#count').textContent()) === '134 graves' && (await p4.locator('#afd option').nth(1).textContent()) === 'Section A (29)', 'tæller og rullemenu på engelsk');
   ok((await p4.locator('#cMeta').innerText()).includes('Grave P-513 · section P') && (await p4.locator('#cLinks').textContent()).includes('Route here') && (await p4.locator('#cLinks').textContent()).includes('Read more (in Danish)'), 'kortet med H. C. Andersen på engelsk');
   ok((await p4.locator('.kat').first().innerText()) === 'Poets, writers and philosophers' && (await p4.locator('.afdhead').first().innerText()).endsWith('SECTION A'), 'signatur og afdelingsoverskrifter på engelsk');
   ok((await p4.locator('#langBtn').innerText()).toUpperCase() === 'PÅ DANSK', 'sprogknappen viser det andet sprog');
@@ -176,7 +180,7 @@ try {
   await ctx4.close();
   const ctx3 = await browser.newContext({ viewport: { width: 1280, height: 900 }, serviceWorkers: 'block' });
   const p3 = await ctx3.newPage(); await p3.goto(URL0 + '#afd=A'); await p3.waitForSelector('.dot');
-  ok(await p3.locator('.row').count() === 28, '#afd=A viser 28 rækker på skrivebordet');
+  ok(await p3.locator('.row').count() === 29, '#afd=A viser 29 rækker på skrivebordet');
   if (UD) await p3.screenshot({ path: path.join(UD, 'skrivebord.png') });
   await ctx3.close();
 } finally {

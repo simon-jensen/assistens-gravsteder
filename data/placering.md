@@ -1,6 +1,6 @@
 # Placering af gravstederne (genereret af scripts/placer.py)
 
-Kommunens gravstedsdata hentet 2026-10-05. 125 sikre (acc ≤ 3 m), 8 anslåede/usikre, 0 ikke fundet, 0 manuelt placeret.
+Kommunens gravstedsdata hentet 2026-10-05. 126 sikre (acc ≤ 3 m), 8 anslåede/usikre, 0 ikke fundet, 0 manuelt placeret.
 
 | Id | Gravsted | Navn | acc (m) | Sådan fundet |
 |---|---|---|--:|---|
@@ -15,7 +15,7 @@ Kommunens gravstedsdata hentet 2026-10-05. 125 sikre (acc ≤ 3 m), 8 anslåede/
 | A9 | A-315/16 | Christen Købke | 3.0 | KK: A-315: direkte; A-316: anslået mellem A-315 og A-326 (12 m fra hinanden); midt mellem 2 gravsteder, 1 m spredning |
 | A10 | A-535 | Herman Vilhelm Bissen | 1.5 | KK: A-535: direkte |
 | A11 | A-558 | Johan Samuel Augustin | 1.5 | KK: A-558: direkte |
-| A12 | A-616 | Peter Christian Abilgaard | 3.0 | KK: A-616: anslået mellem A-615 og A-618 (6 m fra hinanden) |
+| A12 | A-616 | Peter Christian Abildgaard | 3.0 | KK: A-616: anslået mellem A-615 og A-618 (6 m fra hinanden) |
 | A13 | A-683 | Ernst Vilhelm Stibolt | 1.5 | KK: A-683: direkte |
 | A14 | A-686 | Georg Nielsen | 1.5 | KK: A-686: direkte |
 | A15 | A-693 | Søren Gyldendal | 1.5 | KK: A-693: direkte |
@@ -32,6 +32,7 @@ Kommunens gravstedsdata hentet 2026-10-05. 125 sikre (acc ≤ 3 m), 8 anslåede/
 | A26 | A-1030 | Morten Wærn | 1.5 | KK: A-1030: direkte |
 | A27 | A-789 | Edvard Storm | 1.5 | KK: A-789: direkte |
 | A28 | A-979 | Giuseppe Siboni | 1.5 | KK: A-979: direkte |
+| A29 | A-792 | Carl Christian Rafn | 1.5 | KK: A-792: direkte |
 | B1 | B-20 | Ludvig Bødtcher | 1.5 | KK: B-20: direkte |
 | B2 | B-32 | Martin Vahl | 1.5 | KK: B-32: direkte |
 | B3 | B-37 | Kjeld Abell | 1.5 | KK: B-37: direkte |
@@ -64,7 +65,7 @@ Kommunens gravstedsdata hentet 2026-10-05. 125 sikre (acc ≤ 3 m), 8 anslåede/
 | C10 | C-726 | Ida Wilde, født Thiele | 1.5 | KK: C-726: direkte |
 | C11 | C-736 | Anne Elisabeth Schmidt | 1.5 | KK: C-736: direkte |
 | C12 | C-556 | Jens Bang | 1.5 | KK: C-556: direkte |
-| D1 | D-129 | Magdelene Thoresen | 1.5 | KK: D-129: direkte |
+| D1 | D-129 | Magdalene Thoresen | 1.5 | KK: D-129: direkte |
 | D2 | D-506 | Johannes Wasserfall | 1.5 | KK: D-506: direkte |
 | D3 | D-581 | Christoph Cloëtta | 1.5 | KK: D-581: direkte |
 | D4 | D-590 | Peter von Scholten | 1.5 | KK: D-590: direkte |
@@ -72,7 +73,7 @@ Kommunens gravstedsdata hentet 2026-10-05. 125 sikre (acc ≤ 3 m), 8 anslåede/
 | E1 | E-270 | Dagmar Hansen, gift Heinemann | 1.5 | KK: E-270: direkte |
 | E2 | E-274 | Poul Martin Møller | 1.5 | KK: E-274: direkte |
 | E3 | E-312 | Cosmus Bræstrup | 1.5 | KK: E-312: direkte |
-| E4 | E-325 | Matilde Malling Hauschultz | 1.5 | KK: E-325: direkte |
+| E4 | E-325 | Mathilde Malling Hauschultz | 1.5 | KK: E-325: direkte |
 | E5 | E-509 | Peter Christian Skovgaard | 1.5 | KK: E-509: direkte |
 | E6 | E-538 | H. E. Freund | 1.5 | KK: E-538: direkte |
 | E7 | E-554 | Anne Marie "madam" Mangor | 1.5 | KK: E-554: direkte |
@@ -107,7 +108,7 @@ Kommunens gravstedsdata hentet 2026-10-05. 125 sikre (acc ≤ 3 m), 8 anslåede/
 | K1 | K-13/14 | Johan Ole Emil Horneman | 8.0 | KK: K-13: direkte; K-14: anslået mellem K-13 og K-25 (20 m fra hinanden); midt mellem 2 gravsteder, 1 m spredning |
 | K2 | K-5-2-51/55 | Søstre fra Den franske Skole | 8.0 | KK: K5-51: direkte; K5-55: direkte; midt mellem 2 gravsteder, 3 m spredning; underafdeling K5, række 2 |
 | K3 | K-6-1-1 | Franske soldatergrave | 8.0 | KK: K6-1: direkte; underafdeling K6, række 1 |
-| K4 | K-300 | Finn Juul | 1.5 | KK: K-300: direkte |
+| K4 | K-300 | Finn Juhl | 1.5 | KK: K-300: direkte |
 | K5 | K-625 | Finn Ejnar Madsen | 1.5 | KK: K-625: direkte |
 | K6 | K-Ny russisk-51 | Cecilia Grünwald | 1.5 | KK: NY.RUS-51: direkte |
 | L1 | L-151 | Julie Amalie Møller | 1.5 | KK: L-151: direkte |

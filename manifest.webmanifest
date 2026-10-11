@@ -1,7 +1,7 @@
 {
   "name": "Assistens Kirkegård · Gravsteder",
   "short_name": "Gravsteder",
-  "description": "Find de 133 kendte gravsteder på Assistens Kirkegård, og se hvor du selv står",
+  "description": "Find de kendte gravsteder på Assistens Kirkegård, og se hvor du selv står",
   "lang": "da",
   "start_url": "./",
   "scope": "./",

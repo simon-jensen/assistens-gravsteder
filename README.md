@@ -1,7 +1,7 @@
 # Assistens Kirkegård · Gravsteder
 
-Et lille, hurtigt kort over de 133 kendte gravsteder på Assistens Kirkegård i
-København: søg et navn, tryk på en prik, og se hvor du selv står. Søsterprojekt
+Et lille, hurtigt kort over 134 kendte gravsteder på Assistens Kirkegård i
+København (kommunens 133 og ét tilføjet af projektet): søg et navn, tryk på en prik, og se hvor du selv står. Søsterprojekt
 til [Trækortet](https://github.com/simon-jensen/assistens-traekort) og bygget med
 det, vi lærte dér: eget grundkort af åbne data, placeringer beregnet fra
 kommunens gravstedsregister, offline-drift og ingen byggetrin.
@@ -79,6 +79,12 @@ kortet, og fortegnelsen stammer fra kommunens egen brochure.
   Familien Holtens fire poster på C-703 er skrevet ud, så de kan søges hver
   for sig. Tilladelse til at gengive fortegnelsen er ikke dokumenteret (se
   *Til opfølgning*).
+- **Tilføjet uden for brochuren** (`kilde: "egen"` i `gravsteder.json`):
+  Carl Christian Rafn (A-792, † 1864, oldforsker, kategori videnskabsfolk).
+  Nummeret er kommunens (gravsted 1 A 00 0792), person og dødsår efter Dansk
+  Biografisk Leksikon; placeringen beregnes som de andre. Siden markerer posten
+  i kortet ("Ikke i kommunens brochure") og nævner den i sidefoden, og tallet i
+  sidehovedet beregnes af data.
 - **Opslagslinkene** (`wiki` i `gravsteder.json`) er sat i hånden efter
   opslag: dansk Wikipedia, hvor der findes en artikel om personen; ellers
   Dansk Biografisk Leksikon eller Den Store Danske på lex.dk; ellers engelsk
